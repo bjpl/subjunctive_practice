@@ -1,0 +1,7 @@
+main.py
+pyproject.toml
+subjunctive_practice_gui.egg-info/PKG-INFO
+subjunctive_practice_gui.egg-info/SOURCES.txt
+subjunctive_practice_gui.egg-info/dependency_links.txt
+subjunctive_practice_gui.egg-info/requires.txt
+subjunctive_practice_gui.egg-info/top_level.txt
