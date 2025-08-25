@@ -3498,3 +3498,117 @@ Requirements:
 2025-08-25 10:01:49,091 - INFO - Applying basic error fixes only (rollback mode)
 2025-08-25 10:01:49,174 - INFO - Patched accessibility features initialized successfully
 2025-08-25 10:01:49,174 - INFO - Status update: ¡2 días! Sigue así.
+2025-08-25 10:04:10,577 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-25 10:04:10,578 - INFO - API Health Status: unhealthy - Available: True
+2025-08-25 10:04:10,591 - INFO - Using basic UI styling - rollback mode
+2025-08-25 10:04:10,773 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-25 10:04:10,773 - INFO - Application initialized.
+2025-08-25 10:04:10,773 - INFO - Applying basic error fixes only (rollback mode)
+2025-08-25 10:04:10,835 - INFO - Patched accessibility features initialized successfully
+2025-08-25 10:04:10,835 - INFO - Status update: ¡2 días! Sigue así.
+2025-08-25 10:07:47,727 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-25 10:07:47,727 - INFO - API Health Status: unhealthy - Available: True
+2025-08-25 10:07:47,753 - INFO - Using basic UI styling - rollback mode
+2025-08-25 10:08:39,598 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-25 10:08:39,598 - INFO - API Health Status: unhealthy - Available: True
+2025-08-25 10:08:42,255 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-25 10:08:42,255 - INFO - API Health Status: unhealthy - Available: True
+2025-08-25 10:08:42,268 - INFO - Using basic UI styling - rollback mode
+2025-08-25 10:08:42,519 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-25 10:08:42,526 - INFO - Text truncation fixes applied successfully
+2025-08-25 10:08:42,526 - INFO - Application initialized.
+2025-08-25 10:08:42,526 - INFO - Applying basic error fixes only (rollback mode)
+2025-08-25 10:08:42,598 - INFO - Patched accessibility features initialized successfully
+2025-08-25 10:08:42,598 - INFO - Status update: ¡2 días! Sigue así.
+2025-08-25 10:08:48,034 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-25 10:08:48,034 - INFO - API Health Status: unhealthy - Available: True
+2025-08-25 10:08:48,391 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-25 10:08:48,436 - INFO - Text truncation fixes applied successfully
+2025-08-25 10:08:48,436 - INFO - Application initialized.
+2025-08-25 10:08:48,437 - INFO - Applying basic error fixes only (rollback mode)
+2025-08-25 10:08:48,553 - INFO - Patched accessibility features initialized successfully
+2025-08-25 10:08:48,553 - INFO - Status update: ¡2 días! Sigue así.
+2025-08-25 10:08:55,266 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-25 10:08:55,266 - INFO - API Health Status: unhealthy - Available: True
+2025-08-25 10:08:55,532 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-25 10:08:55,539 - INFO - Text truncation fixes applied successfully
+2025-08-25 10:08:55,539 - INFO - Application initialized.
+2025-08-25 10:08:55,539 - INFO - Applying basic error fixes only (rollback mode)
+2025-08-25 10:08:55,618 - INFO - Patched accessibility features initialized successfully
+2025-08-25 10:08:55,618 - INFO - Status update: ¡2 días! Sigue así.
+2025-08-25 10:09:23,022 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-25 10:09:23,023 - INFO - API Health Status: unhealthy - Available: True
+2025-08-25 10:09:23,269 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-25 10:09:23,283 - INFO - Text truncation fixes applied successfully
+2025-08-25 10:09:23,284 - INFO - Application initialized.
+2025-08-25 10:09:23,284 - INFO - Applying basic error fixes only (rollback mode)
+2025-08-25 10:09:23,371 - INFO - Patched accessibility features initialized successfully
+2025-08-25 10:09:23,371 - INFO - Status update: ¡2 días! Sigue así.
+2025-08-25 10:09:50,195 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-25 10:09:50,195 - INFO - API Health Status: unhealthy - Available: True
+2025-08-25 10:09:50,402 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-25 10:09:50,409 - INFO - Text truncation fixes applied successfully
+2025-08-25 10:09:50,409 - INFO - Application initialized.
+2025-08-25 10:09:50,409 - INFO - Applying basic error fixes only (rollback mode)
+2025-08-25 10:09:50,501 - INFO - Patched accessibility features initialized successfully
+2025-08-25 10:09:50,501 - INFO - Status update: ¡2 días! Sigue así.
+2025-08-25 10:10:17,320 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-25 10:10:17,320 - INFO - API Health Status: unhealthy - Available: True
+2025-08-25 10:10:23,485 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-25 10:10:23,485 - INFO - API Health Status: unhealthy - Available: True
+2025-08-25 10:11:06,902 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-25 10:11:06,902 - INFO - API Health Status: unhealthy - Available: True
+2025-08-25 10:11:07,137 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-25 10:11:07,144 - INFO - Text truncation fixes applied successfully
+2025-08-25 10:11:07,144 - INFO - Application initialized.
+2025-08-25 10:11:07,144 - INFO - Applying basic error fixes only (rollback mode)
+2025-08-25 10:11:07,241 - INFO - Patched accessibility features initialized successfully
+2025-08-25 10:11:07,241 - INFO - Status update: ¡2 días! Sigue así.
+2025-08-25 10:11:33,871 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-25 10:11:33,871 - INFO - API Health Status: unhealthy - Available: True
+2025-08-25 10:11:34,125 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-25 10:11:34,132 - INFO - Text truncation fixes applied successfully
+2025-08-25 10:11:34,132 - INFO - Application initialized.
+2025-08-25 10:11:34,132 - INFO - Applying basic error fixes only (rollback mode)
+2025-08-25 10:11:34,205 - INFO - Patched accessibility features initialized successfully
+2025-08-25 10:11:34,205 - INFO - Status update: ¡2 días! Sigue así.
+2025-08-25 10:12:17,884 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-25 10:12:17,884 - INFO - API Health Status: unhealthy - Available: True
+2025-08-25 10:12:18,095 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-25 10:12:18,102 - INFO - Text truncation fixes applied successfully
+2025-08-25 10:12:18,118 - INFO - Checkbox rendering fixes applied successfully
+2025-08-25 10:12:18,118 - INFO - Application initialized.
+2025-08-25 10:12:18,118 - INFO - Applying basic error fixes only (rollback mode)
+2025-08-25 10:12:18,199 - INFO - Patched accessibility features initialized successfully
+2025-08-25 10:12:18,200 - INFO - Status update: ¡2 días! Sigue así.
+2025-08-25 10:12:21,471 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-25 10:12:21,472 - INFO - API Health Status: unhealthy - Available: True
+2025-08-25 10:12:29,935 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-25 10:12:29,936 - INFO - API Health Status: unhealthy - Available: True
+2025-08-25 10:12:30,175 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-25 10:12:30,183 - INFO - Text truncation fixes applied successfully
+2025-08-25 10:12:30,201 - INFO - Checkbox rendering fixes applied successfully
+2025-08-25 10:12:30,201 - INFO - Application initialized.
+2025-08-25 10:12:30,201 - INFO - Applying basic error fixes only (rollback mode)
+2025-08-25 10:12:30,294 - INFO - Patched accessibility features initialized successfully
+2025-08-25 10:12:30,294 - INFO - Status update: ¡2 días! Sigue así.
+2025-08-25 10:12:38,391 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-25 10:12:38,391 - INFO - API Health Status: unhealthy - Available: True
+2025-08-25 10:12:38,406 - INFO - Using basic UI styling - rollback mode
+2025-08-25 10:12:38,646 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-25 10:12:38,658 - INFO - Text truncation fixes applied successfully
+2025-08-25 10:12:38,679 - INFO - Checkbox rendering fixes applied successfully
+2025-08-25 10:12:38,680 - INFO - Application initialized.
+2025-08-25 10:12:38,680 - INFO - Applying basic error fixes only (rollback mode)
+2025-08-25 10:12:38,779 - INFO - Patched accessibility features initialized successfully
+2025-08-25 10:12:38,780 - INFO - Status update: ¡2 días! Sigue así.
+2025-08-25 10:12:45,964 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-25 10:12:45,965 - INFO - API Health Status: unhealthy - Available: True
+2025-08-25 10:12:45,977 - INFO - Using basic UI styling - rollback mode
+2025-08-25 10:12:46,200 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-25 10:12:46,207 - INFO - Text truncation fixes applied successfully
+2025-08-25 10:12:46,222 - INFO - Checkbox rendering fixes applied successfully
+2025-08-25 10:12:46,222 - INFO - Application initialized.
+2025-08-25 10:12:46,222 - INFO - Applying basic error fixes only (rollback mode)
+2025-08-25 10:12:46,368 - INFO - Patched accessibility features initialized successfully
+2025-08-25 10:12:46,368 - INFO - Status update: ¡2 días! Sigue así.

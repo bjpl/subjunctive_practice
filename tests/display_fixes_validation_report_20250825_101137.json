@@ -1,0 +1,85 @@
+{
+  "summary": {
+    "timestamp": "2025-08-25T10:11:37.566394",
+    "total_tests": 7,
+    "tests_passed": 6,
+    "tests_failed": 1,
+    "success_rate": "85.7%",
+    "pyqt5_available": true
+  },
+  "test_categories": {
+    "Text Truncation Prevention": "PASS",
+    "Checkbox State Visibility": "PASS",
+    "Input Field Display": "PASS",
+    "Form Element Accessibility": "PASS",
+    "Responsive Layout": "FAIL",
+    "Scrollbar Functionality": "PASS",
+    "Interactive Element Functionality": "PASS"
+  },
+  "detailed_results": {
+    "Text Truncation Prevention": {
+      "name": "Text Truncation Prevention",
+      "passed": true,
+      "issues": [],
+      "details": {
+        "texts_tested": 4
+      }
+    },
+    "Checkbox State Visibility": {
+      "name": "Checkbox State Visibility",
+      "passed": true,
+      "issues": [],
+      "details": {
+        "states_tested": 3
+      }
+    },
+    "Input Field Display": {
+      "name": "Input Field Display",
+      "passed": true,
+      "issues": [],
+      "details": {
+        "fields_tested": 2
+      }
+    },
+    "Form Element Accessibility": {
+      "name": "Form Element Accessibility",
+      "passed": true,
+      "issues": [],
+      "details": {
+        "elements_tested": 4
+      }
+    },
+    "Responsive Layout": {
+      "name": "Responsive Layout",
+      "passed": false,
+      "issues": [
+        "Content wider than window at small size"
+      ],
+      "details": {
+        "sizes_tested": 3
+      }
+    },
+    "Scrollbar Functionality": {
+      "name": "Scrollbar Functionality",
+      "passed": true,
+      "issues": [],
+      "details": {
+        "scroll_areas_tested": 1
+      }
+    },
+    "Interactive Element Functionality": {
+      "name": "Interactive Element Functionality",
+      "passed": true,
+      "issues": [],
+      "details": {
+        "interactive_elements_tested": 2
+      }
+    }
+  },
+  "issues_found": [
+    "Responsive Layout: Content wider than window at small size"
+  ],
+  "recommendations": [
+    "Implement responsive design patterns for better multi-device support"
+  ]
+}

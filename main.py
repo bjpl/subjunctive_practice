@@ -89,6 +89,25 @@ except ImportError:
     print("Progress indicators module not available. Using basic status updates.")
     PROGRESS_INDICATORS_AVAILABLE = False
 
+# Import text truncation fixes
+try:
+    from src.text_truncation_fixes import TextTruncationFixer, fix_text_truncation_issues
+    TEXT_TRUNCATION_FIXES_AVAILABLE = True
+except ImportError:
+    print("Text truncation fixes not available. Text may be truncated in UI.")
+    TEXT_TRUNCATION_FIXES_AVAILABLE = False
+
+# Import checkbox rendering fixes
+try:
+    from src.checkbox_rendering_fixes import (
+        CheckboxRenderingFixer, fix_checkbox_rendering_issues, 
+        remove_red_borders_from_forms
+    )
+    CHECKBOX_RENDERING_FIXES_AVAILABLE = True
+except ImportError:
+    print("Checkbox rendering fixes not available. Checkboxes may not render properly.")
+    CHECKBOX_RENDERING_FIXES_AVAILABLE = False
+
 # Import complete responsive design integration - COMMENTED OUT FOR ROLLBACK
 # try:
 #     from src.complete_responsive_integration import quick_responsive_integration
@@ -289,7 +308,8 @@ class SpanishSubjunctivePracticeGUI(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
         self.setWindowTitle("Spanish Subjunctive Practice")
-        self.setGeometry(100, 100, 1100, 700)
+        self.setGeometry(100, 100, 1200, 800)  # Increased dimensions for three-column layout
+        self.setMinimumSize(1000, 600)  # Set minimum window size to ensure usability
 
         # Initialize style manager for theme control
         self.style_manager = None
@@ -388,11 +408,11 @@ class SpanishSubjunctivePracticeGUI(QMainWindow):
         main_layout.setContentsMargins(10, 10, 10, 10)
         main_layout.setSpacing(10)
         
-        # Create the main splitter to hold left and right panes
-        splitter = QSplitter(Qt.Horizontal)
-        main_layout.addWidget(splitter)
+        # Create the main splitter for three-column layout
+        self.main_splitter = QSplitter(Qt.Horizontal)
+        main_layout.addWidget(self.main_splitter)
 
-        # ----- Left Pane: Indicators, Context, Stats -----
+        # ----- Left Column: Indicators, Context, Stats -----
         left_widget = QWidget()
         left_layout = QVBoxLayout(left_widget)
         left_layout.setContentsMargins(10, 10, 10, 10)
@@ -445,14 +465,16 @@ class SpanishSubjunctivePracticeGUI(QMainWindow):
         trigger_layout.addWidget(self.custom_context_input)
         left_layout.addWidget(trigger_box)
         left_layout.addStretch()
+        
+        # Set minimum width for left column to prevent content cutoff
+        left_widget.setMinimumWidth(320)
+        self.main_splitter.addWidget(left_widget)
 
-        splitter.addWidget(left_widget)
-
-        # ----- Right Pane: Answer Input, Feedback, Controls -----
-        right_widget = QWidget()
-        right_layout = QVBoxLayout(right_widget)
-        right_layout.setContentsMargins(10, 10, 10, 10)
-        right_layout.setSpacing(10)
+        # ----- Middle Column: Exercise Controls and Input -----
+        middle_widget = QWidget()
+        middle_layout = QVBoxLayout(middle_widget)
+        middle_layout.setContentsMargins(10, 10, 10, 10)
+        middle_layout.setSpacing(10)
 
         # Tense and Person selections using checkboxes (no defaults)
         selection_box = QGroupBox("Select Tense(s) and Person(s)")
@@ -493,7 +515,7 @@ class SpanishSubjunctivePracticeGUI(QMainWindow):
         sel_layout.addWidget(tense_box, 1)
         sel_layout.addWidget(person_box, 1)
         sel_layout.addStretch()
-        right_layout.addWidget(selection_box)
+        middle_layout.addWidget(selection_box)
 
         # Specific Verbs (optional)
         verb_box = QGroupBox("Specific Verbs (optional, comma-separated)")
@@ -501,7 +523,7 @@ class SpanishSubjunctivePracticeGUI(QMainWindow):
         self.verbs_input = QLineEdit()
         self.verbs_input.setPlaceholderText("e.g., hablar, comer, vivir")
         vb_layout.addWidget(self.verbs_input)
-        right_layout.addWidget(verb_box)
+        middle_layout.addWidget(verb_box)
 
         # Mode, Difficulty and Task Type selection
         mode_layout = QHBoxLayout()
@@ -527,7 +549,7 @@ class SpanishSubjunctivePracticeGUI(QMainWindow):
         mode_layout.addWidget(task_type_label)
         mode_layout.addWidget(self.task_type_combo)
         mode_layout.addStretch()
-        right_layout.addLayout(mode_layout)
+        middle_layout.addLayout(mode_layout)
 
         # Input stack for answer entry
         self.input_stack = QStackedWidget()
@@ -543,7 +565,7 @@ class SpanishSubjunctivePracticeGUI(QMainWindow):
         self.mc_options_layout = QHBoxLayout()  # Horizontal arrangement for multiple choice options
         mc_layout.addLayout(self.mc_options_layout)
         self.input_stack.addWidget(mc_page)
-        right_layout.addWidget(self.input_stack)
+        middle_layout.addWidget(self.input_stack)
 
         # Navigation Buttons
         buttons_layout = QHBoxLayout()
@@ -564,7 +586,17 @@ class SpanishSubjunctivePracticeGUI(QMainWindow):
         buttons_layout.addWidget(self.hint_button)
         buttons_layout.addWidget(self.submit_button)
         buttons_layout.addWidget(self.next_button)
-        right_layout.addLayout(buttons_layout)
+        middle_layout.addLayout(buttons_layout)
+        
+        # Set minimum width for middle column and add to splitter
+        middle_widget.setMinimumWidth(280)
+        self.main_splitter.addWidget(middle_widget)
+
+        # ----- Right Column: Feedback and Progress -----
+        right_widget = QWidget()
+        right_layout = QVBoxLayout(right_widget)
+        right_layout.setContentsMargins(10, 10, 10, 10)
+        right_layout.setSpacing(10)
 
         # --- Feedback Text (Explanations) with Scrollability ---
         self.feedback_text = QTextEdit()
@@ -578,10 +610,33 @@ class SpanishSubjunctivePracticeGUI(QMainWindow):
         self.progress_bar = QProgressBar()
         self.progress_bar.setTextVisible(True)
         right_layout.addWidget(self.progress_bar)
-
-        splitter.addWidget(right_widget)
-        splitter.setStretchFactor(0, 1)
-        splitter.setStretchFactor(1, 2)
+        
+        # Set minimum width for right column and add to splitter
+        right_widget.setMinimumWidth(200)
+        self.main_splitter.addWidget(right_widget)
+        
+        # Configure three-column layout proportions (40% left, 35% middle, 25% right)
+        # Set stretch factors (these are relative to each other)
+        self.main_splitter.setStretchFactor(0, 8)   # Left column (8/18 = 44%)
+        self.main_splitter.setStretchFactor(1, 7)   # Middle column (7/18 = 39%)  
+        self.main_splitter.setStretchFactor(2, 5)   # Right column (5/18 = 28%)
+        
+        # Set initial sizes with explicit values to ensure proper proportions
+        # Using larger values to ensure stretch factors take effect
+        self.main_splitter.setSizes([
+            480,  # 40% of 1200px
+            420,  # 35% of 1200px  
+            300   # 25% of 1200px
+        ])
+        
+        # Enable proper resizing behavior
+        self.main_splitter.setChildrenCollapsible(False)  # Prevent columns from collapsing completely
+        
+        # Add spacing between columns for better visual separation
+        self.main_splitter.setHandleWidth(8)  # Increase splitter handle width for better visibility
+        
+        # Store for later adjustment after window is shown
+        self._initial_column_setup_done = False
 
         # Initialize progress overlay after UI is set up
         if PROGRESS_INDICATORS_AVAILABLE:
@@ -622,6 +677,23 @@ class SpanishSubjunctivePracticeGUI(QMainWindow):
         
         self.updateStatus("Welcome! Please make all required selections and generate new exercises.")
 
+        # Apply text truncation fixes
+        if TEXT_TRUNCATION_FIXES_AVAILABLE:
+            try:
+                fix_text_truncation_issues(self)
+                logger.info("Text truncation fixes applied successfully")
+            except Exception as e:
+                logger.error(f"Failed to apply text truncation fixes: {e}")
+        
+        # Apply checkbox rendering fixes
+        if CHECKBOX_RENDERING_FIXES_AVAILABLE:
+            try:
+                fix_checkbox_rendering_issues(self)
+                remove_red_borders_from_forms(self)
+                logger.info("Checkbox rendering fixes applied successfully")
+            except Exception as e:
+                logger.error(f"Failed to apply checkbox rendering fixes: {e}")
+        
         # Initialize exercise data
         self.exercises = []
         self.total_exercises = 0
@@ -644,7 +716,38 @@ class SpanishSubjunctivePracticeGUI(QMainWindow):
                 }
                 QLabel {
                     background-color: transparent;
-                    color: #333;
+                    color: #1A202C;
+                    font-weight: 500;
+                    font-size: 14px;
+                    padding: 2px 0;
+                }
+                QCheckBox {
+                    color: #1A202C;
+                    font-weight: 500;
+                    font-size: 14px;
+                    padding: 4px 0;
+                }
+                QRadioButton {
+                    color: #1A202C;
+                    font-weight: 500;
+                    font-size: 14px;
+                    padding: 4px 0;
+                }
+                QGroupBox {
+                    font-weight: 600;
+                    font-size: 16px;
+                    color: #1A202C;
+                    border: 2px solid #E2E8F0;
+                    border-radius: 8px;
+                    margin-top: 12px;
+                    padding-top: 16px;
+                }
+                QGroupBox::title {
+                    subcontrol-origin: margin;
+                    left: 10px;
+                    padding: 0 8px 0 8px;
+                    color: #3B82F6;
+                    font-weight: 600;
                 }
                 QPushButton {
                     background-color: #e0e0e0;
@@ -657,14 +760,91 @@ class SpanishSubjunctivePracticeGUI(QMainWindow):
                 }
                 QLineEdit {
                     background-color: white;
-                    border: 1px solid #ccc;
-                    padding: 5px;
-                    border-radius: 3px;
+                    border: 2px solid #CBD5E0;
+                    padding: 8px 12px;
+                    border-radius: 6px;
+                    font-size: 14px;
+                    color: #1A202C;
+                    min-height: 20px;
+                    outline: none;
+                }
+                QLineEdit:focus {
+                    border-color: #3B82F6;
+                    background-color: #FFFFFF;
+                    outline: none;
+                }
+                QLineEdit:hover {
+                    border-color: #A0AEC0;
+                    background-color: #FAFBFC;
+                }
+                QLineEdit::placeholder {
+                    color: #9CA3AF;
+                    font-style: italic;
                 }
                 QTextEdit {
                     background-color: white;
                     border: 1px solid #ccc;
                     border-radius: 3px;
+                }
+                
+                /* Checkbox styling fixes - remove red borders and ensure visibility */
+                QCheckBox {
+                    background-color: transparent;
+                    color: #333;
+                    spacing: 8px;
+                    padding: 4px;
+                    border: none;
+                    font-size: 13px;
+                }
+                
+                QCheckBox::indicator {
+                    width: 16px;
+                    height: 16px;
+                    border: 2px solid #888;
+                    border-radius: 3px;
+                    background-color: white;
+                }
+                
+                QCheckBox::indicator:hover {
+                    border-color: #555;
+                    background-color: #f5f5f5;
+                }
+                
+                QCheckBox::indicator:checked {
+                    background-color: #4a90e2;
+                    border-color: #4a90e2;
+                    image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iOSIgdmlld0JveD0iMCAwIDEyIDkiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0xIDQuNUw0LjUgOEwxMSAxIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K);
+                }
+                
+                QCheckBox::indicator:checked:hover {
+                    background-color: #357abd;
+                    border-color: #357abd;
+                }
+                
+                QCheckBox::indicator:focus {
+                    border: 2px solid #4a90e2;
+                    outline: none;
+                }
+                
+                QCheckBox::indicator:disabled {
+                    background-color: #f0f0f0;
+                    border-color: #ccc;
+                }
+                
+                /* Group box styling for consistent appearance */
+                QGroupBox {
+                    font-weight: bold;
+                    border: 2px solid #ccc;
+                    border-radius: 5px;
+                    margin-top: 10px;
+                    padding-top: 10px;
+                }
+                
+                QGroupBox::title {
+                    subcontrol-origin: margin;
+                    left: 10px;
+                    padding: 0 5px 0 5px;
+                    background-color: #f8f8f8;
                 }
             """)
             
@@ -1140,10 +1320,68 @@ Recommendations:
                 basic_dark_stylesheet = """
                     QMainWindow { background-color: #2b2b2b; color: #ffffff; }
                     QWidget { background-color: transparent; color: #ffffff; }
-                    QGroupBox { border: 1px solid #555; background-color: #3c3c3c; }
+                    QLabel { 
+                        background-color: transparent; 
+                        color: #F7FAFC; 
+                        font-weight: 500;
+                        font-size: 14px;
+                        padding: 2px 0;
+                    }
+                    QCheckBox { 
+                        color: #F7FAFC; 
+                        font-weight: 500;
+                        font-size: 14px;
+                        padding: 4px 0;
+                    }
+                    QRadioButton { 
+                        color: #F7FAFC; 
+                        font-weight: 500;
+                        font-size: 14px;
+                        padding: 4px 0;
+                    }
+                    QGroupBox { 
+                        font-weight: 600;
+                        font-size: 16px;
+                        color: #F7FAFC;
+                        border: 2px solid #4A5568;
+                        border-radius: 8px;
+                        margin-top: 12px;
+                        padding-top: 16px;
+                        background-color: #3c3c3c;
+                    }
+                    QGroupBox::title {
+                        subcontrol-origin: margin;
+                        left: 10px;
+                        padding: 0 8px 0 8px;
+                        color: #63B3ED;
+                        font-weight: 600;
+                    }
                     QPushButton { background-color: #0066cc; color: white; padding: 8px; border-radius: 4px; }
                     QPushButton:hover { background-color: #0052a3; }
-                    QLineEdit, QTextEdit { background-color: #3c3c3c; border: 1px solid #555; color: #ffffff; }
+                    QLineEdit {
+                        background-color: #2D3748;
+                        border: 2px solid #4A5568;
+                        padding: 8px 12px;
+                        border-radius: 6px;
+                        font-size: 14px;
+                        color: #F7FAFC;
+                        min-height: 20px;
+                        outline: none;
+                    }
+                    QLineEdit:focus {
+                        border-color: #63B3ED;
+                        background-color: #2D3748;
+                        outline: none;
+                    }
+                    QLineEdit:hover {
+                        border-color: #718096;
+                        background-color: #4A5568;
+                    }
+                    QLineEdit::placeholder {
+                        color: #718096;
+                        font-style: italic;
+                    }
+                    QTextEdit { background-color: #3c3c3c; border: 1px solid #555; color: #ffffff; }
                 """
                 self.setStyleSheet(basic_dark_stylesheet)
                 self.dark_mode = True
@@ -2424,6 +2662,31 @@ Please check the application logs for more details.
         
         # Call parent implementation
         super().keyPressEvent(event)
+    
+    def showEvent(self, event):
+        """Handle window show event to set proper column proportions"""
+        super().showEvent(event)
+        
+        # Adjust column proportions after window is fully shown
+        if not self._initial_column_setup_done:
+            # Use QTimer to defer the sizing adjustment
+            from PyQt5.QtCore import QTimer
+            QTimer.singleShot(100, self._adjust_column_proportions)
+            self._initial_column_setup_done = True
+    
+    def _adjust_column_proportions(self):
+        """Adjust splitter column proportions to target values"""
+        try:
+            if hasattr(self, 'main_splitter'):
+                total_width = self.main_splitter.width()
+                if total_width > 100:  # Only adjust if we have reasonable width
+                    self.main_splitter.setSizes([
+                        int(total_width * 0.40),  # 40% for left
+                        int(total_width * 0.35),  # 35% for middle
+                        int(total_width * 0.25)   # 25% for right
+                    ])
+        except Exception as e:
+            logger.error(f"Error adjusting column proportions: {e}")
     
     def resizeEvent(self, event):
         """Handle window resize to maintain progress overlay positioning"""
