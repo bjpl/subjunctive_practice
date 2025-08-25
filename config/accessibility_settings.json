@@ -1,0 +1,15 @@
+{
+  "high_contrast": false,
+  "focus_ring_width": 3,
+  "focus_ring_color": "#FF4444",
+  "font_size_multiplier": 1.0,
+  "keyboard_navigation_enabled": true,
+  "screen_reader_support": true,
+  "auto_announce": true,
+  "skip_animation": false,
+  "show_shortcuts": true,
+  "custom_shortcuts": {},
+  "color_theme": "default",
+  "reduce_motion": false,
+  "enhanced_tooltips": true
+}

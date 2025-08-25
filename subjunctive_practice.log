@@ -2909,3 +2909,592 @@ The JSON output must be strictly valid.
 2025-02-24 17:25:47,417 - INFO - Submitted answer 'cazara' for exercise 3
 2025-02-24 17:26:40,458 - INFO - Status update: Exercise 4 of 5
 2025-02-24 17:27:29,185 - INFO - Submitted answer 'ha pescado' for exercise 4
+2025-08-15 20:10:12,931 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-15 20:10:12,932 - INFO - Application initialized.
+2025-08-15 20:12:20,354 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-15 20:12:20,354 - INFO - Application initialized.
+2025-08-15 20:21:43,834 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-15 20:21:43,834 - INFO - Application initialized.
+2025-08-15 20:21:44,105 - INFO - Status update: Switched to dark theme.
+2025-08-15 20:21:44,105 - INFO - Switched to dark theme.
+2025-08-15 20:41:52,211 - INFO - API key validated (length: 164)
+2025-08-15 20:41:52,499 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-15 20:41:52,499 - INFO - Application initialized.
+2025-08-15 21:59:36,524 - INFO - API key validated (length: 164)
+2025-08-15 21:59:37,179 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-15 21:59:37,179 - INFO - Application initialized.
+2025-08-15 23:06:32,819 - INFO - API key validated (length: 164)
+2025-08-15 23:06:48,585 - INFO - API key validated (length: 164)
+2025-08-15 23:06:49,404 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-15 23:06:49,405 - INFO - Application initialized.
+2025-08-15 23:06:49,405 - INFO - Status update: ¡1 día! Sigue así.
+2025-08-24 17:50:56,236 - INFO - API key validated (length: 164)
+2025-08-24 17:51:00,629 - INFO - API key validated (length: 164)
+2025-08-24 17:51:00,707 - INFO - Modern UI theme initialized successfully
+2025-08-24 17:51:01,286 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-24 17:51:01,287 - INFO - Application initialized.
+2025-08-24 17:51:01,481 - INFO - Accessibility features initialized successfully
+2025-08-24 17:51:01,483 - INFO - Status update: ¡1 día! Sigue así.
+2025-08-24 18:00:25,707 - INFO - API key validated (length: 164)
+2025-08-24 18:00:26,324 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-24 18:00:26,324 - INFO - Application initialized.
+2025-08-24 18:00:26,468 - INFO - Accessibility features initialized successfully
+2025-08-24 18:00:26,536 - INFO - Spacing optimization initialized successfully
+2025-08-24 18:00:26,547 - INFO - Text spacing and layout optimized for better readability
+2025-08-24 18:00:26,548 - INFO - Status update: ¡1 día! Sigue así.
+2025-08-24 18:08:32,050 - INFO - API key validated (length: 164)
+2025-08-24 18:08:32,144 - INFO - Modern UI theme initialized successfully
+2025-08-24 18:08:32,845 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-24 18:08:32,845 - INFO - Application initialized.
+2025-08-24 18:08:33,019 - INFO - Accessibility features initialized successfully
+2025-08-24 18:08:33,111 - INFO - Spacing optimization initialized successfully
+2025-08-24 18:08:33,123 - INFO - Text spacing and layout optimized for better readability
+2025-08-24 18:08:33,123 - INFO - Status update: ¡1 día! Sigue así.
+2025-08-24 18:09:32,999 - INFO - API key validated (length: 164)
+2025-08-24 18:09:33,069 - INFO - Modern UI theme initialized successfully
+2025-08-24 18:09:33,629 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-24 18:09:33,630 - INFO - Application initialized.
+2025-08-24 18:09:33,763 - INFO - Accessibility features initialized successfully
+2025-08-24 18:09:33,841 - INFO - Spacing optimization initialized successfully
+2025-08-24 18:09:33,852 - INFO - Text spacing and layout optimized for better readability
+2025-08-24 18:09:33,852 - INFO - Status update: ¡1 día! Sigue así.
+2025-08-24 18:10:29,362 - INFO - Status update: TBLT mode: Focus on real-world communication tasks
+2025-08-24 18:10:35,096 - INFO - Status update: No exercises available. Generate new ones first.
+2025-08-24 18:10:38,307 - INFO - Status update: No exercises available. Generate new ones first.
+2025-08-24 18:10:43,013 - INFO - Status update: No exercises available. Generate new ones first.
+2025-08-24 18:10:58,109 - INFO - Status update: No exercises available. Generate new ones first.
+2025-08-24 18:11:04,107 - INFO - Status update: Generating TBLT communicative tasks...
+2025-08-24 18:13:15,792 - INFO - API key validated (length: 164)
+2025-08-24 18:13:15,862 - INFO - Modern UI theme initialized successfully
+2025-08-24 18:13:16,408 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-24 18:13:16,408 - INFO - Application initialized.
+2025-08-24 18:13:16,536 - INFO - Accessibility features initialized successfully
+2025-08-24 18:13:16,603 - INFO - Spacing optimization initialized successfully
+2025-08-24 18:13:16,612 - INFO - Text spacing and layout optimized for better readability
+2025-08-24 18:13:16,612 - INFO - Status update: ¡1 día! Sigue así.
+2025-08-24 18:17:15,784 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-24 18:17:15,784 - INFO - API Health Status: unhealthy - Available: False
+2025-08-24 18:17:26,261 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-24 18:17:26,262 - INFO - API Health Status: unhealthy - Available: False
+2025-08-24 18:17:26,306 - INFO - Modern UI theme initialized successfully
+2025-08-24 18:17:26,890 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-24 18:17:26,891 - INFO - Application initialized.
+2025-08-24 18:17:26,916 - WARNING - Some error fixes failed to apply
+2025-08-24 18:17:27,090 - INFO - Patched accessibility features initialized successfully
+2025-08-24 18:17:27,167 - INFO - Spacing optimization initialized successfully
+2025-08-24 18:17:27,177 - INFO - Text spacing and layout optimized for better readability
+2025-08-24 18:17:27,177 - INFO - Status update: ¡1 día! Sigue así.
+2025-08-24 18:19:07,232 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-24 18:19:07,232 - INFO - API Health Status: unhealthy - Available: False
+2025-08-24 18:19:07,262 - INFO - Modern UI theme initialized successfully
+2025-08-24 18:19:07,951 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-24 18:19:07,951 - INFO - Application initialized.
+2025-08-24 18:19:07,970 - INFO - Error fixes applied successfully
+2025-08-24 18:19:08,131 - INFO - Patched accessibility features initialized successfully
+2025-08-24 18:19:08,222 - INFO - Spacing optimization initialized successfully
+2025-08-24 18:19:08,234 - INFO - Text spacing and layout optimized for better readability
+2025-08-24 18:19:08,234 - INFO - Status update: ¡1 día! Sigue así.
+2025-08-24 18:19:10,845 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-24 18:19:10,845 - INFO - API Health Status: unhealthy - Available: False
+2025-08-24 18:19:10,869 - INFO - Modern UI theme initialized successfully
+2025-08-24 18:19:11,495 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-24 18:19:11,495 - INFO - Application initialized.
+2025-08-24 18:19:11,515 - INFO - Error fixes applied successfully
+2025-08-24 18:19:11,663 - INFO - Patched accessibility features initialized successfully
+2025-08-24 18:19:11,760 - INFO - Spacing optimization initialized successfully
+2025-08-24 18:19:11,773 - INFO - Text spacing and layout optimized for better readability
+2025-08-24 18:19:11,773 - INFO - Status update: ¡1 día! Sigue así.
+2025-08-24 18:20:42,762 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-24 18:20:42,763 - INFO - API Health Status: unhealthy - Available: False
+2025-08-24 19:57:21,990 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-24 19:57:21,991 - INFO - API Health Status: unhealthy - Available: True
+2025-08-24 19:57:22,008 - INFO - Modern UI theme initialized successfully
+2025-08-24 19:57:22,262 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-24 19:57:22,262 - INFO - Application initialized.
+2025-08-24 19:57:22,273 - INFO - Error fixes applied successfully
+2025-08-24 19:57:22,364 - INFO - Patched accessibility features initialized successfully
+2025-08-24 19:57:22,414 - INFO - Spacing optimization initialized successfully
+2025-08-24 19:57:22,420 - INFO - Text spacing and layout optimized for better readability
+2025-08-24 19:57:22,420 - INFO - Status update: ¡1 día! Sigue así.
+2025-08-24 19:58:02,767 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-24 19:58:02,767 - INFO - API Health Status: unhealthy - Available: True
+2025-08-24 19:58:02,784 - INFO - Modern UI theme initialized successfully
+2025-08-24 19:58:03,030 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-24 19:58:03,030 - INFO - Application initialized.
+2025-08-24 19:58:03,040 - INFO - Error fixes applied successfully
+2025-08-24 19:58:03,118 - INFO - Patched accessibility features initialized successfully
+2025-08-24 19:58:03,180 - INFO - Spacing optimization initialized successfully
+2025-08-24 19:58:03,188 - INFO - Text spacing and layout optimized for better readability
+2025-08-24 19:58:03,188 - INFO - Status update: ¡1 día! Sigue así.
+2025-08-24 19:58:30,360 - INFO - Status update: No exercises available. Generate new ones first.
+2025-08-24 19:58:35,672 - INFO - Status update: No exercises available. Generate new ones first.
+2025-08-24 19:58:36,805 - INFO - Status update: No exercises available. Generate new ones first.
+2025-08-24 19:58:41,003 - INFO - Status update: No exercises available. Generate new ones first.
+2025-08-24 19:58:48,059 - INFO - Status update: No exercises available. Generate new ones first.
+2025-08-24 19:58:49,428 - INFO - Status update: Generating new exercises...
+2025-08-24 19:58:49,431 - INFO - Generating new exercises with prompt: Create 5 Spanish subjunctive exercises. Intermediate level.
+Tenses: Present Subjunctive | Persons: él/ella/usted
+Return only JSON array:
+[{"context": "brief scenario", "sentence": "exercise text", "answer": "correct form", "choices": ["a","b","c","d"], "translation": "English"}]
+
+Requirements:
+- Use varied vocabulary and more complex sentence structures. Include less common triggers and verb forms.
+- LATAM Spanish
+- Real situations
+- No extra text
+2025-08-24 19:58:52,209 - INFO - Status update: Generating new exercises...
+2025-08-24 19:58:52,214 - INFO - Generating new exercises with prompt: Create 5 Spanish subjunctive exercises. Intermediate level.
+Tenses: Present Subjunctive | Persons: él/ella/usted
+Return only JSON array:
+[{"context": "brief scenario", "sentence": "exercise text", "answer": "correct form", "choices": ["a","b","c","d"], "translation": "English"}]
+
+Requirements:
+- Use varied vocabulary and more complex sentence structures. Include less common triggers and verb forms.
+- LATAM Spanish
+- Real situations
+- No extra text
+2025-08-24 19:59:03,131 - INFO - Raw GPT response received:
+[
+  {
+    "context": "Estás hablando con un amigo sobre un nuevo proyecto que quiere empezar, pero no está seguro si tiene el dinero suficiente.",
+    "sentence": "Es posible que él _______ (necesitar) un préstamo para iniciar su empresa.",
+    "answer": "necesite",
+    "choices": ["necesita", "necesitó", "necesitará", "necesite"],
+    "translation": "It's possible that he may need a loan to start his business."
+  },
+  {
+    "context": "Estás aconsejando a tu hermana que se comunique con su amigo que está molesto con ella.",
+    "sentence": "Es mejor que tú _______ (hablar) con él para aclarar el malentendido.",
+    "answer": "hables",
+    "choices": ["hablas", "hablaste", "hablarás", "hables"],
+    "translation": "It's better that you talk to him to clear up the misunderstanding."
+  },
+  {
+    "context": "Estás en una reunión de trabajo y tu jefe te pide tu opinión sobre una nueva estrategia de marketing.",
+    "sentence": "Creo que es importante que nosotros _______ (considerar) todas las posibilidades antes de tomar una decisión.",
+    "answer": "consideremos",
+    "choices": ["consideramos", "considerábamos", "consideraremos", "consideremos"],
+    "translation": "I think it's important that we consider all possibilities before making a decision."
+  },
+  {
+    "context": "Estás hablando con tu pareja sobre la posibilidad de mudarse a una nueva ciudad por trabajo.",
+    "sentence": "Es probable que ella _______ (sentir) miedo por el cambio, pero creo que es una buena oportunidad.",
+    "answer": "sienta",
+    "choices": ["siente", "sentía", "sentirá", "sienta"],
+    "translation": "She may probably feel fear about the change, but I think it's a good opportunity."
+  },
+  {
+    "context": "Estás hablando con un amigo que está pasando por un mal momento.",
+    "sentence": "Espero que tú _______ (encontrar) la paz y la felicidad que mereces pronto.",
+    "answer": "encuentres",
+    "choices": ["encuentras", "encontraste", "encontrarás", "encuentres"],
+    "translation": "I hope that you find the peace and happiness that you deserve soon."
+  }
+]
+2025-08-24 19:59:03,132 - INFO - Extracted JSON substring:
+[
+  {
+    "context": "Estás hablando con un amigo sobre un nuevo proyecto que quiere empezar, pero no está seguro si tiene el dinero suficiente.",
+    "sentence": "Es posible que él _______ (necesitar) un préstamo para iniciar su empresa.",
+    "answer": "necesite",
+    "choices": ["necesita", "necesitó", "necesitará", "necesite"],
+    "translation": "It's possible that he may need a loan to start his business."
+  },
+  {
+    "context": "Estás aconsejando a tu hermana que se comunique con su amigo que está molesto con ella.",
+    "sentence": "Es mejor que tú _______ (hablar) con él para aclarar el malentendido.",
+    "answer": "hables",
+    "choices": ["hablas", "hablaste", "hablarás", "hables"],
+    "translation": "It's better that you talk to him to clear up the misunderstanding."
+  },
+  {
+    "context": "Estás en una reunión de trabajo y tu jefe te pide tu opinión sobre una nueva estrategia de marketing.",
+    "sentence": "Creo que es importante que nosotros _______ (considerar) todas las posibilidades antes de tomar una decisión.",
+    "answer": "consideremos",
+    "choices": ["consideramos", "considerábamos", "consideraremos", "consideremos"],
+    "translation": "I think it's important that we consider all possibilities before making a decision."
+  },
+  {
+    "context": "Estás hablando con tu pareja sobre la posibilidad de mudarse a una nueva ciudad por trabajo.",
+    "sentence": "Es probable que ella _______ (sentir) miedo por el cambio, pero creo que es una buena oportunidad.",
+    "answer": "sienta",
+    "choices": ["siente", "sentía", "sentirá", "sienta"],
+    "translation": "She may probably feel fear about the change, but I think it's a good opportunity."
+  },
+  {
+    "context": "Estás hablando con un amigo que está pasando por un mal momento.",
+    "sentence": "Espero que tú _______ (encontrar) la paz y la felicidad que mereces pronto.",
+    "answer": "encuentres",
+    "choices": ["encuentras", "encontraste", "encontrarás", "encuentres"],
+    "translation": "I hope that you find the peace and happiness that you deserve soon."
+  }
+]
+2025-08-24 19:59:03,132 - INFO - After removing trailing commas:
+[
+  {
+    "context": "Estás hablando con un amigo sobre un nuevo proyecto que quiere empezar, pero no está seguro si tiene el dinero suficiente.",
+    "sentence": "Es posible que él _______ (necesitar) un préstamo para iniciar su empresa.",
+    "answer": "necesite",
+    "choices": ["necesita", "necesitó", "necesitará", "necesite"],
+    "translation": "It's possible that he may need a loan to start his business."
+  },
+  {
+    "context": "Estás aconsejando a tu hermana que se comunique con su amigo que está molesto con ella.",
+    "sentence": "Es mejor que tú _______ (hablar) con él para aclarar el malentendido.",
+    "answer": "hables",
+    "choices": ["hablas", "hablaste", "hablarás", "hables"],
+    "translation": "It's better that you talk to him to clear up the misunderstanding."
+  },
+  {
+    "context": "Estás en una reunión de trabajo y tu jefe te pide tu opinión sobre una nueva estrategia de marketing.",
+    "sentence": "Creo que es importante que nosotros _______ (considerar) todas las posibilidades antes de tomar una decisión.",
+    "answer": "consideremos",
+    "choices": ["consideramos", "considerábamos", "consideraremos", "consideremos"],
+    "translation": "I think it's important that we consider all possibilities before making a decision."
+  },
+  {
+    "context": "Estás hablando con tu pareja sobre la posibilidad de mudarse a una nueva ciudad por trabajo.",
+    "sentence": "Es probable que ella _______ (sentir) miedo por el cambio, pero creo que es una buena oportunidad.",
+    "answer": "sienta",
+    "choices": ["siente", "sentía", "sentirá", "sienta"],
+    "translation": "She may probably feel fear about the change, but I think it's a good opportunity."
+  },
+  {
+    "context": "Estás hablando con un amigo que está pasando por un mal momento.",
+    "sentence": "Espero que tú _______ (encontrar) la paz y la felicidad que mereces pronto.",
+    "answer": "encuentres",
+    "choices": ["encuentras", "encontraste", "encontrarás", "encuentres"],
+    "translation": "I hope that you find the peace and happiness that you deserve soon."
+  }
+]
+2025-08-24 19:59:03,140 - INFO - Status update: Exercise 1 of 5
+2025-08-24 19:59:03,155 - INFO - Status update: 🔊 Exercise mode: Multiple Choice
+2025-08-24 19:59:03,156 - INFO - Status update: New exercises generated.
+2025-08-24 19:59:03,156 - INFO - New exercises generated successfully.
+2025-08-24 19:59:03,156 - INFO - Status update: 🔊 5 new exercises generated. Starting with exercise 1.
+2025-08-24 19:59:03,158 - INFO - Status update: 🔊 First exercise ready
+2025-08-24 19:59:08,029 - INFO - Raw GPT response received:
+[
+  {
+    "context": "Estás hablando con tu jefe sobre un nuevo proyecto muy importante. Quieres que él te dé más responsabilidades en este proyecto.", 
+    "sentence": "Jefe, espero que usted ________ (confiar) en mis habilidades y me permita manejar una parte más grande de este proyecto.", 
+    "answer": "confíe", 
+    "choices": ["confío", "confía", "confíe", "confié"], 
+    "translation": "Boss, I hope that you trust in my abilities and allow me to handle a larger part of this project."
+  },
+  {
+    "context": "Estás dando consejos a un amigo que quiere comprar una casa. Quieres que él investigue bien antes de tomar una decisión.", 
+    "sentence": "Es importante que tú ________ (investigar) bien antes de comprar una casa.", 
+    "answer": "investigues", 
+    "choices": ["investigas", "investigue", "investiga", "investigues"], 
+    "translation": "It's important that you investigate well before buying a house."
+  },
+  {
+    "context": "Estás en una reunión con un cliente y quieres que él entienda la importancia de tu propuesta.", 
+    "sentence": "Es fundamental que usted ________ (entender) la importancia de esta propuesta para su empresa.", 
+    "answer": "entienda", 
+    "choices": ["entiende", "entendió", "entenderá", "entienda"], 
+    "translation": "It's crucial that you understand the importance of this proposal for your company."
+  },
+  {
+    "context": "Estás hablando con tu amiga sobre su relación problemática. Quieres que ella hable con su pareja sobre los problemas.", 
+    "sentence": "Es necesario que tú ________ (hablar) con tu pareja sobre los problemas que tienen.", 
+    "answer": "hables", 
+    "choices": ["hablas", "hablarás", "hables", "hablaste"], 
+    "translation": "It's necessary that you talk to your partner about the problems you have."
+  },
+  {
+    "context": "Estás en una entrevista de trabajo y el entrevistador te pregunta por qué deberían contratarlo.", 
+    "sentence": "Creo que es esencial que usted ________ (ver) mis habilidades y experiencia como un activo para su empresa.", 
+    "answer": "vea", 
+    "choices": ["ve", "verá", "vio", "vea"], 
+    "translation": "I believe it's essential that you see my skills and experience as an asset to your company."
+  }
+]
+2025-08-24 19:59:08,029 - INFO - Extracted JSON substring:
+[
+  {
+    "context": "Estás hablando con tu jefe sobre un nuevo proyecto muy importante. Quieres que él te dé más responsabilidades en este proyecto.", 
+    "sentence": "Jefe, espero que usted ________ (confiar) en mis habilidades y me permita manejar una parte más grande de este proyecto.", 
+    "answer": "confíe", 
+    "choices": ["confío", "confía", "confíe", "confié"], 
+    "translation": "Boss, I hope that you trust in my abilities and allow me to handle a larger part of this project."
+  },
+  {
+    "context": "Estás dando consejos a un amigo que quiere comprar una casa. Quieres que él investigue bien antes de tomar una decisión.", 
+    "sentence": "Es importante que tú ________ (investigar) bien antes de comprar una casa.", 
+    "answer": "investigues", 
+    "choices": ["investigas", "investigue", "investiga", "investigues"], 
+    "translation": "It's important that you investigate well before buying a house."
+  },
+  {
+    "context": "Estás en una reunión con un cliente y quieres que él entienda la importancia de tu propuesta.", 
+    "sentence": "Es fundamental que usted ________ (entender) la importancia de esta propuesta para su empresa.", 
+    "answer": "entienda", 
+    "choices": ["entiende", "entendió", "entenderá", "entienda"], 
+    "translation": "It's crucial that you understand the importance of this proposal for your company."
+  },
+  {
+    "context": "Estás hablando con tu amiga sobre su relación problemática. Quieres que ella hable con su pareja sobre los problemas.", 
+    "sentence": "Es necesario que tú ________ (hablar) con tu pareja sobre los problemas que tienen.", 
+    "answer": "hables", 
+    "choices": ["hablas", "hablarás", "hables", "hablaste"], 
+    "translation": "It's necessary that you talk to your partner about the problems you have."
+  },
+  {
+    "context": "Estás en una entrevista de trabajo y el entrevistador te pregunta por qué deberían contratarlo.", 
+    "sentence": "Creo que es esencial que usted ________ (ver) mis habilidades y experiencia como un activo para su empresa.", 
+    "answer": "vea", 
+    "choices": ["ve", "verá", "vio", "vea"], 
+    "translation": "I believe it's essential that you see my skills and experience as an asset to your company."
+  }
+]
+2025-08-24 19:59:08,029 - INFO - After removing trailing commas:
+[
+  {
+    "context": "Estás hablando con tu jefe sobre un nuevo proyecto muy importante. Quieres que él te dé más responsabilidades en este proyecto.", 
+    "sentence": "Jefe, espero que usted ________ (confiar) en mis habilidades y me permita manejar una parte más grande de este proyecto.", 
+    "answer": "confíe", 
+    "choices": ["confío", "confía", "confíe", "confié"], 
+    "translation": "Boss, I hope that you trust in my abilities and allow me to handle a larger part of this project."
+  },
+  {
+    "context": "Estás dando consejos a un amigo que quiere comprar una casa. Quieres que él investigue bien antes de tomar una decisión.", 
+    "sentence": "Es importante que tú ________ (investigar) bien antes de comprar una casa.", 
+    "answer": "investigues", 
+    "choices": ["investigas", "investigue", "investiga", "investigues"], 
+    "translation": "It's important that you investigate well before buying a house."
+  },
+  {
+    "context": "Estás en una reunión con un cliente y quieres que él entienda la importancia de tu propuesta.", 
+    "sentence": "Es fundamental que usted ________ (entender) la importancia de esta propuesta para su empresa.", 
+    "answer": "entienda", 
+    "choices": ["entiende", "entendió", "entenderá", "entienda"], 
+    "translation": "It's crucial that you understand the importance of this proposal for your company."
+  },
+  {
+    "context": "Estás hablando con tu amiga sobre su relación problemática. Quieres que ella hable con su pareja sobre los problemas.", 
+    "sentence": "Es necesario que tú ________ (hablar) con tu pareja sobre los problemas que tienen.", 
+    "answer": "hables", 
+    "choices": ["hablas", "hablarás", "hables", "hablaste"], 
+    "translation": "It's necessary that you talk to your partner about the problems you have."
+  },
+  {
+    "context": "Estás en una entrevista de trabajo y el entrevistador te pregunta por qué deberían contratarlo.", 
+    "sentence": "Creo que es esencial que usted ________ (ver) mis habilidades y experiencia como un activo para su empresa.", 
+    "answer": "vea", 
+    "choices": ["ve", "verá", "vio", "vea"], 
+    "translation": "I believe it's essential that you see my skills and experience as an asset to your company."
+  }
+]
+2025-08-24 19:59:08,031 - INFO - Status update: Exercise 1 of 5
+2025-08-24 19:59:08,051 - INFO - Status update: 🔊 Exercise mode: Multiple Choice
+2025-08-24 19:59:08,052 - INFO - Status update: New exercises generated.
+2025-08-24 19:59:08,052 - INFO - New exercises generated successfully.
+2025-08-24 19:59:08,052 - INFO - Status update: 🔊 5 new exercises generated. Starting with exercise 1.
+2025-08-24 19:59:08,052 - INFO - Status update: 🔊 First exercise ready
+2025-08-24 20:11:44,500 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-24 20:11:44,501 - INFO - API Health Status: unhealthy - Available: True
+2025-08-24 20:11:44,515 - INFO - Modern UI theme initialized successfully
+2025-08-24 20:11:44,799 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-24 20:11:44,799 - INFO - Application initialized.
+2025-08-24 20:11:44,809 - INFO - Error fixes applied successfully
+2025-08-24 20:11:44,882 - INFO - Form styling fixes initialized successfully - red boxes and visibility issues addressed
+2025-08-24 20:11:45,003 - INFO - Patched accessibility features initialized successfully
+2025-08-24 20:11:45,063 - INFO - Spacing optimization initialized successfully
+2025-08-24 20:11:45,069 - INFO - Text spacing and layout optimized for better readability
+2025-08-24 20:11:45,070 - ERROR - Typography fixes failed: 'SpanishSubjunctivePracticeGUI' object has no attribute 'app'
+2025-08-24 20:11:45,070 - INFO - Status update: Typography enhancement failed - using default styling
+2025-08-24 20:11:45,070 - INFO - Status update: ¡1 día! Sigue así.
+2025-08-24 20:19:53,145 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-24 20:19:53,146 - INFO - API Health Status: unhealthy - Available: True
+2025-08-24 20:19:53,160 - INFO - Modern UI theme initialized successfully
+2025-08-24 20:19:53,393 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-24 20:19:53,394 - INFO - Application initialized.
+2025-08-24 20:19:53,403 - INFO - Error fixes applied successfully
+2025-08-24 20:19:53,464 - INFO - Form styling fixes initialized successfully - red boxes and visibility issues addressed
+2025-08-24 20:19:53,548 - INFO - Patched accessibility features initialized successfully
+2025-08-24 20:19:53,598 - INFO - Spacing optimization initialized successfully
+2025-08-24 20:19:53,605 - INFO - Text spacing and layout optimized for better readability
+2025-08-24 20:19:53,605 - ERROR - Typography fixes failed: 'SpanishSubjunctivePracticeGUI' object has no attribute 'app'
+2025-08-24 20:19:53,605 - INFO - Status update: Typography enhancement failed - using default styling
+2025-08-24 20:19:53,605 - INFO - Status update: ¡1 día! Sigue así.
+2025-08-24 20:19:53,649 - INFO - Responsive design system integrated successfully
+2025-08-24 20:23:48,448 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-24 20:23:48,448 - INFO - API Health Status: unhealthy - Available: True
+2025-08-24 20:23:48,687 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-24 20:23:48,687 - INFO - Application initialized.
+2025-08-24 20:23:48,687 - INFO - Applying basic error fixes only (rollback mode)
+2025-08-24 20:23:48,692 - INFO - Status update: ¡1 día! Sigue así.
+2025-08-24 20:24:02,965 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-24 20:24:02,965 - INFO - API Health Status: unhealthy - Available: True
+2025-08-24 20:24:03,261 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-24 20:24:03,262 - INFO - Application initialized.
+2025-08-24 20:24:03,262 - INFO - Applying basic error fixes only (rollback mode)
+2025-08-24 20:24:03,270 - INFO - Status update: ¡1 día! Sigue así.
+2025-08-24 21:02:03,665 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-24 21:02:03,665 - INFO - API Health Status: unhealthy - Available: True
+2025-08-24 21:02:03,681 - INFO - Using basic UI styling - rollback mode
+2025-08-24 21:02:03,905 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-24 21:02:03,906 - INFO - Application initialized.
+2025-08-24 21:02:03,906 - INFO - Applying basic error fixes only (rollback mode)
+2025-08-24 21:02:04,009 - INFO - Patched accessibility features initialized successfully
+2025-08-24 21:02:04,009 - INFO - Status update: ¡1 día! Sigue así.
+2025-08-25 09:36:09,815 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-25 09:36:09,816 - INFO - API Health Status: unhealthy - Available: True
+2025-08-25 09:36:09,856 - INFO - Using basic UI styling - rollback mode
+2025-08-25 09:36:10,162 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-25 09:36:10,162 - INFO - Application initialized.
+2025-08-25 09:36:10,162 - INFO - Applying basic error fixes only (rollback mode)
+2025-08-25 09:36:10,248 - INFO - Patched accessibility features initialized successfully
+2025-08-25 09:36:10,249 - INFO - Status update: ¡2 días! Sigue así.
+2025-08-25 09:36:30,928 - INFO - Status update: No exercises available. Generate new ones first.
+2025-08-25 09:36:32,417 - INFO - Status update: Generating new exercises...
+2025-08-25 09:36:32,421 - INFO - Generating new exercises with prompt: Create 5 Spanish subjunctive exercises. Intermediate level.
+Tenses: Present Subjunctive | Persons: él/ella/usted
+Return only JSON array:
+[{"context": "brief scenario", "sentence": "exercise text", "answer": "correct form", "choices": ["a","b","c","d"], "translation": "English"}]
+
+Requirements:
+- Use varied vocabulary and more complex sentence structures. Include less common triggers and verb forms.
+- LATAM Spanish
+- Real situations
+- No extra text
+2025-08-25 09:36:51,806 - INFO - Raw GPT response received:
+[
+  {
+    "context": "Estás en una fiesta con tu amigo Carlos. Quieres que él hable con una chica que le gusta.",
+    "sentence": "Espero que Carlos ___ (hablar) con ella antes de que termine la fiesta.",
+    "answer": "hable",
+    "choices": ["habla", "hablé", "hable", "ha hablado"],
+    "translation": "I hope Carlos talks to her before the party ends."
+  },
+  {
+    "context": "Tu madre está enferma y quieres que tu hermano vaya a la farmacia.",
+    "sentence": "Dile a Juan que ___ (ir) a la farmacia y compre la medicina para mamá.",
+    "answer": "vaya",
+    "choices": ["va", "vaya", "fue", "vamos"],
+    "translation": "Tell Juan to go to the pharmacy and buy mom's medicine."
+  },
+  {
+    "context": "Estás hablando con el dueño de un restaurante sobre tu amigo, un chef talentoso.",
+    "sentence": "Es importante que usted ___ (conocer) a mi amigo. Tiene mucho talento en la cocina.",
+    "answer": "conozca",
+    "choices": ["conoce", "conocerá", "conozca", "conoció"],
+    "translation": "It's important that you meet my friend. He's very talented in the kitchen."
+  },
+  {
+    "context": "Estás dando instrucciones a tu compañero de trabajo sobre una tarea importante.",
+    "sentence": "Es necesario que tú ___ (terminar) el informe antes de la reunión de mañana.",
+    "answer": "termines",
+    "choices": ["terminas", "terminaste", "termines", "termina"],
+    "translation": "It's necessary that you finish the report before tomorrow's meeting."
+  },
+  {
+    "context": "Estás hablando con tu amigo sobre un libro que quieres que él lea.",
+    "sentence": "Te recomiendo que ___ (leer) este libro. Creo que te gustará.",
+    "answer": "leas",
+    "choices": ["leas", "lees", "lee", "leyó"],
+    "translation": "I recommend you read this book. I think you'll like it."
+  }
+]
+2025-08-25 09:36:51,806 - INFO - Extracted JSON substring:
+[
+  {
+    "context": "Estás en una fiesta con tu amigo Carlos. Quieres que él hable con una chica que le gusta.",
+    "sentence": "Espero que Carlos ___ (hablar) con ella antes de que termine la fiesta.",
+    "answer": "hable",
+    "choices": ["habla", "hablé", "hable", "ha hablado"],
+    "translation": "I hope Carlos talks to her before the party ends."
+  },
+  {
+    "context": "Tu madre está enferma y quieres que tu hermano vaya a la farmacia.",
+    "sentence": "Dile a Juan que ___ (ir) a la farmacia y compre la medicina para mamá.",
+    "answer": "vaya",
+    "choices": ["va", "vaya", "fue", "vamos"],
+    "translation": "Tell Juan to go to the pharmacy and buy mom's medicine."
+  },
+  {
+    "context": "Estás hablando con el dueño de un restaurante sobre tu amigo, un chef talentoso.",
+    "sentence": "Es importante que usted ___ (conocer) a mi amigo. Tiene mucho talento en la cocina.",
+    "answer": "conozca",
+    "choices": ["conoce", "conocerá", "conozca", "conoció"],
+    "translation": "It's important that you meet my friend. He's very talented in the kitchen."
+  },
+  {
+    "context": "Estás dando instrucciones a tu compañero de trabajo sobre una tarea importante.",
+    "sentence": "Es necesario que tú ___ (terminar) el informe antes de la reunión de mañana.",
+    "answer": "termines",
+    "choices": ["terminas", "terminaste", "termines", "termina"],
+    "translation": "It's necessary that you finish the report before tomorrow's meeting."
+  },
+  {
+    "context": "Estás hablando con tu amigo sobre un libro que quieres que él lea.",
+    "sentence": "Te recomiendo que ___ (leer) este libro. Creo que te gustará.",
+    "answer": "leas",
+    "choices": ["leas", "lees", "lee", "leyó"],
+    "translation": "I recommend you read this book. I think you'll like it."
+  }
+]
+2025-08-25 09:36:51,807 - INFO - After removing trailing commas:
+[
+  {
+    "context": "Estás en una fiesta con tu amigo Carlos. Quieres que él hable con una chica que le gusta.",
+    "sentence": "Espero que Carlos ___ (hablar) con ella antes de que termine la fiesta.",
+    "answer": "hable",
+    "choices": ["habla", "hablé", "hable", "ha hablado"],
+    "translation": "I hope Carlos talks to her before the party ends."
+  },
+  {
+    "context": "Tu madre está enferma y quieres que tu hermano vaya a la farmacia.",
+    "sentence": "Dile a Juan que ___ (ir) a la farmacia y compre la medicina para mamá.",
+    "answer": "vaya",
+    "choices": ["va", "vaya", "fue", "vamos"],
+    "translation": "Tell Juan to go to the pharmacy and buy mom's medicine."
+  },
+  {
+    "context": "Estás hablando con el dueño de un restaurante sobre tu amigo, un chef talentoso.",
+    "sentence": "Es importante que usted ___ (conocer) a mi amigo. Tiene mucho talento en la cocina.",
+    "answer": "conozca",
+    "choices": ["conoce", "conocerá", "conozca", "conoció"],
+    "translation": "It's important that you meet my friend. He's very talented in the kitchen."
+  },
+  {
+    "context": "Estás dando instrucciones a tu compañero de trabajo sobre una tarea importante.",
+    "sentence": "Es necesario que tú ___ (terminar) el informe antes de la reunión de mañana.",
+    "answer": "termines",
+    "choices": ["terminas", "terminaste", "termines", "termina"],
+    "translation": "It's necessary that you finish the report before tomorrow's meeting."
+  },
+  {
+    "context": "Estás hablando con tu amigo sobre un libro que quieres que él lea.",
+    "sentence": "Te recomiendo que ___ (leer) este libro. Creo que te gustará.",
+    "answer": "leas",
+    "choices": ["leas", "lees", "lee", "leyó"],
+    "translation": "I recommend you read this book. I think you'll like it."
+  }
+]
+2025-08-25 09:36:51,813 - INFO - Status update: Exercise 1 of 5
+2025-08-25 09:36:51,822 - INFO - Status update: 🔊 Exercise mode: Multiple Choice
+2025-08-25 09:36:51,823 - INFO - Status update: New exercises generated successfully!
+2025-08-25 09:36:51,823 - INFO - New exercises generated successfully.
+2025-08-25 09:36:51,823 - INFO - Status update: 🔊 5 new exercises generated. Starting with exercise 1.
+2025-08-25 09:36:51,825 - INFO - Status update: 🔊 First exercise ready
+2025-08-25 09:37:46,013 - INFO - Submitted answer 'hable' for exercise 1
+2025-08-25 09:37:49,977 - INFO - Status update: Answer explanation ready
+2025-08-25 09:37:52,186 - INFO - Status update: Exercise 2 of 5
+2025-08-25 09:37:52,194 - INFO - Status update: 🔊 Exercise mode: Multiple Choice
+2025-08-25 09:38:00,607 - INFO - Submitted answer 'vaya' for exercise 2
+2025-08-25 09:38:04,285 - INFO - Status update: Answer explanation ready
+2025-08-25 09:54:16,431 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-25 09:54:16,431 - INFO - API Health Status: unhealthy - Available: True
+2025-08-25 09:55:47,214 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-25 09:55:47,215 - INFO - API Health Status: unhealthy - Available: True
+2025-08-25 10:01:48,796 - INFO - Using enhanced API configuration with rate limiting and error handling
+2025-08-25 10:01:48,797 - INFO - API Health Status: unhealthy - Available: True
+2025-08-25 10:01:48,809 - INFO - Using basic UI styling - rollback mode
+2025-08-25 10:01:49,090 - INFO - Status update: Welcome! Please make all required selections and generate new exercises.
+2025-08-25 10:01:49,091 - INFO - Application initialized.
+2025-08-25 10:01:49,091 - INFO - Applying basic error fixes only (rollback mode)
+2025-08-25 10:01:49,174 - INFO - Patched accessibility features initialized successfully
+2025-08-25 10:01:49,174 - INFO - Status update: ¡2 días! Sigue así.

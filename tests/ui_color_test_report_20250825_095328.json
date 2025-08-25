@@ -1,0 +1,530 @@
+{
+  "timestamp": "2025-08-25T09:53:28.232189",
+  "test_summary": {
+    "overall_passed": false,
+    "total_violations": 23,
+    "harsh_red_violations": 21,
+    "focus_violations": 1,
+    "error_violations": 1,
+    "files_with_violations": 2,
+    "accessibility_score": 0
+  },
+  "static_analysis": {
+    "timestamp": "2025-08-25T09:53:28.232189",
+    "project_root": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice",
+    "harsh_red_scan": {
+      "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\verify_fixes.py": [
+        {
+          "line": 32,
+          "match": "#FF0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "if '#FF0000' in colors.values() or '#DC143C' in colors.values():",
+          "column": 8
+        },
+        {
+          "line": 32,
+          "match": "#DC143C",
+          "pattern": "#DC143C",
+          "context": "if '#FF0000' in colors.values() or '#DC143C' in colors.values():",
+          "column": 40
+        }
+      ],
+      "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py": [
+        {
+          "line": 6,
+          "match": "#FF0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "1. No harsh red (#FF0000) remains in style definitions",
+          "column": 17
+        },
+        {
+          "line": 52,
+          "match": "#FF0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "r'#[Ff]{2}0{4}',           # #FF0000, #ff0000",
+          "column": 37
+        },
+        {
+          "line": 52,
+          "match": "#ff0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "r'#[Ff]{2}0{4}',           # #FF0000, #ff0000",
+          "column": 46
+        },
+        {
+          "line": 53,
+          "match": "rgb(255, 0, 0)",
+          "pattern": "rgb\\(\\s*255\\s*,\\s*0\\s*,\\s*0\\s*\\)",
+          "context": "r'rgb\\(\\s*255\\s*,\\s*0\\s*,\\s*0\\s*\\)',  # rgb(255, 0, 0)",
+          "column": 48
+        },
+        {
+          "line": 56,
+          "match": "#DC143C",
+          "pattern": "#DC143C",
+          "context": "r'#DC143C',                             # Crimson red",
+          "column": 10
+        },
+        {
+          "line": 301,
+          "match": "#FF0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "color.upper() in ['#FF0000', '#DC143C']",
+          "column": 35
+        },
+        {
+          "line": 301,
+          "match": "#DC143C",
+          "pattern": "#DC143C",
+          "context": "color.upper() in ['#FF0000', '#DC143C']",
+          "column": 46
+        },
+        {
+          "line": 353,
+          "match": "#FF0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "'harsh_reds': ['#FF0000', '#DC143C'],",
+          "column": 28
+        },
+        {
+          "line": 353,
+          "match": "#DC143C",
+          "pattern": "#DC143C",
+          "context": "'harsh_reds': ['#FF0000', '#DC143C'],",
+          "column": 39
+        },
+        {
+          "line": 354,
+          "match": "#FF0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "'focus_colors': ['#FF0000', 'red'],",
+          "column": 30
+        },
+        {
+          "line": 355,
+          "match": "#FF0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "'error_colors': ['#FF0000', 'crimson'],",
+          "column": 30
+        },
+        {
+          "line": 369,
+          "match": "#FF0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "'Used harsh #FF0000 red causing eye strain',",
+          "column": 32
+        },
+        {
+          "line": 388,
+          "match": "#FF0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "'eye_strain_reduction': 'Eliminated harsh #FF0000',",
+          "column": 58
+        },
+        {
+          "line": 404,
+          "match": "#FF0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "background-color: #FF0000 !important;  /* Harsh red - causes eye strain */",
+          "column": 22
+        },
+        {
+          "line": 406,
+          "match": "#FF0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "border: 2px solid #FF0000;",
+          "column": 22
+        },
+        {
+          "line": 411,
+          "match": "#FF0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "border: 2px solid #FF0000;",
+          "column": 22
+        },
+        {
+          "line": 415,
+          "match": "#DC143C",
+          "pattern": "#DC143C",
+          "context": "background-color: #DC143C;  /* Crimson red - too aggressive */",
+          "column": 22
+        },
+        {
+          "line": 515,
+          "match": "#FF0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "recommendations.append(\"Replace harsh red colors (#FF0000) with softer alternatives (#DC2626, #EF4444)\")",
+          "column": 58
+        },
+        {
+          "line": 565,
+          "match": "#FF0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "print(f\"• Harsh Red Colors (#FF0000): {summary['harsh_red_violations']}\")",
+          "column": 32
+        }
+      ]
+    },
+    "focus_color_validation": {
+      "approved_focus_colors": [
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\accessibility_manager.py",
+          "line": 39,
+          "color": "#3B82F6",
+          "context": "\"focus_ring_color\": \"#3B82F6\","
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\accessibility_manager.py",
+          "line": 182,
+          "color": "#3B82F6",
+          "context": "ring_color = self.settings.get(\"focus_ring_color\", \"#3B82F6\")"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\accessibility_manager.py",
+          "line": 1272,
+          "color": "#3B82F6",
+          "context": "current_color = QColor(self.settings.get(\"focus_ring_color\", \"#3B82F6\"))"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\css_variables_system.py",
+          "line": 93,
+          "color": "#3B82F6",
+          "context": "'--border-focus': '#3b82f6',"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\enhanced_typography_system.py",
+          "line": 103,
+          "color": "#2563EB",
+          "context": "'light_focus': '#2563eb',"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\form_styling_fixes.py",
+          "line": 42,
+          "color": "#3B82F6",
+          "context": "'input_border_focus': '#3B82F6',  # Professional blue instead of red"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\form_styling_fixes.py",
+          "line": 601,
+          "color": "#3B82F6",
+          "context": "focus_color = QColor('#3B82F6')  # Professional blue"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\ui_visual.py",
+          "line": 39,
+          "color": "#2E86AB",
+          "context": "'border_focus': '#2E86AB',      # Focus border color"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py",
+          "line": 7,
+          "color": "#3B82F6",
+          "context": "2. Focus states use blue (#3B82F6) instead of red"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py",
+          "line": 327,
+          "color": "#3B82F6",
+          "context": "(QLineEdit, \"QLineEdit:focus { border: 2px solid #3B82F6; }\"),"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py",
+          "line": 360,
+          "color": "#3B82F6",
+          "context": "'focus_colors': ['#3B82F6', '#2563EB', '#2E86AB'],"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py",
+          "line": 360,
+          "color": "#2563EB",
+          "context": "'focus_colors': ['#3B82F6', '#2563EB', '#2E86AB'],"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py",
+          "line": 360,
+          "color": "#2E86AB",
+          "context": "'focus_colors': ['#3B82F6', '#2563EB', '#2E86AB'],"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py",
+          "line": 430,
+          "color": "#3B82F6",
+          "context": "outline: 2px solid #3B82F6;  /* Blue focus - accessible */"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py",
+          "line": 518,
+          "color": "#3B82F6",
+          "context": "recommendations.append(\"Update focus states to use blue colors (#3B82F6) instead of red\")"
+        }
+      ],
+      "violations": [
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py",
+          "line": 354,
+          "context": "'focus_colors': ['#FF0000', 'red'],",
+          "issue": "Focus state uses harsh red color"
+        }
+      ],
+      "files_checked": 89
+    },
+    "error_color_validation": {
+      "approved_error_colors": [
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\accessibility_manager.py",
+          "line": 390,
+          "color": "#DC2626",
+          "context": "\"error\": \"#DC2626\""
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\accessibility_manager.py",
+          "line": 402,
+          "color": "#EF4444",
+          "context": "\"error\": \"#EF4444\""
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\accessibility_theme_integration.py",
+          "line": 415,
+          "color": "#E74C3C",
+          "context": "'incorrect': '#E74C3C',"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\clean_ui_colors.py",
+          "line": 31,
+          "color": "#EF4444",
+          "context": "ERROR = \"#EF4444\"            # Soft red - Errors, incorrect answers"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\clean_ui_colors.py",
+          "line": 32,
+          "color": "#DC2626",
+          "context": "ERROR_HOVER = \"#DC2626\"      # Darker red for hover"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\contrast_improvements.py",
+          "line": 497,
+          "color": "#E74C3C",
+          "context": "'error': '#E74C3C',"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\css_variables_system.py",
+          "line": 76,
+          "color": "#EF4444",
+          "context": "'--color-error': '#ef4444',"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\css_variables_system.py",
+          "line": 94,
+          "color": "#EF4444",
+          "context": "'--border-error': '#ef4444',"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\form_styling_fixes.py",
+          "line": 52,
+          "color": "#DC2626",
+          "context": "'error_border': '#DC2626',"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\modern_responsive_design.py",
+          "line": 122,
+          "color": "#EF4444",
+          "context": "'error-500': '#ef4444',"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\modern_responsive_design.py",
+          "line": 166,
+          "color": "#EF4444",
+          "context": "'error-500': '#ef4444',"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\modern_responsive_design.py",
+          "line": 167,
+          "color": "#F87171",
+          "context": "'error-700': '#f87171',"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\ui_consistency.py",
+          "line": 65,
+          "color": "#E74C3C",
+          "context": "\"error\": \"#e74c3c\","
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\ui_interactions.py",
+          "line": 105,
+          "color": "#E74C3C",
+          "context": "FeedbackType.INCORRECT: \"#e74c3c\",  # Red"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\ui_visual.py",
+          "line": 53,
+          "color": "#E74C3C",
+          "context": "'error': '#E74C3C',             # Red for errors"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py",
+          "line": 8,
+          "color": "#DC2626",
+          "context": "3. Error states use softer red (#DC2626 or #EF4444)"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py",
+          "line": 8,
+          "color": "#EF4444",
+          "context": "3. Error states use softer red (#DC2626 or #EF4444)"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py",
+          "line": 71,
+          "color": "#E74C3C",
+          "context": "'#E74C3C',  # Theme error color"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py",
+          "line": 361,
+          "color": "#DC2626",
+          "context": "'error_colors': ['#DC2626', '#EF4444'],"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py",
+          "line": 361,
+          "color": "#EF4444",
+          "context": "'error_colors': ['#DC2626', '#EF4444'],"
+        }
+      ],
+      "violations": [
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py",
+          "line": 355,
+          "context": "'error_colors': ['#FF0000', 'crimson'],",
+          "issue": "Error state uses harsh red color"
+        }
+      ],
+      "files_checked": 89
+    },
+    "summary": {
+      "harsh_red_files_count": 2,
+      "harsh_red_violations_count": 21,
+      "focus_violations_count": 1,
+      "focus_approved_count": 15,
+      "error_violations_count": 1,
+      "error_approved_count": 20,
+      "total_violations": 23,
+      "passed": false
+    }
+  },
+  "runtime_tests": {
+    "QLabel": {
+      "widget_class": "QLabel",
+      "colors": {
+        "background": "#f0f0f0",
+        "foreground": "#000000",
+        "highlight": "#0078d7",
+        "highlighted_text": "#ffffff",
+        "button": "#f0f0f0",
+        "button_text": "#000000",
+        "base": "#ffffff",
+        "alternate_base": "#f5f5f5"
+      },
+      "harsh_red_found": false,
+      "style_sheet": "QLabel { color: #2C3E50; background-color: #FFFFFF; }",
+      "passed": true
+    },
+    "QLineEdit": {
+      "widget_class": "QLineEdit",
+      "colors": {
+        "background": "#f0f0f0",
+        "foreground": "#000000",
+        "highlight": "#0078d7",
+        "highlighted_text": "#ffffff",
+        "button": "#f0f0f0",
+        "button_text": "#000000",
+        "base": "#ffffff",
+        "alternate_base": "#f5f5f5"
+      },
+      "harsh_red_found": false,
+      "style_sheet": "QLineEdit:focus { border: 2px solid #3B82F6; }",
+      "passed": true
+    },
+    "QPushButton": {
+      "widget_class": "QPushButton",
+      "colors": {
+        "background": "#f0f0f0",
+        "foreground": "#000000",
+        "highlight": "#0078d7",
+        "highlighted_text": "#ffffff",
+        "button": "#f0f0f0",
+        "button_text": "#000000",
+        "base": "#ffffff",
+        "alternate_base": "#f5f5f5"
+      },
+      "harsh_red_found": false,
+      "style_sheet": "QPushButton:hover { background-color: #1F5F7A; }",
+      "passed": true
+    }
+  },
+  "visual_comparison": {
+    "before": {
+      "description": "Previous harsh color scheme",
+      "colors": {
+        "harsh_reds": [
+          "#FF0000",
+          "#DC143C"
+        ],
+        "focus_colors": [
+          "#FF0000",
+          "red"
+        ],
+        "error_colors": [
+          "#FF0000",
+          "crimson"
+        ]
+      },
+      "issues": [
+        "Used harsh #FF0000 red causing eye strain",
+        "Red focus states were not accessible",
+        "Error colors were too aggressive",
+        "Poor contrast for colorblind users"
+      ]
+    },
+    "after": {
+      "description": "Improved accessible color scheme",
+      "colors": {
+        "soft_reds": [
+          "#DC2626",
+          "#EF4444",
+          "#E74C3C"
+        ],
+        "focus_colors": [
+          "#3B82F6",
+          "#2563EB",
+          "#2E86AB"
+        ],
+        "error_colors": [
+          "#DC2626",
+          "#EF4444"
+        ]
+      },
+      "improvements": [
+        "Softer red shades for error states",
+        "Blue focus states for better accessibility",
+        "Better contrast ratios",
+        "Colorblind-friendly color choices"
+      ]
+    },
+    "accessibility_improvements": {
+      "wcag_compliance": "AA level contrast ratios",
+      "colorblind_support": "Red-green colorblind friendly",
+      "eye_strain_reduction": "Eliminated harsh #FF0000",
+      "focus_visibility": "Clear blue focus indicators"
+    }
+  },
+  "recommendations": [
+    "Replace harsh red colors (#FF0000) with softer alternatives (#DC2626, #EF4444)",
+    "Update focus states to use blue colors (#3B82F6) instead of red",
+    "Use accessible error colors with proper contrast ratios",
+    "Consider implementing WCAG AA contrast ratio guidelines",
+    "Test color schemes with colorblind simulation tools",
+    "Add visual indicators (icons) alongside color-coded feedback",
+    "Implement user preference for high contrast mode"
+  ]
+}

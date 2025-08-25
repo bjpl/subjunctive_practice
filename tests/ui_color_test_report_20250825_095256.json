@@ -1,0 +1,539 @@
+{
+  "timestamp": "2025-08-25T09:52:56.414608",
+  "test_summary": {
+    "overall_passed": false,
+    "total_violations": 24,
+    "harsh_red_violations": 22,
+    "focus_violations": 1,
+    "error_violations": 1,
+    "files_with_violations": 3,
+    "accessibility_score": 0
+  },
+  "static_analysis": {
+    "timestamp": "2025-08-25T09:52:56.414608",
+    "project_root": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice",
+    "harsh_red_scan": {
+      "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\verify_fixes.py": [
+        {
+          "line": 32,
+          "match": "#FF0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "if '#FF0000' in colors.values() or '#DC143C' in colors.values():",
+          "column": 8
+        },
+        {
+          "line": 32,
+          "match": "#DC143C",
+          "pattern": "#DC143C",
+          "context": "if '#FF0000' in colors.values() or '#DC143C' in colors.values():",
+          "column": 40
+        }
+      ],
+      "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\font_integration_example.py": [
+        {
+          "line": 131,
+          "match": "color: red;",
+          "pattern": "color:\\s*red\\s*[;}]",
+          "context": "dpi_info = QLabel(f\"DPI Scale: {self.font_manager.dpi_manager.get_dpi_scale():.2f}\")\\n        dpi_info.setStyleSheet(\"color: gray; font-size: 11px;\")\\n        font_layout.addWidget(dpi_info)\\n        \\n        layout.addWidget(font_group)\\n        \\n        # Spanish character test group\\n        spanish_group = QGroupBox(\"Spanish Character Support\")\\n        spanish_layout = QVBoxLayout(spanish_group)\\n        \\n        self.character_test_label = QLabel(\"Testing...\")\\n        self.character_test_label.setWordWrap(True)\\n        spanish_layout.addWidget(self.character_test_label)\\n        \\n        test_button = QPushButton(\"Test Current Font\")\\n        test_button.clicked.connect(self.test_spanish_characters)\\n        spanish_layout.addWidget(test_button)\\n        \\n        layout.addWidget(spanish_group)\\n        \\n        # Debug info group\\n        debug_group = QGroupBox(\"Debug Information\")\\n        debug_layout = QVBoxLayout(debug_group)\\n        \\n        self.debug_text = QTextEdit()\\n        self.debug_text.setMaximumHeight(200)\\n        self.debug_text.setReadOnly(True)\\n        debug_layout.addWidget(self.debug_text)\\n        \\n        refresh_debug_btn = QPushButton(\"Refresh Debug Info\")\\n        refresh_debug_btn.clicked.connect(self.update_debug_info)\\n        debug_layout.addWidget(refresh_debug_btn)\\n        \\n        layout.addWidget(debug_group)\\n        \\n        # Performance test\\n        perf_group = QGroupBox(\"Performance Test\")\\n        perf_layout = QVBoxLayout(perf_group)\\n        \\n        perf_button = QPushButton(\"Run Font Performance Test\")\\n        perf_button.clicked.connect(self.run_performance_test)\\n        perf_layout.addWidget(perf_button)\\n        \\n        self.perf_results = QLabel(\"No test results yet\")\\n        self.perf_results.setWordWrap(True)\\n        perf_layout.addWidget(self.perf_results)\\n        \\n        layout.addWidget(perf_group)\\n        \\n        layout.addStretch()\\n        \\n        return panel\\n    \\n    def create_content_panel(self) -> QWidget:\\n        \"\"\"Create the content demonstration panel\"\"\"\\n        panel = QWidget()\\n        layout = QVBoxLayout(panel)\\n        \\n        # Create tabs for different content types\\n        tabs = QTabWidget()\\n        \\n        # Text content tab\\n        text_tab = self.create_text_content_tab()\\n        tabs.addTab(text_tab, \"Text Content\")\\n        \\n        # Exercise simulation tab\\n        exercise_tab = self.create_exercise_tab()\\n        tabs.addTab(exercise_tab, \"Exercise Simulation\")\\n        \\n        # Font comparison tab\\n        comparison_tab = self.create_font_comparison_tab()\\n        tabs.addTab(comparison_tab, \"Font Comparison\")\\n        \\n        layout.addWidget(tabs)\\n        \\n        return panel\\n    \\n    def create_text_content_tab(self) -> QWidget:\\n        \"\"\"Create tab with text content for font testing\"\"\"\\n        tab = QWidget()\\n        layout = QVBoxLayout(tab)\\n        \\n        # Title\\n        self.title_label = QLabel(self.spanish_content['title'])\\n        layout.addWidget(self.title_label)\\n        \\n        # Subtitle\\n        self.subtitle_label = QLabel(self.spanish_content['subtitle'])\\n        layout.addWidget(self.subtitle_label)\\n        \\n        # Separator\\n        layout.addWidget(QLabel(\"─\" * 80))\\n        \\n        # Main content\\n        self.content_text = QTextEdit()\\n        self.content_text.setPlainText(self.spanish_content['sample_text'])\\n        self.content_text.setMinimumHeight(400)\\n        layout.addWidget(self.content_text)\\n        \\n        return tab\\n    \\n    def create_exercise_tab(self) -> QWidget:\\n        \"\"\"Create tab simulating exercise interface\"\"\"\\n        tab = QWidget()\\n        layout = QVBoxLayout(tab)\\n        \\n        # Exercise question\\n        exercise_group = QGroupBox(\"Exercise\")\\n        exercise_layout = QVBoxLayout(exercise_group)\\n        \\n        self.exercise_label = QLabel(self.spanish_content['exercise'])\\n        self.exercise_label.setWordWrap(True)\\n        exercise_layout.addWidget(self.exercise_label)\\n        \\n        # Answer input simulation\\n        answer_label = QLabel(\"Your answer:\")\\n        exercise_layout.addWidget(answer_label)\\n        \\n        from PyQt5.QtWidgets import QLineEdit\\n        self.answer_input = QLineEdit()\\n        self.answer_input.setPlaceholderText(\"Type your answer here...\")\\n        exercise_layout.addWidget(self.answer_input)\\n        \\n        layout.addWidget(exercise_group)\\n        \\n        # Feedback section\\n        feedback_group = QGroupBox(\"Feedback\")\\n        feedback_layout = QVBoxLayout(feedback_group)\\n        \\n        self.feedback_label = QLabel(self.spanish_content['feedback'])\\n        self.feedback_label.setWordWrap(True)\\n        feedback_layout.addWidget(self.feedback_label)\\n        \\n        layout.addWidget(feedback_group)\\n        \\n        layout.addStretch()\\n        \\n        return tab\\n    \\n    def create_font_comparison_tab(self) -> QWidget:\\n        \"\"\"Create tab comparing different fonts\"\"\"\\n        tab = QWidget()\\n        layout = QVBoxLayout(tab)\\n        \\n        scroll_area = QScrollArea()\\n        scroll_widget = QWidget()\\n        scroll_layout = QVBoxLayout(scroll_widget)\\n        \\n        test_text = \"¡Hola! ¿Cómo estás? Ñoño güeña años corazón\"\\n        \\n        # Compare top 5 Spanish fonts\\n        recommended_fonts = self.font_manager.get_recommended_fonts()[:5]\\n        \\n        for font_name in recommended_fonts:\\n            # Get Spanish support info\\n            support_info = self.font_manager.get_spanish_character_support(font_name)\\n            \\n            group = QGroupBox(f\"{font_name} (Support: {support_info.quality_score:.1%})\")\\n            group_layout = QVBoxLayout(group)\\n            \\n            # Sample text with this font\\n            sample_label = QLabel(test_text)\\n            font = QFont(font_name, 14)\\n            sample_label.setFont(font)\\n            group_layout.addWidget(sample_label)\\n            \\n            # Support details\\n            if support_info.missing_chars:\\n                missing_label = QLabel(f\"Missing: {', '.join(support_info.missing_chars)}\")\\n                missing_label.setStyleSheet(\"color: red; font-size: 11px;\")\\n                group_layout.addWidget(missing_label)\\n            else:\\n                complete_label = QLabel(\"✓ Complete Spanish support\")\\n                complete_label.setStyleSheet(\"color: green; font-size: 11px;\")\\n                group_layout.addWidget(complete_label)\\n            \\n            scroll_layout.addWidget(group)\\n        \\n        scroll_area.setWidget(scroll_widget)\\n        layout.addWidget(scroll_area)\\n        \\n        return tab\\n    \\n    def apply_fonts_to_ui(self):\\n        \"\"\"Apply font manager fonts to UI elements\"\"\"\\n        # Apply different font sizes to different UI elements\\n        self.font_manager.apply_font_to_widget(self.title_label, 'extra_large', QFont.Bold)\\n        self.font_manager.apply_font_to_widget(self.subtitle_label, 'large', QFont.Normal, True)\\n        self.font_manager.apply_font_to_widget(self.content_text, 'normal')\\n        self.font_manager.apply_font_to_widget(self.exercise_label, 'medium')\\n        self.font_manager.apply_font_to_widget(self.feedback_label, 'normal')\\n        \\n        # Update debug info\\n        self.update_debug_info()\\n        self.test_spanish_characters()\\n    \\n    @pyqtSlot()\\n    def on_font_changed(self):\\n        \"\"\"Handle font change signal\"\"\"\\n        self.apply_fonts_to_ui()\\n        self.statusBar().showMessage(\"Font changed successfully\", 2000)\\n    \\n    @pyqtSlot(int)\\n    def on_font_size_changed(self, size: int):\\n        \"\"\"Handle font size change signal\"\"\"\\n        # Update spinbox and slider without triggering signals\\n        self.size_spinbox.blockSignals(True)\\n        self.size_slider.blockSignals(True)\\n        \\n        self.size_spinbox.setValue(size)\\n        self.size_slider.setValue(size)\\n        \\n        self.size_spinbox.blockSignals(False)\\n        self.size_slider.blockSignals(False)\\n        \\n        self.apply_fonts_to_ui()\\n    \\n    def on_font_family_changed(self, font_name: str):\\n        \"\"\"Handle font family selection change\"\"\"\\n        if font_name.startswith(\"---\") or font_name.startswith(\"⭐\"):\\n            font_name = font_name.replace(\"⭐ \", \"\").strip()\\n        \\n        if font_name in self.font_manager.get_available_fonts():\\n            self.font_manager.set_font_family(font_name)\\n            self.statusBar().showMessage(f\"Font changed to {font_name}\", 2000)\\n    \\n    def on_font_size_spinbox_changed(self, size: int):\\n        \"\"\"Handle font size spinbox change\"\"\"\\n        self.size_slider.setValue(size)\\n        self.font_manager.set_base_font_size(size)\\n    \\n    def on_font_size_slider_changed(self, size: int):\\n        \"\"\"Handle font size slider change\"\"\"\\n        self.size_spinbox.setValue(size)\\n        self.font_manager.set_base_font_size(size)\\n    \\n    def test_spanish_characters(self):\\n        \"\"\"Test Spanish character support in current font\"\"\"\\n        config = self.font_manager.get_current_configuration()\\n        if not config:\\n            self.character_test_label.setText(\"No font configuration available\")\\n            return\\n        \\n        support_info = self.font_manager.get_spanish_character_support(config.family)\\n        \\n        if support_info.supports_spanish:\\n            result_text = f\"✓ {config.family} has complete Spanish support ({support_info.quality_score:.1%})\"\\n            self.character_test_label.setStyleSheet(\"color: green;\")\\n        else:\\n            missing = \", \".join(support_info.missing_chars)\\n            result_text = f\"⚠ {config.family} missing: {missing} ({support_info.quality_score:.1%} support)\"\\n            self.character_test_label.setStyleSheet(\"color: orange;\")\\n        \\n        self.character_test_label.setText(result_text)\\n    \\n    def update_debug_info(self):\\n        \"\"\"Update debug information display\"\"\"\\n        debug_info = self.font_manager.get_debug_info()\\n        \\n        formatted_info = f\\\"\\\"\\\"\\nCurrent Configuration:\\n• Family: {debug_info['current_config']['family'] if debug_info['current_config'] else 'None'}\\n• Size: {debug_info['current_config']['size'] if debug_info['current_config'] else 'None'}pt\\n• DPI Scale: {debug_info['dpi_scale']:.2f}\\n• System DPI: {debug_info['system_dpi']}\\n\\nSystem Information:\\n• Platform: {debug_info['platform']}\\n• Available Fonts: {debug_info['available_fonts_count']}\\n• Spanish-optimized Fonts: {debug_info['spanish_fonts_count']}\\n• Windows Features: {debug_info['windows_available']}\\n\\nPerformance:\\n• Font Cache Size: {debug_info['font_cache_size']}\\n• Metrics Cache Size: {debug_info['metrics_cache_size']}\\n\\nTop Spanish Fonts:\\n{chr(10).join([f'• {name}: {score:.1%}' for name, score in debug_info['top_spanish_fonts']])}\\n        \\\"\\\"\\\".strip()\\n        \\n        self.debug_text.setPlainText(formatted_info)\\n    \\n    def run_performance_test(self):\\n        \\\"\\\"\\\"Run a performance test on font operations\\\"\\\"\\\"\\n        import time\\n        \\n        self.perf_results.setText(\"Running performance test...\")\\n        QApplication.processEvents()\\n        \\n        # Test font creation performance\\n        start_time = time.time()\\n        test_fonts = []\\n        \\n        for i in range(100):\\n            font = self.font_manager.get_font('normal')\\n            metrics = self.font_manager.get_font_metrics(font)\\n            test_fonts.append((font, metrics))\\n        \\n        creation_time = time.time() - start_time\\n        \\n        # Test Spanish character validation\\n        start_time = time.time()\\n        validator = SpanishCharacterValidator()\\n        \\n        test_results = []\\n        for font_name in self.font_manager.get_recommended_fonts()[:10]:\\n            result = validator.validate_spanish_support(QFont(font_name))\\n            test_results.append(result)\\n        \\n        validation_time = time.time() - start_time\\n        \\n        # Display results\\n        results_text = f\\\"\\\"\\\"\\nPerformance Test Results:\\n\\n• Font Creation (100 fonts): {creation_time:.3f}s\\n• Avg per font: {creation_time/100*1000:.2f}ms\\n• Spanish Validation (10 fonts): {validation_time:.3f}s\\n• Avg per validation: {validation_time/10*1000:.2f}ms\\n\\nCache Status:\\n• Font cache size: {len(self.font_manager._font_cache)}\\n• Metrics cache size: {len(self.font_manager._metrics_cache)}\\n        \\\"\\\"\\\".strip()\\n        \\n        self.perf_results.setText(results_text)\\n\\n\\ndef main():\\n    \\\"\\\"\\\"Main function to run the font integration demo\\\"\\\"\\\"\\n    # Set up logging\\n    logging.basicConfig(\\n        level=logging.INFO,\\n        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'\\n    )\\n    \\n    # Create application\\n    app = QApplication(sys.argv)\\n    \\n    # Create and show demo window\\n    demo = FontIntegrationDemo()\\n    demo.show()\\n    \\n    # Run application\\n    sys.exit(app.exec_())\\n\\n\\nif __name__ == \"__main__\":\\n    main()",
+          "column": 6260
+        }
+      ],
+      "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py": [
+        {
+          "line": 6,
+          "match": "#FF0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "1. No harsh red (#FF0000) remains in style definitions",
+          "column": 17
+        },
+        {
+          "line": 52,
+          "match": "#FF0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "r'#[Ff]{2}0{4}',           # #FF0000, #ff0000",
+          "column": 37
+        },
+        {
+          "line": 52,
+          "match": "#ff0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "r'#[Ff]{2}0{4}',           # #FF0000, #ff0000",
+          "column": 46
+        },
+        {
+          "line": 53,
+          "match": "rgb(255, 0, 0)",
+          "pattern": "rgb\\(\\s*255\\s*,\\s*0\\s*,\\s*0\\s*\\)",
+          "context": "r'rgb\\(\\s*255\\s*,\\s*0\\s*,\\s*0\\s*\\)',  # rgb(255, 0, 0)",
+          "column": 48
+        },
+        {
+          "line": 56,
+          "match": "#DC143C",
+          "pattern": "#DC143C",
+          "context": "r'#DC143C',                             # Crimson red",
+          "column": 10
+        },
+        {
+          "line": 301,
+          "match": "#FF0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "color.upper() in ['#FF0000', '#DC143C']",
+          "column": 35
+        },
+        {
+          "line": 301,
+          "match": "#DC143C",
+          "pattern": "#DC143C",
+          "context": "color.upper() in ['#FF0000', '#DC143C']",
+          "column": 46
+        },
+        {
+          "line": 353,
+          "match": "#FF0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "'harsh_reds': ['#FF0000', '#DC143C'],",
+          "column": 28
+        },
+        {
+          "line": 353,
+          "match": "#DC143C",
+          "pattern": "#DC143C",
+          "context": "'harsh_reds': ['#FF0000', '#DC143C'],",
+          "column": 39
+        },
+        {
+          "line": 354,
+          "match": "#FF0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "'focus_colors': ['#FF0000', 'red'],",
+          "column": 30
+        },
+        {
+          "line": 355,
+          "match": "#FF0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "'error_colors': ['#FF0000', 'crimson'],",
+          "column": 30
+        },
+        {
+          "line": 369,
+          "match": "#FF0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "'Used harsh #FF0000 red causing eye strain',",
+          "column": 32
+        },
+        {
+          "line": 388,
+          "match": "#FF0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "'eye_strain_reduction': 'Eliminated harsh #FF0000',",
+          "column": 58
+        },
+        {
+          "line": 404,
+          "match": "#FF0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "background-color: #FF0000 !important;  /* Harsh red - causes eye strain */",
+          "column": 22
+        },
+        {
+          "line": 406,
+          "match": "#FF0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "border: 2px solid #FF0000;",
+          "column": 22
+        },
+        {
+          "line": 411,
+          "match": "#FF0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "border: 2px solid #FF0000;",
+          "column": 22
+        },
+        {
+          "line": 415,
+          "match": "#DC143C",
+          "pattern": "#DC143C",
+          "context": "background-color: #DC143C;  /* Crimson red - too aggressive */",
+          "column": 22
+        },
+        {
+          "line": 515,
+          "match": "#FF0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "recommendations.append(\"Replace harsh red colors (#FF0000) with softer alternatives (#DC2626, #EF4444)\")",
+          "column": 58
+        },
+        {
+          "line": 565,
+          "match": "#FF0000",
+          "pattern": "#[Ff]{2}0{4}",
+          "context": "print(f\"• Harsh Red Colors (#FF0000): {summary['harsh_red_violations']}\")",
+          "column": 32
+        }
+      ]
+    },
+    "focus_color_validation": {
+      "approved_focus_colors": [
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\accessibility_manager.py",
+          "line": 39,
+          "color": "#3B82F6",
+          "context": "\"focus_ring_color\": \"#3B82F6\","
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\accessibility_manager.py",
+          "line": 182,
+          "color": "#3B82F6",
+          "context": "ring_color = self.settings.get(\"focus_ring_color\", \"#3B82F6\")"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\accessibility_manager.py",
+          "line": 1272,
+          "color": "#3B82F6",
+          "context": "current_color = QColor(self.settings.get(\"focus_ring_color\", \"#3B82F6\"))"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\css_variables_system.py",
+          "line": 93,
+          "color": "#3B82F6",
+          "context": "'--border-focus': '#3b82f6',"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\enhanced_typography_system.py",
+          "line": 103,
+          "color": "#2563EB",
+          "context": "'light_focus': '#2563eb',"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\form_styling_fixes.py",
+          "line": 42,
+          "color": "#3B82F6",
+          "context": "'input_border_focus': '#3B82F6',  # Professional blue instead of red"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\form_styling_fixes.py",
+          "line": 601,
+          "color": "#3B82F6",
+          "context": "focus_color = QColor('#3B82F6')  # Professional blue"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\ui_visual.py",
+          "line": 39,
+          "color": "#2E86AB",
+          "context": "'border_focus': '#2E86AB',      # Focus border color"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py",
+          "line": 7,
+          "color": "#3B82F6",
+          "context": "2. Focus states use blue (#3B82F6) instead of red"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py",
+          "line": 327,
+          "color": "#3B82F6",
+          "context": "(QLineEdit, \"QLineEdit:focus { border: 2px solid #3B82F6; }\"),"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py",
+          "line": 360,
+          "color": "#3B82F6",
+          "context": "'focus_colors': ['#3B82F6', '#2563EB', '#2E86AB'],"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py",
+          "line": 360,
+          "color": "#2563EB",
+          "context": "'focus_colors': ['#3B82F6', '#2563EB', '#2E86AB'],"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py",
+          "line": 360,
+          "color": "#2E86AB",
+          "context": "'focus_colors': ['#3B82F6', '#2563EB', '#2E86AB'],"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py",
+          "line": 430,
+          "color": "#3B82F6",
+          "context": "outline: 2px solid #3B82F6;  /* Blue focus - accessible */"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py",
+          "line": 518,
+          "color": "#3B82F6",
+          "context": "recommendations.append(\"Update focus states to use blue colors (#3B82F6) instead of red\")"
+        }
+      ],
+      "violations": [
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py",
+          "line": 354,
+          "context": "'focus_colors': ['#FF0000', 'red'],",
+          "issue": "Focus state uses harsh red color"
+        }
+      ],
+      "files_checked": 89
+    },
+    "error_color_validation": {
+      "approved_error_colors": [
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\accessibility_manager.py",
+          "line": 390,
+          "color": "#DC2626",
+          "context": "\"error\": \"#DC2626\""
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\accessibility_manager.py",
+          "line": 402,
+          "color": "#EF4444",
+          "context": "\"error\": \"#EF4444\""
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\accessibility_theme_integration.py",
+          "line": 415,
+          "color": "#E74C3C",
+          "context": "'incorrect': '#E74C3C',"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\clean_ui_colors.py",
+          "line": 31,
+          "color": "#EF4444",
+          "context": "ERROR = \"#EF4444\"            # Soft red - Errors, incorrect answers"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\clean_ui_colors.py",
+          "line": 32,
+          "color": "#DC2626",
+          "context": "ERROR_HOVER = \"#DC2626\"      # Darker red for hover"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\contrast_improvements.py",
+          "line": 497,
+          "color": "#E74C3C",
+          "context": "'error': '#E74C3C',"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\css_variables_system.py",
+          "line": 76,
+          "color": "#EF4444",
+          "context": "'--color-error': '#ef4444',"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\css_variables_system.py",
+          "line": 94,
+          "color": "#EF4444",
+          "context": "'--border-error': '#ef4444',"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\form_styling_fixes.py",
+          "line": 52,
+          "color": "#DC2626",
+          "context": "'error_border': '#DC2626',"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\modern_responsive_design.py",
+          "line": 122,
+          "color": "#EF4444",
+          "context": "'error-500': '#ef4444',"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\modern_responsive_design.py",
+          "line": 166,
+          "color": "#EF4444",
+          "context": "'error-500': '#ef4444',"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\modern_responsive_design.py",
+          "line": 167,
+          "color": "#F87171",
+          "context": "'error-700': '#f87171',"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\ui_consistency.py",
+          "line": 65,
+          "color": "#E74C3C",
+          "context": "\"error\": \"#e74c3c\","
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\ui_interactions.py",
+          "line": 105,
+          "color": "#E74C3C",
+          "context": "FeedbackType.INCORRECT: \"#e74c3c\",  # Red"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\src\\ui_visual.py",
+          "line": 53,
+          "color": "#E74C3C",
+          "context": "'error': '#E74C3C',             # Red for errors"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py",
+          "line": 8,
+          "color": "#DC2626",
+          "context": "3. Error states use softer red (#DC2626 or #EF4444)"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py",
+          "line": 8,
+          "color": "#EF4444",
+          "context": "3. Error states use softer red (#DC2626 or #EF4444)"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py",
+          "line": 71,
+          "color": "#E74C3C",
+          "context": "'#E74C3C',  # Theme error color"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py",
+          "line": 361,
+          "color": "#DC2626",
+          "context": "'error_colors': ['#DC2626', '#EF4444'],"
+        },
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py",
+          "line": 361,
+          "color": "#EF4444",
+          "context": "'error_colors': ['#DC2626', '#EF4444'],"
+        }
+      ],
+      "violations": [
+        {
+          "file": "C:\\Users\\brand\\Development\\Project_Workspace\\subjunctive_practice\\tests\\test_ui_colors.py",
+          "line": 355,
+          "context": "'error_colors': ['#FF0000', 'crimson'],",
+          "issue": "Error state uses harsh red color"
+        }
+      ],
+      "files_checked": 89
+    },
+    "summary": {
+      "harsh_red_files_count": 3,
+      "harsh_red_violations_count": 22,
+      "focus_violations_count": 1,
+      "focus_approved_count": 15,
+      "error_violations_count": 1,
+      "error_approved_count": 20,
+      "total_violations": 24,
+      "passed": false
+    }
+  },
+  "runtime_tests": {
+    "QLabel": {
+      "widget_class": "QLabel",
+      "colors": {
+        "background": "#f0f0f0",
+        "foreground": "#000000",
+        "highlight": "#0078d7",
+        "highlighted_text": "#ffffff",
+        "button": "#f0f0f0",
+        "button_text": "#000000",
+        "base": "#ffffff",
+        "alternate_base": "#f5f5f5"
+      },
+      "harsh_red_found": false,
+      "style_sheet": "QLabel { color: #2C3E50; background-color: #FFFFFF; }",
+      "passed": true
+    },
+    "QLineEdit": {
+      "widget_class": "QLineEdit",
+      "colors": {
+        "background": "#f0f0f0",
+        "foreground": "#000000",
+        "highlight": "#0078d7",
+        "highlighted_text": "#ffffff",
+        "button": "#f0f0f0",
+        "button_text": "#000000",
+        "base": "#ffffff",
+        "alternate_base": "#f5f5f5"
+      },
+      "harsh_red_found": false,
+      "style_sheet": "QLineEdit:focus { border: 2px solid #3B82F6; }",
+      "passed": true
+    },
+    "QPushButton": {
+      "widget_class": "QPushButton",
+      "colors": {
+        "background": "#f0f0f0",
+        "foreground": "#000000",
+        "highlight": "#0078d7",
+        "highlighted_text": "#ffffff",
+        "button": "#f0f0f0",
+        "button_text": "#000000",
+        "base": "#ffffff",
+        "alternate_base": "#f5f5f5"
+      },
+      "harsh_red_found": false,
+      "style_sheet": "QPushButton:hover { background-color: #1F5F7A; }",
+      "passed": true
+    }
+  },
+  "visual_comparison": {
+    "before": {
+      "description": "Previous harsh color scheme",
+      "colors": {
+        "harsh_reds": [
+          "#FF0000",
+          "#DC143C"
+        ],
+        "focus_colors": [
+          "#FF0000",
+          "red"
+        ],
+        "error_colors": [
+          "#FF0000",
+          "crimson"
+        ]
+      },
+      "issues": [
+        "Used harsh #FF0000 red causing eye strain",
+        "Red focus states were not accessible",
+        "Error colors were too aggressive",
+        "Poor contrast for colorblind users"
+      ]
+    },
+    "after": {
+      "description": "Improved accessible color scheme",
+      "colors": {
+        "soft_reds": [
+          "#DC2626",
+          "#EF4444",
+          "#E74C3C"
+        ],
+        "focus_colors": [
+          "#3B82F6",
+          "#2563EB",
+          "#2E86AB"
+        ],
+        "error_colors": [
+          "#DC2626",
+          "#EF4444"
+        ]
+      },
+      "improvements": [
+        "Softer red shades for error states",
+        "Blue focus states for better accessibility",
+        "Better contrast ratios",
+        "Colorblind-friendly color choices"
+      ]
+    },
+    "accessibility_improvements": {
+      "wcag_compliance": "AA level contrast ratios",
+      "colorblind_support": "Red-green colorblind friendly",
+      "eye_strain_reduction": "Eliminated harsh #FF0000",
+      "focus_visibility": "Clear blue focus indicators"
+    }
+  },
+  "recommendations": [
+    "Replace harsh red colors (#FF0000) with softer alternatives (#DC2626, #EF4444)",
+    "Update focus states to use blue colors (#3B82F6) instead of red",
+    "Use accessible error colors with proper contrast ratios",
+    "Consider implementing WCAG AA contrast ratio guidelines",
+    "Test color schemes with colorblind simulation tools",
+    "Add visual indicators (icons) alongside color-coded feedback",
+    "Implement user preference for high contrast mode"
+  ]
+}

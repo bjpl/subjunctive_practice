@@ -1,0 +1,616 @@
+{
+  "startup_analysis": {
+    "main_file_exists": true,
+    "essential_components": {
+      "QApplication import": true,
+      "Main GUI class": true,
+      "OpenAI client": true,
+      "Environment variables": true,
+      "Logging setup": true,
+      "API validation": true
+    },
+    "missing_components": [],
+    "file_size": 81426,
+    "line_count": 1885,
+    "dependencies": {
+      "PyQt5": true,
+      "openai": true,
+      "python-dotenv": true,
+      "json": true
+    },
+    "config_files": {
+      "pyproject.toml": true,
+      "requirements.txt": true,
+      ".env.example": true,
+      ".env": true
+    },
+    "data_directories": {
+      "user_data": true,
+      "tests": true,
+      "src": true,
+      "docs": true
+    }
+  },
+  "code_structure": {
+    "main_file": {
+      "classes": 3,
+      "methods": 57,
+      "imports": 16,
+      "class_names": [
+        "WorkerSignals",
+        "GPTWorkerRunnable",
+        "SpanishSubjunctivePracticeGUI"
+      ],
+      "lines_of_code": 1885
+    },
+    "src_modules": {
+      "accessibility_demo.py": {
+        "size": 21344,
+        "lines": 510,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "accessibility_integration.py": {
+        "size": 19304,
+        "lines": 437,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "accessibility_integration_patch.py": {
+        "size": 11892,
+        "lines": 288,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "accessibility_manager.py": {
+        "size": 54360,
+        "lines": 1329,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "accessibility_theme_integration.py": {
+        "size": 17012,
+        "lines": 482,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "api_configuration_fix.py": {
+        "size": 28055,
+        "lines": 770,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "contrast_improvements.py": {
+        "size": 29727,
+        "lines": 859,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "error_fixes.py": {
+        "size": 14133,
+        "lines": 396,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "font_integration_example.py": {
+        "size": 18003,
+        "lines": 131,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "font_integration_patch.py": {
+        "size": 15018,
+        "lines": 81,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "font_manager.py": {
+        "size": 23194,
+        "lines": 634,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "integration_guide.py": {
+        "size": 28427,
+        "lines": 674,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "layout_demo.py": {
+        "size": 27190,
+        "lines": 684,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "layout_integration.py": {
+        "size": 19157,
+        "lines": 470,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "main_optimized.py": {
+        "size": 19444,
+        "lines": 504,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "optimized_layout.py": {
+        "size": 29223,
+        "lines": 825,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "readability_analysis_report.py": {
+        "size": 23262,
+        "lines": 509,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "readability_enhancements.py": {
+        "size": 30648,
+        "lines": 762,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "responsive_design.py": {
+        "size": 19927,
+        "lines": 525,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "spacing_demo.py": {
+        "size": 3647,
+        "lines": 94,
+        "has_main_class": false,
+        "has_functions": true
+      },
+      "spacing_optimizer.py": {
+        "size": 18908,
+        "lines": 480,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "test_error_fixes.py": {
+        "size": 14778,
+        "lines": 386,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "test_readability_system.py": {
+        "size": 11032,
+        "lines": 307,
+        "has_main_class": false,
+        "has_functions": true
+      },
+      "test_spacing_optimizer.py": {
+        "size": 10263,
+        "lines": 267,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "typography_integration_example.py": {
+        "size": 19711,
+        "lines": 505,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "typography_system.py": {
+        "size": 30342,
+        "lines": 837,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "ui_accessibility.py": {
+        "size": 25850,
+        "lines": 663,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "ui_consistency.py": {
+        "size": 24816,
+        "lines": 647,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "ui_demo.py": {
+        "size": 17100,
+        "lines": 425,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "ui_integration.py": {
+        "size": 16059,
+        "lines": 421,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "ui_integration_example.py": {
+        "size": 13293,
+        "lines": 337,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "ui_interactions.py": {
+        "size": 21795,
+        "lines": 546,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "ui_interaction_patch.py": {
+        "size": 17558,
+        "lines": 450,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "ui_performance.py": {
+        "size": 29183,
+        "lines": 894,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "ui_simplified.py": {
+        "size": 30238,
+        "lines": 807,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "ui_visual.py": {
+        "size": 27254,
+        "lines": 807,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "validate_modules.py": {
+        "size": 4743,
+        "lines": 133,
+        "has_main_class": true,
+        "has_functions": true
+      },
+      "visual_improvements_guide.py": {
+        "size": 12051,
+        "lines": 257,
+        "has_main_class": true,
+        "has_functions": true
+      }
+    },
+    "support_modules": {
+      "learning_analytics.py": {
+        "exists": true,
+        "size": 14780,
+        "lines": 374
+      },
+      "session_manager.py": {
+        "exists": true,
+        "size": 6843,
+        "lines": 174
+      },
+      "tblt_scenarios.py": {
+        "exists": true,
+        "size": 14490,
+        "lines": 338
+      },
+      "conjugation_reference.py": {
+        "exists": true,
+        "size": 6442,
+        "lines": 159
+      }
+    }
+  },
+  "ui_components": {
+    "ui_components": {
+      "QLabel": 10,
+      "QPushButton": 9,
+      "QLineEdit": 3,
+      "QTextEdit": 3,
+      "QComboBox": 3,
+      "QCheckBox": 3,
+      "QRadioButton": 1,
+      "QProgressBar": 1,
+      "QGroupBox": 7,
+      "QScrollArea": 2,
+      "QStackedWidget": 1,
+      "QSplitter": 1,
+      "QVBoxLayout": 15,
+      "QHBoxLayout": 6
+    },
+    "specific_elements": {
+      "sentence_label": true,
+      "translation_label": true,
+      "feedback_text": true,
+      "submit_button": true,
+      "next_button": true,
+      "prev_button": true,
+      "hint_button": true,
+      "progress_bar": true,
+      "mode_combo": true,
+      "difficulty_combo": true,
+      "task_type_combo": true
+    },
+    "event_handlers": {
+      "submitAnswer": true,
+      "nextExercise": true,
+      "prevExercise": true,
+      "provideHint": true,
+      "updateExercise": true,
+      "generateNewExercise": true,
+      "toggleTheme": true,
+      "toggleTranslation": true
+    },
+    "total_ui_components": 65,
+    "missing_elements": [],
+    "missing_handlers": []
+  },
+  "exercise_workflow": {
+    "workflow_methods": {
+      "generateNewExercise": true,
+      "handleNewExerciseResult": true,
+      "updateExercise": true,
+      "submitAnswer": true,
+      "getUserAnswer": true,
+      "generateGPTExplanationAsync": true,
+      "populateMultipleChoice": true,
+      "switchMode": true
+    },
+    "data_structures": {
+      "exercises_list": true,
+      "current_exercise": true,
+      "total_exercises": true,
+      "correct_count": true,
+      "session_stats": true,
+      "responses": true
+    },
+    "exercise_types": {
+      "traditional": true,
+      "tblt": true,
+      "contrast": true,
+      "review": true
+    },
+    "validation_checks": {
+      "tense_selection": true,
+      "person_selection": true,
+      "trigger_selection": true,
+      "input_validation": true,
+      "answer_comparison": true
+    },
+    "missing_methods": [],
+    "missing_structures": [],
+    "available_types": [
+      "traditional",
+      "tblt",
+      "contrast",
+      "review"
+    ]
+  },
+  "enhancement_modules": {
+    "src_modules": {
+      "accessibility_demo": {
+        "file_exists": true,
+        "importable": false,
+        "integrated": false,
+        "import_error": "No module named 'ui_accessibility'"
+      },
+      "accessibility_integration": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": true
+      },
+      "accessibility_integration_patch": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": true
+      },
+      "accessibility_manager": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": false
+      },
+      "accessibility_theme_integration": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": false
+      },
+      "api_configuration_fix": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": true
+      },
+      "contrast_improvements": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": false
+      },
+      "error_fixes": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": true
+      },
+      "font_integration_example": {
+        "file_exists": true,
+        "importable": false,
+        "integrated": false,
+        "import_error": "unexpected character after line continuation character (font_integration_example.py, line 131)"
+      },
+      "font_integration_patch": {
+        "file_exists": true,
+        "importable": false,
+        "integrated": false,
+        "import_error": "unexpected character after line continuation character (font_integration_patch.py, line 81)"
+      },
+      "font_manager": {
+        "file_exists": true,
+        "importable": false,
+        "integrated": false,
+        "import_error": "cannot import name 'QApplication' from 'PyQt5.QtGui' (C:\\Users\\brand\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\PyQt5\\QtGui.pyd)"
+      },
+      "integration_guide": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": false
+      },
+      "layout_demo": {
+        "file_exists": true,
+        "importable": false,
+        "integrated": false,
+        "import_error": "No module named 'optimized_layout'"
+      },
+      "layout_integration": {
+        "file_exists": true,
+        "importable": false,
+        "integrated": false,
+        "import_error": "cannot import name 'QCollapsibleGroupBox' from 'PyQt5.QtWidgets' (C:\\Users\\brand\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\PyQt5\\QtWidgets.pyd)"
+      },
+      "main_optimized": {
+        "file_exists": true,
+        "importable": false,
+        "integrated": false,
+        "import_error": "No module named 'optimized_layout'"
+      },
+      "optimized_layout": {
+        "file_exists": true,
+        "importable": false,
+        "integrated": false,
+        "import_error": "cannot import name 'QCollapsibleGroupBox' from 'PyQt5.QtWidgets' (C:\\Users\\brand\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\PyQt5\\QtWidgets.pyd)"
+      },
+      "readability_analysis_report": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": false
+      },
+      "readability_enhancements": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": false
+      },
+      "responsive_design": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": false
+      },
+      "spacing_demo": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": false
+      },
+      "spacing_optimizer": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": true
+      },
+      "test_error_fixes": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": false
+      },
+      "test_readability_system": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": false
+      },
+      "test_spacing_optimizer": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": false
+      },
+      "typography_integration_example": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": false
+      },
+      "typography_system": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": false
+      },
+      "ui_accessibility": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": false
+      },
+      "ui_consistency": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": false
+      },
+      "ui_demo": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": false
+      },
+      "ui_integration": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": false
+      },
+      "ui_integration_example": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": false
+      },
+      "ui_interactions": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": false
+      },
+      "ui_interaction_patch": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": false
+      },
+      "ui_performance": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": false
+      },
+      "ui_simplified": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": false
+      },
+      "ui_visual": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": true
+      },
+      "validate_modules": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": false
+      },
+      "visual_improvements_guide": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": false
+      }
+    },
+    "analytics_modules": {
+      "learning_analytics": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": true
+      },
+      "session_manager": {
+        "file_exists": true,
+        "importable": true,
+        "integrated": true
+      }
+    },
+    "total_src_modules": 38,
+    "importable_src_modules": 30,
+    "integrated_src_modules": 6,
+    "importable_analytics_modules": 2,
+    "integrated_analytics_modules": 2
+  },
+  "critical_issues": [],
+  "recommendations": [
+    "🔧 Fix import issues in 8 src modules",
+    "🔗 Integrate 24 available enhancement modules",
+    "📝 Consider refactoring main.py - it's getting large (>1500 lines)",
+    "🔒 Environment variable loading detected - ensure secure API key management"
+  ],
+  "analysis_summary": {
+    "execution_time": 1.414,
+    "timestamp": "2025-08-24T18:18:57.965112",
+    "total_critical_issues": 0,
+    "total_recommendations": 4
+  }
+}

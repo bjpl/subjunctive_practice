@@ -224,3 +224,73 @@ Exercise 4
 
 === End of Session ===
 
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+Exercise 1
+  Sentence: Espero que Carlos ___ (hablar) con ella antes de que termine la fiesta.
+  Translation: I hope Carlos talks to her before the party ends.
+  User answer: hable
+  Correct: True
+  Explanation: GRAMMATICAL RULE: The subjunctive is used in dependent clauses after expressions of hope or desire (like "espero que"). 
+
+Pattern: [expression of hope/desire] + que + [subjunctive verb]
+
+EXPLICACIÓN EN ESPAÑOL: Usamos el subjuntivo en cláusulas dependientes después de expresiones de esperanza o deseo. 
+Patrón: [expresión de esperanza/deseo] + que + [verbo en subjuntivo]
+Ejemplo: "Deseo que tú (venir) - vengas a la fiesta."
+
+Exercise 2
+  Sentence: Dile a Juan que ___ (ir) a la farmacia y compre la medicina para mamá.
+  Translation: Tell Juan to go to the pharmacy and buy mom's medicine.
+  User answer: vaya
+  Correct: True
+  Explanation: La regla gramatical es que se usa el subjuntivo después de ciertas expresiones impersonales y de influencia, como "dile a Juan que". Esto indica una acción no realizada o incierta. El patrón es: [expresión de influencia] + que + [verbo en subjuntivo].
+
+Explicación en español: Usamos el subjuntivo tras "dile a" para expresar una acción no realizada o incierta. Ejemplo: "Dile a María que (llegar) llegue temprano."
+
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+

@@ -1,0 +1,337 @@
+{
+  "test_timestamp": "2025-08-24T20:23:47.196711",
+  "test_summary": {
+    "total_tests": 10,
+    "passed_tests": 6,
+    "failed_tests": 4,
+    "success_rate": "60.0%",
+    "overall_status": "FAIL"
+  },
+  "detailed_results": {
+    "Environment Check": {
+      "success": true,
+      "checks": {
+        "python_version": "3.10.11",
+        "pyqt5_available": true,
+        "main.py_exists": true,
+        "src/_exists": true,
+        ".env_exists": true,
+        "openai_api_key_set": true
+      },
+      "issues": []
+    },
+    "Application Launch": {
+      "success": true,
+      "launch_time": "1.48s",
+      "errors": [],
+      "warnings": [],
+      "window_title": "Spanish Subjunctive Practice",
+      "window_size": "1100x700"
+    },
+    "UI Components Load": {
+      "success": true,
+      "components_found": {
+        "sentence_label": {
+          "description": "Main sentence display",
+          "found": true,
+          "type": "QLabel"
+        },
+        "stats_label": {
+          "description": "Statistics display",
+          "found": true,
+          "type": "QLabel"
+        },
+        "trigger_checkboxes": {
+          "description": "Subjunctive trigger checkboxes",
+          "found": true,
+          "type": "list",
+          "count": 11
+        },
+        "tense_checkboxes": {
+          "description": "Tense selection checkboxes",
+          "found": true,
+          "type": "dict",
+          "count": 5
+        },
+        "person_checkboxes": {
+          "description": "Person selection checkboxes",
+          "found": true,
+          "type": "dict",
+          "count": 6
+        },
+        "free_response_input": {
+          "description": "Free response input field",
+          "found": true,
+          "type": "QLineEdit"
+        },
+        "feedback_text": {
+          "description": "Feedback display area",
+          "found": true,
+          "type": "QTextEdit"
+        }
+      },
+      "missing_components": [],
+      "error_components": [],
+      "success_rate": "100.0%"
+    },
+    "Text Readability": {
+      "success": false,
+      "font_checks": {
+        "app_font_family": "MS Shell Dlg 2",
+        "app_font_size": 8,
+        "sentence_label_font": {
+          "family": "MS Shell Dlg 2",
+          "size": 8,
+          "bold": false
+        },
+        "stats_label_font": {
+          "family": "MS Shell Dlg 2",
+          "size": 8,
+          "bold": false
+        },
+        "feedback_text_font": {
+          "family": "MS Shell Dlg 2",
+          "size": 8,
+          "bold": false
+        }
+      },
+      "readability_issues": [
+        "Font size too small: 8pt",
+        "Main sentence font too small: 8pt",
+        "Statistics font too small: 8pt",
+        "Feedback area font too small: 8pt",
+        "Gray text may have contrast issues"
+      ]
+    },
+    "Red Box Issues": {
+      "success": true,
+      "form_elements_checked": {
+        "trigger_checkboxes_0": {
+          "has_red_styling": false,
+          "style_length": 0,
+          "has_styling": false
+        },
+        "trigger_checkboxes_1": {
+          "has_red_styling": false,
+          "style_length": 0,
+          "has_styling": false
+        },
+        "trigger_checkboxes_2": {
+          "has_red_styling": false,
+          "style_length": 0,
+          "has_styling": false
+        },
+        "trigger_checkboxes_3": {
+          "has_red_styling": false,
+          "style_length": 0,
+          "has_styling": false
+        },
+        "trigger_checkboxes_4": {
+          "has_red_styling": false,
+          "style_length": 0,
+          "has_styling": false
+        },
+        "trigger_checkboxes_5": {
+          "has_red_styling": false,
+          "style_length": 0,
+          "has_styling": false
+        },
+        "trigger_checkboxes_6": {
+          "has_red_styling": false,
+          "style_length": 0,
+          "has_styling": false
+        },
+        "trigger_checkboxes_7": {
+          "has_red_styling": false,
+          "style_length": 0,
+          "has_styling": false
+        },
+        "trigger_checkboxes_8": {
+          "has_red_styling": false,
+          "style_length": 0,
+          "has_styling": false
+        },
+        "trigger_checkboxes_9": {
+          "has_red_styling": false,
+          "style_length": 0,
+          "has_styling": false
+        },
+        "trigger_checkboxes_10": {
+          "has_red_styling": false,
+          "style_length": 0,
+          "has_styling": false
+        },
+        "tense_checkboxes_0": {
+          "has_red_styling": false,
+          "style_length": 0,
+          "has_styling": false
+        },
+        "tense_checkboxes_1": {
+          "has_red_styling": false,
+          "style_length": 0,
+          "has_styling": false
+        },
+        "tense_checkboxes_2": {
+          "has_red_styling": false,
+          "style_length": 0,
+          "has_styling": false
+        },
+        "tense_checkboxes_3": {
+          "has_red_styling": false,
+          "style_length": 0,
+          "has_styling": false
+        },
+        "tense_checkboxes_4": {
+          "has_red_styling": false,
+          "style_length": 0,
+          "has_styling": false
+        },
+        "person_checkboxes_0": {
+          "has_red_styling": false,
+          "style_length": 0,
+          "has_styling": false
+        },
+        "person_checkboxes_1": {
+          "has_red_styling": false,
+          "style_length": 0,
+          "has_styling": false
+        },
+        "person_checkboxes_2": {
+          "has_red_styling": false,
+          "style_length": 0,
+          "has_styling": false
+        },
+        "person_checkboxes_3": {
+          "has_red_styling": false,
+          "style_length": 0,
+          "has_styling": false
+        },
+        "person_checkboxes_4": {
+          "has_red_styling": false,
+          "style_length": 0,
+          "has_styling": false
+        },
+        "person_checkboxes_5": {
+          "has_red_styling": false,
+          "style_length": 0,
+          "has_styling": false
+        },
+        "free_response_input": {
+          "has_red_styling": false,
+          "style_length": 0,
+          "has_styling": false
+        },
+        "custom_context_input": {
+          "has_red_styling": false,
+          "style_length": 0,
+          "has_styling": false
+        },
+        "verbs_input": {
+          "has_red_styling": false,
+          "style_length": 0,
+          "has_styling": false
+        }
+      },
+      "red_box_issues": [],
+      "form_integration_manager_present": true
+    },
+    "Progress Indicators": {
+      "success": false,
+      "progress_features": {
+        "progress_manager_present": true,
+        "has_show_loading": false,
+        "has_hide_loading": false,
+        "has_update_progress": false,
+        "progress_overlay_present": true,
+        "loading_states_count": 5,
+        "loading_states": [
+          "generating_exercises",
+          "checking_answer",
+          "getting_hint",
+          "generating_summary",
+          "testing_api"
+        ],
+        "progress_indicators_available": false
+      },
+      "issues": [
+        "Progress manager missing method: show_loading",
+        "Progress manager missing method: hide_loading",
+        "Progress manager missing method: update_progress",
+        "Progress indicators module not available"
+      ]
+    },
+    "Form Styling": {
+      "success": false,
+      "styling_features": {
+        "form_integration_manager": true,
+        "style_manager_present": true,
+        "spacing_optimizer_present": true
+      },
+      "issues": [
+        "Form integration manager is None"
+      ]
+    },
+    "Accessibility Features": {
+      "success": true,
+      "accessibility_features": {
+        "accessibility_manager_present": true,
+        "integrate_accessibility_available": false,
+        "add_accessibility_startup_check_available": false,
+        "settings_file_exists": true,
+        "settings_keys": [
+          "high_contrast",
+          "focus_ring_width",
+          "focus_ring_color",
+          "font_size_multiplier",
+          "keyboard_navigation_enabled",
+          "screen_reader_support",
+          "auto_announce",
+          "skip_animation",
+          "show_shortcuts",
+          "custom_shortcuts",
+          "color_theme",
+          "reduce_motion",
+          "enhanced_tooltips"
+        ]
+      },
+      "issues": []
+    },
+    "Error Handling": {
+      "success": true,
+      "error_handling_features": {
+        "api_module_available": false,
+        "client_initialized": false,
+        "error_fixes_module_available": true,
+        "logging_configured": false
+      },
+      "issues": [
+        "Logging not properly configured"
+      ]
+    },
+    "Responsiveness": {
+      "success": false,
+      "responsive_features": {
+        "initial_size": "1100x700",
+        "minimum_size": "0x0",
+        "responsive_design_available": false,
+        "splitter_count": 1,
+        "has_splitter": true
+      },
+      "issues": [
+        "Responsive design module not available"
+      ]
+    }
+  },
+  "issues_found": [
+    "Progress Indicators: Progress manager missing method: show_loading",
+    "Progress Indicators: Progress manager missing method: hide_loading",
+    "Progress Indicators: Progress manager missing method: update_progress",
+    "Progress Indicators: Progress indicators module not available",
+    "Form Styling: Form integration manager is None",
+    "Responsiveness: Responsive design module not available"
+  ],
+  "recommendations": [
+    "Text readability improvements need refinement",
+    "Progress indication system needs improvement"
+  ]
+}

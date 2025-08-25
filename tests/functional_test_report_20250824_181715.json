@@ -1,0 +1,369 @@
+{
+  "test_summary": {
+    "total_tests": 17,
+    "passed_tests": 3,
+    "failed_tests": 14,
+    "success_rate": 17.65,
+    "critical_failures": 8,
+    "total_execution_time": 0.001,
+    "avg_execution_time": 0.0
+  },
+  "critical_issues": [
+    {
+      "test_name": "application_startup",
+      "description": "Test application startup and initialization",
+      "error_message": "Main application module not available",
+      "execution_time": 0.0
+    },
+    {
+      "test_name": "application_startup",
+      "description": "Test application startup and initialization",
+      "error_message": "Main application module not available",
+      "execution_time": 0.0
+    },
+    {
+      "test_name": "ui_components",
+      "description": "Test UI component functionality",
+      "error_message": "Main window not available",
+      "execution_time": 0.0
+    },
+    {
+      "test_name": "ui_components",
+      "description": "Test UI component functionality",
+      "error_message": "Main window not available",
+      "execution_time": 0.0
+    },
+    {
+      "test_name": "exercise_generation",
+      "description": "Test exercise generation workflow",
+      "error_message": "Main window not available",
+      "execution_time": 0.0
+    },
+    {
+      "test_name": "exercise_generation",
+      "description": "Test exercise generation workflow",
+      "error_message": "Main window not available",
+      "execution_time": 0.0
+    },
+    {
+      "test_name": "answer_submission",
+      "description": "Test answer submission and validation",
+      "error_message": "Main window not available",
+      "execution_time": 0.0
+    },
+    {
+      "test_name": "answer_submission",
+      "description": "Test answer submission and validation",
+      "error_message": "Main window not available",
+      "execution_time": 0.0
+    }
+  ],
+  "issues_by_category": {
+    "application": [
+      {
+        "test": "application_startup",
+        "error": "Main application module not available",
+        "critical": true
+      },
+      {
+        "test": "application_startup",
+        "error": "Main application module not available",
+        "critical": true
+      }
+    ],
+    "ui": [
+      {
+        "test": "ui_components",
+        "error": "Main window not available",
+        "critical": true
+      },
+      {
+        "test": "ui_components",
+        "error": "Main window not available",
+        "critical": true
+      }
+    ],
+    "exercise": [
+      {
+        "test": "exercise_generation",
+        "error": "Main window not available",
+        "critical": true
+      },
+      {
+        "test": "exercise_generation",
+        "error": "Main window not available",
+        "critical": true
+      },
+      {
+        "test": "exercise_navigation",
+        "error": "Main window not available",
+        "critical": false
+      },
+      {
+        "test": "exercise_navigation",
+        "error": "Main window not available",
+        "critical": false
+      }
+    ],
+    "answer": [
+      {
+        "test": "answer_submission",
+        "error": "Main window not available",
+        "critical": true
+      },
+      {
+        "test": "answer_submission",
+        "error": "Main window not available",
+        "critical": true
+      }
+    ],
+    "settings": [
+      {
+        "test": "settings_preferences",
+        "error": "Main window not available",
+        "critical": false
+      },
+      {
+        "test": "settings_preferences",
+        "error": "Main window not available",
+        "critical": false
+      }
+    ],
+    "error": [
+      {
+        "test": "error_handling",
+        "error": "Main window not available",
+        "critical": false
+      },
+      {
+        "test": "error_handling",
+        "error": "Main window not available",
+        "critical": false
+      }
+    ]
+  },
+  "enhancement_modules_status": {
+    "ui_visual": "not_initialized",
+    "spacing_optimizer": "not_initialized",
+    "accessibility": "not_initialized",
+    "learning_analytics": "working",
+    "session_manager": "working"
+  },
+  "detailed_results": [
+    {
+      "test_name": "application_startup",
+      "description": "Test application startup and initialization",
+      "passed": false,
+      "error_message": "Main application module not available",
+      "execution_time": 0.0,
+      "details": {},
+      "critical": true
+    },
+    {
+      "test_name": "application_startup",
+      "description": "Test application startup and initialization",
+      "passed": false,
+      "error_message": "Main application module not available",
+      "execution_time": 0.0,
+      "details": {},
+      "critical": true
+    },
+    {
+      "test_name": "ui_components",
+      "description": "Test UI component functionality",
+      "passed": false,
+      "error_message": "Main window not available",
+      "execution_time": 0.0,
+      "details": {},
+      "critical": true
+    },
+    {
+      "test_name": "ui_components",
+      "description": "Test UI component functionality",
+      "passed": false,
+      "error_message": "Main window not available",
+      "execution_time": 0.0,
+      "details": {},
+      "critical": true
+    },
+    {
+      "test_name": "exercise_generation",
+      "description": "Test exercise generation workflow",
+      "passed": false,
+      "error_message": "Main window not available",
+      "execution_time": 0.0,
+      "details": {},
+      "critical": true
+    },
+    {
+      "test_name": "exercise_generation",
+      "description": "Test exercise generation workflow",
+      "passed": false,
+      "error_message": "Main window not available",
+      "execution_time": 0.0,
+      "details": {},
+      "critical": true
+    },
+    {
+      "test_name": "answer_submission",
+      "description": "Test answer submission and validation",
+      "passed": false,
+      "error_message": "Main window not available",
+      "execution_time": 0.0,
+      "details": {},
+      "critical": true
+    },
+    {
+      "test_name": "answer_submission",
+      "description": "Test answer submission and validation",
+      "passed": false,
+      "error_message": "Main window not available",
+      "execution_time": 0.0,
+      "details": {},
+      "critical": true
+    },
+    {
+      "test_name": "exercise_navigation",
+      "description": "Test navigation between exercises",
+      "passed": false,
+      "error_message": "Main window not available",
+      "execution_time": 0.0,
+      "details": {},
+      "critical": false
+    },
+    {
+      "test_name": "exercise_navigation",
+      "description": "Test navigation between exercises",
+      "passed": false,
+      "error_message": "Main window not available",
+      "execution_time": 0.0,
+      "details": {},
+      "critical": false
+    },
+    {
+      "test_name": "settings_preferences",
+      "description": "Test settings and preferences functionality",
+      "passed": false,
+      "error_message": "Main window not available",
+      "execution_time": 0.0,
+      "details": {},
+      "critical": false
+    },
+    {
+      "test_name": "settings_preferences",
+      "description": "Test settings and preferences functionality",
+      "passed": false,
+      "error_message": "Main window not available",
+      "execution_time": 0.0,
+      "details": {},
+      "critical": false
+    },
+    {
+      "test_name": "enhancement_modules",
+      "description": "Test enhancement module integration",
+      "passed": true,
+      "error_message": "",
+      "execution_time": 0.001,
+      "details": {
+        "enhancement_modules": {
+          "ui_visual": {
+            "status": "not_initialized"
+          },
+          "spacing_optimizer": {
+            "status": "not_initialized"
+          },
+          "accessibility": {
+            "status": "not_initialized"
+          },
+          "learning_analytics": {
+            "status": "working",
+            "integration": {
+              "streak_tracker": false,
+              "error_analyzer": false,
+              "adaptive_difficulty": false,
+              "practice_goals": false
+            }
+          },
+          "session_manager": {
+            "status": "working",
+            "integration": {
+              "session_manager": false,
+              "review_queue": false
+            }
+          }
+        },
+        "working_modules": 2,
+        "total_available": 5,
+        "integration_rate": "2/5"
+      },
+      "critical": false
+    },
+    {
+      "test_name": "error_handling",
+      "description": "Test error handling and edge cases",
+      "passed": false,
+      "error_message": "Main window not available",
+      "execution_time": 0.0,
+      "details": {},
+      "critical": false
+    },
+    {
+      "test_name": "error_handling",
+      "description": "Test error handling and edge cases",
+      "passed": false,
+      "error_message": "Main window not available",
+      "execution_time": 0.0,
+      "details": {},
+      "critical": false
+    },
+    {
+      "test_name": "data_persistence",
+      "description": "Test data persistence and session management",
+      "passed": true,
+      "error_message": "",
+      "execution_time": 0.0,
+      "details": {
+        "session_structure": "not_available",
+        "response_tracking": 0,
+        "session_manager": "not_available",
+        "data_directory": "exists",
+        "streak_tracking": "not_initialized"
+      },
+      "critical": false
+    },
+    {
+      "test_name": "accessibility_features",
+      "description": "Test accessibility features and compliance",
+      "passed": true,
+      "error_message": "",
+      "execution_time": 0.0,
+      "details": {
+        "keyboard_navigation": "error: 'NoneType' object has no attribute 'submit_button'",
+        "accessibility_manager": "not_available",
+        "keyboard_shortcuts": "error: 'NoneType' object has no attribute 'submit_button'",
+        "tooltips": "error: 'NoneType' object has no attribute 'submit_button'",
+        "high_contrast": "available",
+        "screen_reader_support": "error: 'NoneType' object has no attribute 'submit_button'"
+      },
+      "critical": false
+    }
+  ],
+  "recommendations": [
+    "🚨 CRITICAL: Address critical test failures before deployment",
+    "  - Fix application_startup: Main application module not available",
+    "  - Fix application_startup: Main application module not available",
+    "  - Fix ui_components: Main window not available",
+    "  - Fix ui_components: Main window not available",
+    "  - Fix exercise_generation: Main window not available",
+    "  - Fix exercise_generation: Main window not available",
+    "  - Fix answer_submission: Main window not available",
+    "  - Fix answer_submission: Main window not available",
+    "⚠️  Overall test success rate is below 80% - investigate failing tests"
+  ],
+  "test_environment": {
+    "python_version": "3.10.11 (tags/v3.10.11:7d4cc5a, Apr  5 2023, 00:38:17) [MSC v.1929 64 bit (AMD64)]",
+    "pyqt_available": true,
+    "main_app_available": false,
+    "timestamp": "2025-08-24T18:17:15.790244"
+  }
+}
