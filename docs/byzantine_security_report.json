@@ -1,0 +1,83 @@
+{
+  "report_timestamp": 1756698173.8350918,
+  "report_type": "byzantine_security_assessment",
+  "swarm_protection_status": {
+    "swarm_id": "swarm-1756696734588-1rik89o3r",
+    "node_id": "byzantine-coordinator",
+    "protection_level": "enhanced",
+    "monitoring_active": true,
+    "timestamp": 1756698173.8350918,
+    "consensus": {
+      "current_view": 0,
+      "sequence_number": 0,
+      "primary_node": "node_0",
+      "connected_nodes": 0,
+      "consensus_integrity": true
+    },
+    "security": {
+      "threat_level": "LOW - Normal operation with standard monitoring",
+      "monitored_nodes": 0,
+      "threat_summary": {
+        "low": 0,
+        "medium": 0,
+        "high": 0,
+        "critical": 0
+      },
+      "recent_security_events": 0,
+      "coordinated_attacks": 0
+    },
+    "validation": {
+      "total_validations": 0,
+      "success_rate": 0.0,
+      "average_confidence": 0.0,
+      "security_events": 0
+    },
+    "memory": {
+      "chain_integrity": true,
+      "total_entries": 2,
+      "verified_entries": 2,
+      "integrity_violations": 0
+    },
+    "metrics": {
+      "messages_processed": 0,
+      "threats_detected": 0,
+      "consensus_rounds": 0,
+      "nodes_isolated": 0,
+      "view_changes": 0,
+      "start_time": 1756698173.8310897,
+      "uptime_seconds": 0.0010018348693847656,
+      "consensus_integrity": true,
+      "active_threats": 0,
+      "memory_entries": 1
+    },
+    "countermeasures": {
+      "active_responses": [],
+      "cooldown_count": 0,
+      "threat_response_config": 5
+    },
+    "recommendations": [
+      "MEDIUM: Low validation success rate - check cryptographic key distribution",
+      "WARNING: Low node connectivity - check network partitions"
+    ]
+  },
+  "security_events_24h": [],
+  "deployment_summary": {
+    "swarm_id": "swarm-1756696734588-1rik89o3r",
+    "node_id": "byzantine-coordinator",
+    "total_nodes": 9,
+    "protection_level": "enhanced",
+    "byzantine_threshold": 2,
+    "consensus_threshold": 5
+  },
+  "threat_analysis": {
+    "total_threats_detected": 0,
+    "nodes_isolated": 0,
+    "view_changes": 0,
+    "consensus_integrity": true,
+    "memory_integrity": true
+  },
+  "recommendations": [
+    "MEDIUM: Low validation success rate - check cryptographic key distribution",
+    "WARNING: Low node connectivity - check network partitions"
+  ]
+}

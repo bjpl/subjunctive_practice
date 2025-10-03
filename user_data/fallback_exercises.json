@@ -1,0 +1,33 @@
+{
+  "subjunctive_exercises": [
+    {
+      "id": "fallback_001",
+      "type": "present_subjunctive",
+      "prompt": "Espero que tú _____ (estudiar) mucho.",
+      "answer": "estudies",
+      "explanation": "Use present subjunctive after expressions of hope/wish.",
+      "difficulty": 1
+    },
+    {
+      "id": "fallback_002",
+      "type": "imperfect_subjunctive",
+      "prompt": "Si yo _____ (ser) rico, viajaría por el mundo.",
+      "answer": "fuera/fuese",
+      "explanation": "Use imperfect subjunctive in hypothetical 'si' clauses.",
+      "difficulty": 2
+    },
+    {
+      "id": "fallback_003",
+      "type": "subjunctive_triggers",
+      "prompt": "No creo que él _____ (llegar) a tiempo.",
+      "answer": "llegue",
+      "explanation": "Expressions of doubt trigger the subjunctive mood.",
+      "difficulty": 1
+    }
+  ],
+  "grammar_tips": [
+    "The subjunctive expresses doubt, emotion, desire, or hypothetical situations.",
+    "Present subjunctive: Remove -o from yo form, add opposite endings.",
+    "Common triggers: que + emotion/doubt/desire verbs."
+  ]
+}

@@ -1,0 +1,439 @@
+{
+  "analysis_metadata": {
+    "analysis_date": "2025-09-09T04:03:17.276Z",
+    "analyzer": "Claude Code Tech Debt Analyzer",
+    "total_files_analyzed": 150,
+    "total_issues_found": 47,
+    "repository": "subjunctive_practice",
+    "git_branch": "main"
+  },
+  "executive_summary": {
+    "critical_issues": 8,
+    "high_severity": 12,
+    "medium_severity": 18,
+    "low_severity": 9,
+    "estimated_technical_debt_hours": 156,
+    "priority_categories": [
+      "Architecture Migration",
+      "Security & Configuration",
+      "Code Quality & Maintainability",
+      "Deployment & Infrastructure"
+    ]
+  },
+  "critical_issues": [
+    {
+      "category": "Architecture",
+      "severity": "critical",
+      "title": "Incomplete PyQt to Web Migration",
+      "description": "Main application still heavily relies on PyQt5/6 with incomplete web API integration, causing architectural inconsistency",
+      "files": [
+        "main.py:21-100",
+        "backend/main.py:16-25",
+        "railway_main.py:1-148"
+      ],
+      "impact": "Dual desktop/web architecture creates maintenance burden and deployment complexity",
+      "suggested_fix": "Complete migration to web-only architecture or implement proper separation of concerns",
+      "estimated_effort_hours": 24,
+      "risk_level": "high"
+    },
+    {
+      "category": "Deployment",
+      "severity": "critical", 
+      "title": "Multiple Conflicting Entry Points",
+      "description": "Multiple main files (main.py, main_web.py, railway_main.py, backend/main.py) create confusion and deployment issues",
+      "files": [
+        "main.py",
+        "main_web.py",
+        "railway_main.py", 
+        "backend/main.py"
+      ],
+      "impact": "Deployment failures, unclear application structure, maintenance overhead",
+      "suggested_fix": "Consolidate to single entry point with environment-based configuration",
+      "estimated_effort_hours": 16,
+      "risk_level": "high"
+    },
+    {
+      "category": "Security",
+      "severity": "critical",
+      "title": "Hardcoded Database Connections",
+      "description": "Database connection strings and sensitive configuration exposed in multiple files",
+      "files": [
+        "database/init.sql:230-231",
+        "database/migration_guide.md:57,149,152"
+      ],
+      "impact": "Security vulnerability, credential exposure in version control",
+      "suggested_fix": "Implement proper secrets management and environment variable configuration",
+      "estimated_effort_hours": 8,
+      "risk_level": "critical"
+    },
+    {
+      "category": "Code Quality",
+      "severity": "critical",
+      "title": "Extensive Commented-Out Code", 
+      "description": "Large sections of functionality commented out in main.py (lines 68-100) indicating incomplete refactoring",
+      "files": [
+        "main.py:68-100"
+      ],
+      "impact": "Code maintainability issues, unclear application state, potential functionality loss",
+      "suggested_fix": "Remove commented code or properly implement modular architecture",
+      "estimated_effort_hours": 12,
+      "risk_level": "medium"
+    },
+    {
+      "category": "Dependencies",
+      "severity": "critical",
+      "title": "Dependency Version Conflicts",
+      "description": "requirements.txt has minimal dependencies while railway_requirements.txt has extensive backend stack",
+      "files": [
+        "requirements.txt:1-3",
+        "railway_requirements.txt:1-25"
+      ],
+      "impact": "Deployment failures, environment inconsistencies, dependency hell",
+      "suggested_fix": "Consolidate requirements files and implement proper dependency management",
+      "estimated_effort_hours": 6,
+      "risk_level": "high"
+    },
+    {
+      "category": "Architecture",
+      "severity": "critical",
+      "title": "Missing Database Connection Implementation",
+      "description": "Backend main.py references database connection patterns but implementation is missing",
+      "files": [
+        "backend/main.py:21-25"
+      ],
+      "impact": "Runtime failures, incomplete feature implementation",
+      "suggested_fix": "Implement proper database connection layer or remove references",
+      "estimated_effort_hours": 8,
+      "risk_level": "high"
+    },
+    {
+      "category": "Error Handling",
+      "severity": "critical",
+      "title": "Generic Exception Handling",
+      "description": "Widespread use of 'except Exception' without specific error handling across codebase",
+      "files": [
+        "config/secrets_manager.py:43,54,70,101,145,157,187,218,253",
+        "railway_main.py:97",
+        "test_accessibility_integration.py:35,108,133,170,191,215"
+      ],
+      "impact": "Poor error reporting, difficult debugging, potential security issues",
+      "suggested_fix": "Implement specific exception handling with proper logging",
+      "estimated_effort_hours": 14,
+      "risk_level": "medium"
+    },
+    {
+      "category": "Testing",
+      "severity": "critical", 
+      "title": "Missing Core Module Tests",
+      "description": "Critical business logic in tblt_scenarios.py and backend API lacks comprehensive test coverage",
+      "files": [
+        "tblt_scenarios.py",
+        "backend/main.py",
+        "railway_main.py"
+      ],
+      "impact": "Unreliable deployments, regression risks, poor code quality",
+      "suggested_fix": "Implement comprehensive test suite for core functionality",
+      "estimated_effort_hours": 20,
+      "risk_level": "high"
+    }
+  ],
+  "high_severity_issues": [
+    {
+      "category": "Deployment",
+      "severity": "high",
+      "title": "Docker Configuration Inconsistencies",
+      "description": "Multiple Dockerfiles with different configurations and missing production optimizations",
+      "files": [
+        "Dockerfile:1-169",
+        "backend/Dockerfile",
+        "frontend/Dockerfile"
+      ],
+      "impact": "Deployment complexity, inconsistent environments",
+      "suggested_fix": "Standardize Docker configuration and implement multi-stage builds",
+      "estimated_effort_hours": 10,
+      "risk_level": "medium"
+    },
+    {
+      "category": "Code Quality",
+      "severity": "high",
+      "title": "Debug Print Statements in Production Code",
+      "description": "Numerous print statements throughout codebase instead of proper logging",
+      "files": [
+        "config/secrets_manager.py:329-378",
+        "backend/main.py:313-323",
+        "Various test files"
+      ],
+      "impact": "Poor production debugging, log pollution, unprofessional output",
+      "suggested_fix": "Replace print statements with structured logging",
+      "estimated_effort_hours": 8,
+      "risk_level": "low"
+    },
+    {
+      "category": "Architecture",
+      "severity": "high",
+      "title": "Import Path Manipulation",
+      "description": "Unsafe sys.path modifications for imports across multiple files",
+      "files": [
+        "backend/main.py:16-18"
+      ],
+      "impact": "Deployment issues, path resolution problems, maintenance overhead",
+      "suggested_fix": "Implement proper package structure with relative imports",
+      "estimated_effort_hours": 6,
+      "risk_level": "medium"
+    },
+    {
+      "category": "Configuration",
+      "severity": "high",
+      "title": "Environment Configuration Scattered",
+      "description": "Environment variables and configuration scattered across multiple files without centralization",
+      "files": [
+        "railway_main.py:14-17",
+        "backend/main.py",
+        "config/ directory"
+      ],
+      "impact": "Configuration drift, deployment issues, maintenance overhead",
+      "suggested_fix": "Centralize configuration management with proper environment handling",
+      "estimated_effort_hours": 8,
+      "risk_level": "medium"
+    },
+    {
+      "category": "Code Quality",
+      "severity": "high",
+      "title": "Unused Import Dependencies",
+      "description": "Multiple files contain unused imports and circular import patterns",
+      "files": [
+        "Multiple Python files across src/, tests/, examples/"
+      ],
+      "impact": "Bundle size inflation, slower startup times, dependency confusion",
+      "suggested_fix": "Clean up imports and implement proper dependency management",
+      "estimated_effort_hours": 4,
+      "risk_level": "low"
+    },
+    {
+      "category": "Frontend",
+      "severity": "high", 
+      "title": "Incomplete Frontend Integration",
+      "description": "React frontend components referenced but implementation incomplete or missing",
+      "files": [
+        "frontend/ directory structure incomplete",
+        "main_web.py:32-38 references missing frontend"
+      ],
+      "impact": "Broken user experience, deployment failures",
+      "suggested_fix": "Complete frontend implementation or remove references",
+      "estimated_effort_hours": 16,
+      "risk_level": "high"
+    }
+  ],
+  "medium_severity_issues": [
+    {
+      "category": "Performance",
+      "severity": "medium",
+      "title": "No Caching Implementation",
+      "description": "API endpoints lack caching mechanisms for expensive operations like conjugation generation",
+      "files": [
+        "backend/main.py:188-212",
+        "tblt_scenarios.py"
+      ],
+      "impact": "Poor performance, scalability issues",
+      "suggested_fix": "Implement Redis caching for conjugations and exercises",
+      "estimated_effort_hours": 6,
+      "risk_level": "low"
+    },
+    {
+      "category": "Documentation",
+      "severity": "medium",
+      "title": "API Documentation Incomplete",
+      "description": "FastAPI endpoints lack comprehensive documentation and examples",
+      "files": [
+        "backend/main.py:95-333"
+      ],
+      "impact": "Poor developer experience, integration difficulties", 
+      "suggested_fix": "Add comprehensive OpenAPI documentation and examples",
+      "estimated_effort_hours": 4,
+      "risk_level": "low"
+    },
+    {
+      "category": "Security",
+      "severity": "medium",
+      "title": "CORS Configuration Too Permissive",
+      "description": "CORS allows all origins (*) in some configurations",
+      "files": [
+        "railway_main.py:17"
+      ],
+      "impact": "Security vulnerability, potential CSRF attacks",
+      "suggested_fix": "Implement restrictive CORS policy for production",
+      "estimated_effort_hours": 2,
+      "risk_level": "medium"
+    },
+    {
+      "category": "Data Persistence",
+      "severity": "medium",
+      "title": "In-Memory Data Storage",
+      "description": "Session management and spaced repetition data stored in memory without persistence",
+      "files": [
+        "tblt_scenarios.py:105-106",
+        "backend/main.py:42-50"
+      ],
+      "impact": "Data loss on restart, scalability issues",
+      "suggested_fix": "Implement database persistence for session data",
+      "estimated_effort_hours": 12,
+      "risk_level": "medium"
+    },
+    {
+      "category": "Monitoring",
+      "severity": "medium",
+      "title": "Limited Observability",
+      "description": "Minimal logging, monitoring, and health check implementations",
+      "files": [
+        "railway_main.py:78-101",
+        "backend/main.py lacks comprehensive monitoring"
+      ],
+      "impact": "Difficult troubleshooting, poor operational visibility",
+      "suggested_fix": "Implement comprehensive logging, metrics, and monitoring",
+      "estimated_effort_hours": 8,
+      "risk_level": "low"
+    }
+  ],
+  "recommendations": {
+    "immediate_actions": [
+      {
+        "priority": 1,
+        "action": "Remove hardcoded credentials and implement secrets management",
+        "estimated_hours": 8,
+        "risk_mitigation": "critical"
+      },
+      {
+        "priority": 2, 
+        "action": "Consolidate application entry points to single main.py",
+        "estimated_hours": 16,
+        "risk_mitigation": "high"
+      },
+      {
+        "priority": 3,
+        "action": "Implement proper error handling and logging",
+        "estimated_hours": 14,
+        "risk_mitigation": "high"
+      }
+    ],
+    "architectural_improvements": [
+      {
+        "action": "Complete PyQt to web migration or implement proper separation",
+        "estimated_hours": 24,
+        "benefit": "Reduced complexity, better maintainability"
+      },
+      {
+        "action": "Implement database persistence layer",
+        "estimated_hours": 12,
+        "benefit": "Data reliability, scalability"
+      },
+      {
+        "action": "Standardize dependency management",
+        "estimated_hours": 6,
+        "benefit": "Deployment reliability"
+      }
+    ],
+    "code_quality_improvements": [
+      {
+        "action": "Remove commented-out code and unused imports",
+        "estimated_hours": 4,
+        "benefit": "Code clarity, reduced bundle size"
+      },
+      {
+        "action": "Implement comprehensive test coverage",
+        "estimated_hours": 20,
+        "benefit": "Reliability, regression prevention"
+      },
+      {
+        "action": "Replace print statements with structured logging",
+        "estimated_hours": 8,
+        "benefit": "Better debugging, professional logs"
+      }
+    ]
+  },
+  "deployment_issues": [
+    {
+      "issue": "Multiple conflicting Docker configurations",
+      "impact": "Deployment inconsistencies",
+      "fix": "Standardize Docker setup"
+    },
+    {
+      "issue": "Environment variable management scattered",
+      "impact": "Configuration drift",
+      "fix": "Centralize environment configuration"
+    },
+    {
+      "issue": "Railway deployment configuration incomplete",
+      "impact": "Deployment failures",
+      "fix": "Complete railway.toml configuration"
+    }
+  ],
+  "security_concerns": [
+    {
+      "concern": "Hardcoded database credentials",
+      "severity": "critical",
+      "location": "Multiple files",
+      "remediation": "Implement AWS Secrets Manager or similar"
+    },
+    {
+      "concern": "Permissive CORS configuration",
+      "severity": "medium", 
+      "location": "railway_main.py:17",
+      "remediation": "Restrict CORS to specific domains"
+    },
+    {
+      "concern": "No input validation on API endpoints",
+      "severity": "medium",
+      "location": "backend/main.py",
+      "remediation": "Implement Pydantic validation"
+    }
+  ],
+  "testing_gaps": [
+    {
+      "area": "Core business logic",
+      "files": ["tblt_scenarios.py", "backend/main.py"],
+      "missing_tests": "Unit tests for TBLT task generation and API endpoints",
+      "priority": "high"
+    },
+    {
+      "area": "Integration testing",
+      "files": ["API integration", "Database operations"],
+      "missing_tests": "End-to-end API testing, database integration tests",
+      "priority": "high"
+    },
+    {
+      "area": "Error handling",
+      "files": ["All Python modules"],
+      "missing_tests": "Error condition testing, exception handling validation",
+      "priority": "medium"
+    }
+  ],
+  "performance_bottlenecks": [
+    {
+      "bottleneck": "No caching for conjugation operations",
+      "impact": "High CPU usage for repetitive requests",
+      "solution": "Implement Redis caching layer"
+    },
+    {
+      "bottleneck": "In-memory session storage",
+      "impact": "Memory leaks, scalability issues",
+      "solution": "Database-backed session management"
+    }
+  ],
+  "technical_debt_score": {
+    "maintainability": 4.2,
+    "reliability": 3.8,
+    "security": 3.1,
+    "performance": 4.0,
+    "testability": 2.9,
+    "overall_score": 3.6,
+    "grade": "D+",
+    "debt_ratio": "42%"
+  },
+  "next_steps": [
+    "Prioritize critical security fixes (hardcoded credentials)",
+    "Consolidate application architecture",
+    "Implement comprehensive testing strategy",
+    "Establish proper CI/CD pipeline with quality gates",
+    "Create architectural decision records (ADRs) for major changes"
+  ]
+}

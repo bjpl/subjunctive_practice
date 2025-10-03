@@ -1,0 +1,168 @@
+# Multi-stage Dockerfile for Spanish Subjunctive Practice App
+# Supports both FastAPI and Streamlit deployments
+
+ARG PYTHON_VERSION=3.10
+FROM python:${PYTHON_VERSION}-slim as base
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libc6-dev \
+    libffi-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create app directory
+WORKDIR /app
+
+# ===== BASE DEPENDENCIES STAGE =====
+FROM base as dependencies
+
+# Copy dependency files
+COPY requirements.txt pyproject.toml ./
+
+# Install Python dependencies
+RUN pip install --upgrade pip && \
+    pip install poetry && \
+    poetry config virtualenvs.create false
+
+# Install from pyproject.toml if available, otherwise from requirements.txt
+RUN if [ -f "pyproject.toml" ]; then \
+        poetry install --no-dev; \
+    else \
+        pip install -r requirements.txt; \
+    fi
+
+# ===== FASTAPI STAGE =====
+FROM dependencies as fastapi
+
+# Install FastAPI specific dependencies
+RUN pip install fastapi uvicorn[standard] gunicorn
+
+# Copy application code
+COPY src/ ./src/
+COPY examples/deployment_configs/fastapi_railway/ ./
+
+# Create entrypoint script
+RUN cat > /app/docker-entrypoint.sh << 'EOF'
+#!/bin/bash
+set -e
+
+# Setup import fixes for missing modules
+export PYTHONPATH="/app/src:/app/src/import_fixes:$PYTHONPATH"
+
+# Run database migrations if needed
+# python -c "from app.core.database import init_db; import asyncio; asyncio.run(init_db())"
+
+# Start the application
+if [ "$1" = "dev" ]; then
+    exec uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000} --reload
+else
+    exec gunicorn main:app -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:${PORT:-8000}
+fi
+EOF
+
+RUN chmod +x /app/docker-entrypoint.sh
+
+EXPOSE 8000
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
+CMD ["prod"]
+
+# ===== STREAMLIT STAGE =====
+FROM dependencies as streamlit
+
+# Install Streamlit specific dependencies
+RUN pip install streamlit
+
+# Copy application code
+COPY src/ ./src/
+COPY examples/deployment_configs/streamlit_cloud/ ./
+
+# Create entrypoint script
+RUN cat > /app/streamlit-entrypoint.sh << 'EOF'
+#!/bin/bash
+set -e
+
+# Setup import fixes for missing modules
+export PYTHONPATH="/app/src:/app/src/import_fixes:$PYTHONPATH"
+
+# Create .streamlit directory and config
+mkdir -p /app/.streamlit
+cat > /app/.streamlit/config.toml << 'CONFIG_EOF'
+[server]
+port = 8501
+address = "0.0.0.0"
+headless = true
+enableCORS = false
+enableXsrfProtection = false
+
+[theme]
+primaryColor = "#FF6B6B"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F0F2F6"
+textColor = "#262730"
+CONFIG_EOF
+
+# Start Streamlit
+exec streamlit run streamlit_app.py --server.port=${PORT:-8501} --server.address=0.0.0.0
+EOF
+
+RUN chmod +x /app/streamlit-entrypoint.sh
+
+EXPOSE 8501
+ENTRYPOINT ["/app/streamlit-entrypoint.sh"]
+
+# ===== DEVELOPMENT STAGE =====
+FROM dependencies as development
+
+# Install development dependencies
+RUN pip install pytest pytest-cov pytest-xvfb pytest-qt black isort flake8 mypy
+
+# Install both FastAPI and Streamlit for development
+RUN pip install fastapi uvicorn[standard] streamlit
+
+# Copy all application code
+COPY . .
+
+# Setup development environment
+RUN cat > /app/dev-entrypoint.sh << 'EOF'
+#!/bin/bash
+set -e
+
+export PYTHONPATH="/app/src:/app/src/import_fixes:$PYTHONPATH"
+export QT_QPA_PLATFORM=offscreen
+
+case "$1" in
+    fastapi)
+        exec uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+        ;;
+    streamlit)
+        cd examples/deployment_configs/streamlit_cloud
+        exec streamlit run streamlit_app.py --server.port=8501 --server.address=0.0.0.0
+        ;;
+    test)
+        shift
+        exec pytest "$@"
+        ;;
+    bash)
+        exec /bin/bash
+        ;;
+    *)
+        echo "Usage: $0 {fastapi|streamlit|test|bash}"
+        exit 1
+        ;;
+esac
+EOF
+
+RUN chmod +x /app/dev-entrypoint.sh
+
+ENTRYPOINT ["/app/dev-entrypoint.sh"]
+CMD ["bash"]
+
+# ===== PRODUCTION STAGE (DEFAULT) =====
+FROM fastapi as production

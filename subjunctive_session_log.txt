@@ -1,0 +1,358 @@
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+Exercise 1
+  Sentence: Quiero que tú ________ (ser) feliz.
+  Translation: I want you to be happy.
+  User answer: seas
+  Correct: True
+  Explanation: Sí, la respuesta del usuario es correcta. En este caso, se usa el subjuntivo porque la frase expresa un deseo. Cuando queremos hablar de deseos, esperanzas o necesidades, se utiliza el modo subjuntivo. "Quiero que tú seas feliz" significa que el hablante desea que la otra persona sea feliz, por lo tanto, se usa "seas", que es la forma subjuntiva del verbo "ser" en segunda persona del singular.
+
+Exercise 2
+  Sentence: Sentí que él ________ (entender) mis sentimientos.
+  Translation: I felt that he understood my feelings.
+  User answer: entendiera
+  Correct: True
+  Explanation: Sí, la respuesta del usuario es correcta. Se utiliza el subjuntivo en este caso porque la frase expresa una emoción o sentimiento, que es uno de los usos del subjuntivo en español. Además, la acción de "entender" no es una realidad confirmada, sino una percepción del hablante, lo que también requiere el uso del subjuntivo.
+
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+Exercise 1
+  Sentence: Angela desea encontrar el mejor regalo que su mamá ______ (amar) jamás.
+  Translation: Angela wishes to find the best gift that her mom has ever loved.
+  User answer: haya amado
+  Correct: True
+  Explanation: Sí, la respuesta del usuario es correcta. En esta oración, se utiliza el subjuntivo porque estamos hablando de un evento hipotético o deseado, no de un hecho concreto. En este caso, Angela desea encontrar algo específico (el mejor regalo que su mamá haya amado jamás), pero no sabemos si ese regalo existe o no. Por lo tanto, se utiliza el subjuntivo en el verbo "amar". Además, se utiliza el tiempo perfecto del subjuntivo ("haya amado") porque se refiere a una acción que ya ha ocurrido o que debería haber ocurrido en el pasado.
+
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+Exercise 1
+  Sentence: Necesito que tú ______ (trabajar) en la decoración de la fiesta.
+  Translation: I need you to work on the party decoration.
+  User answer: 
+  Correct: True
+  Explanation: Sí, la respuesta del usuario es correcta. Usamos el subjuntivo después de "necesito que" porque estamos hablando de una acción que aún no ha ocurrido y que es requerida o deseada por el hablante. En este caso, el hablante necesita que la otra persona trabaje en la decoración de la fiesta.
+
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+Exercise 1
+  Sentence: Es mejor que tú _____ (comprar) una jaula grande para que el pájaro tenga espacio para volar.
+  Translation: It's better that you _____ (buy) a large cage so that the bird has space to fly.
+  User answer: compres
+  Correct: True
+  Explanation: Sí, la respuesta del usuario es correcta. En esta oración, se utiliza el subjuntivo ("compres") después de "es mejor que" porque estamos hablando de una recomendación o un deseo, no de un hecho seguro. Este uso es común en español para expresar incertidumbre, deseo, posibilidad, duda, y otros estados similares.
+
+Exercise 2
+  Sentence: Necesitamos pedir antes de que el camarero _____ (irse).
+  Translation: We need to order before the waiter _____ (leaves).
+  User answer: se vaya
+  Correct: True
+  Explanation: Sí, la respuesta del usuario es correcta. En español, utilizamos el modo subjuntivo después de la conjunción "antes de que". Esto es porque estamos hablando de una acción futura o hipotética que aún no ha ocurrido, lo que es una de las situaciones en las que se requiere el uso del subjuntivo. En este caso, "irse" se convierte en "se vaya" en subjuntivo.
+
+Exercise 3
+  Sentence: Si tú _____ (venir) conmigo, podríamos ver muchos peces exóticos.
+  Translation: If you _____ (came) with me, we could see many exotic fish.
+  User answer: vinieras
+  Correct: True
+  Explanation: Sí, la respuesta del usuario es correcta. En este caso, se usa el subjuntivo en la cláusula "si" porque estamos hablando de una situación hipotética o no realizada. En español, cuando hablamos de situaciones hipotéticas o que aún no han ocurrido, usamos el modo subjuntivo. "Vinieras" es la forma correcta del verbo "venir" en el pretérito imperfecto del subjuntivo.
+
+Exercise 4
+  Sentence: Es posible que nosotros _____ (haber) salvado más aves si hubiéramos hecho una campaña de concienciación más temprano.
+  Translation: We may _____ (have) saved more birds if we had done an awareness campaign earlier.
+  User answer: hayamos
+  Correct: True
+  Explanation: Sí, la respuesta del usuario es correcta. En esta oración, se usa el subjuntivo porque se trata de una expresión de posibilidad (es posible que). En español, cuando se expresa una posibilidad o una duda, se utiliza el modo subjuntivo. En este caso, se usa el tiempo presente del subjuntivo ("hayamos") después de "que".
+
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+Exercise 1
+  Sentence: Miguel busca el mejor salmón que ______ en la tienda.
+  Translation: Miguel is looking for the best salmon that ______ in the store.
+  User answer: haya
+  Correct: True
+  Explanation: La respuesta del usuario es correcta. En esta oración se usa el subjuntivo porque se está buscando algo que puede o no existir. La frase "el mejor salmón que haya en la tienda" implica una incertidumbre sobre la existencia de ese salmón específico. Por eso, se emplea el subjuntivo "haya" en lugar del indicativo.
+
+Exercise 3
+  Sentence: José dudaba que ______ una mojarra más grande que la que atrapó.
+  Translation: José doubted that he ______ a larger mojarra than the one he caught.
+  User answer: atrapara
+  Correct: False
+  Explanation: El error en la respuesta del usuario radica en el uso del tiempo del subjuntivo. La oración "José dudaba que ______ una mojarra más grande que la que atrapó" requiere el uso del pluscuamperfecto de subjuntivo "hubiera atrapado" porque se refiere a una acción hipotética que ya había ocurrido en el pasado antes de otra acción también en el pasado. El imperfecto de subjuntivo "atrapara" no es adecuado aquí porque no expresa esta anterioridad.
+
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+Exercise 1
+  Sentence: Es necesario que tu perro no __________ mis zapatos.
+  Translation: It's necessary that your dog doesn't chew my shoes.
+  User answer: mastique
+  Correct: True
+  Explanation: Sí, la respuesta del usuario es correcta. En español, usamos el subjuntivo después de ciertas frases impersonales como "es necesario que" para expresar una necesidad o una obligación. En este caso, "mastique" es la forma correcta del subjuntivo del verbo "masticar".
+
+Exercise 2
+  Sentence: Era mejor si el gato no nos __________ siempre.
+  Translation: It would have been better if the cat didn't always bite us.
+  User answer: mordía
+  Correct: False
+  Explanation: No, la respuesta del usuario no es correcta. En este caso, la frase "era mejor si" requiere el uso del subjuntivo en español. El subjuntivo se utiliza para expresar deseos, dudas, la posibilidad, la necesidad, y en oraciones condicionales, como en este caso. Por lo tanto, la forma correcta del verbo "morder" en este contexto es "mordiese", no "mordía".
+
+Exercise 2
+  Sentence: Era mejor si el gato no nos __________ siempre.
+  Translation: It would have been better if the cat didn't always bite us.
+  User answer: mordiese
+  Correct: True
+  Explanation: Sí, la respuesta del usuario es correcta. En esta oración, estamos hablando de una situación hipotética o deseada en el pasado, por lo que se usa el subjuntivo en pretérito imperfecto. El verbo "morder" se convierte en "mordiese", que es la forma correcta del subjuntivo. En situaciones donde se expresa un deseo, una posibilidad, una duda o una acción que no sabemos si ocurrió, se usa el modo subjuntivo.
+
+Exercise 3
+  Sentence: Te recomiendo que no __________ este plato. Es muy picante.
+  Translation: I recommend you not to swallow this dish. It's very spicy.
+  User answer: tragues
+  Correct: True
+  Explanation: Sí, la respuesta del usuario es correcta. En este caso, se utiliza el subjuntivo después de "recomendar que" porque estamos hablando de un evento o acción hipotética o no realizada. En español, el subjuntivo se usa a menudo para expresar deseos, dudas, la necesidad, la posibilidad y la incertidumbre, entre otros. Aquí, "tragues" es la forma correcta del subjuntivo del verbo "tragar" en segunda persona del singular.
+
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+Exercise 1
+  Sentence: Espero que el pájaro __________ (picar) las semillas que le dejé.
+  Translation: I hope that the bird pecks at the seeds I left him.
+  User answer: pique
+  Correct: True
+  Explanation: Sí, la respuesta del usuario es correcta. Utilizamos el subjuntivo después de "espero que" para expresar una esperanza o un deseo. En este caso, el verbo "picar" se conjuga en subjuntivo presente (pique) porque estamos expresando el deseo de que el pájaro pique las semillas.
+
+Exercise 2
+  Sentence: El pájaro __________ (tragar) las semillas antes de que yo pueda acercarme.
+  Translation: The bird would swallow the seeds before I could get closer.
+  User answer: tragara
+  Correct: True
+  Explanation: Sí, la respuesta del usuario es correcta. En español, usamos el subjuntivo después de "antes de que" para expresar una acción que todavía no ha ocurrido. En este caso, "El pájaro tragara las semillas antes de que yo pueda acercarme", la acción de tragar las semillas aún no ha sucedido, por lo que se utiliza el subjuntivo "tragara".
+
+Exercise 3
+  Sentence: Si el pájaro __________ (cazar insectos), sería un espectáculo increíble para ver.
+  Translation: If the bird were to hunt insects, it would be an amazing sight to see.
+  User answer: cazara
+  Correct: False
+  Explanation: La respuesta del usuario es correcta. En español, especialmente en el español de América Latina, tanto "cazara" como "cazase" son formas válidas del pretérito imperfecto de subjuntivo del verbo "cazar". Ambas formas se pueden usar indistintamente en la mayoría de los contextos. Entonces, en la frase "Si el pájaro cazara/cazase insectos, sería un espectáculo increíble para ver", ambas opciones son correctas.
+
+Exercise 4
+  Sentence: Es increíble que el pájaro __________ (pescar peces) tan fácilmente.
+  Translation: It's amazing that the bird has fished so easily.
+  User answer: ha pescado
+  Correct: False
+  Explanation: No, la respuesta del usuario no es correcta. En este caso, se debe usar el subjuntivo perfecto "haya pescado" en lugar de "ha pescado". La razón es que la frase contiene una expresión de incredulidad "es increíble que", la cual requiere el uso del subjuntivo. En español, usamos el subjuntivo para hablar de situaciones hipotéticas, dudas, emociones, posibilidades, necesidades, entre otros. En este caso, la incredulidad es una emoción que requiere el subjuntivo.
+
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+Exercise 1
+  Sentence: Espero que Carlos ___ (hablar) con ella antes de que termine la fiesta.
+  Translation: I hope Carlos talks to her before the party ends.
+  User answer: hable
+  Correct: True
+  Explanation: GRAMMATICAL RULE: The subjunctive is used in dependent clauses after expressions of hope or desire (like "espero que"). 
+
+Pattern: [expression of hope/desire] + que + [subjunctive verb]
+
+EXPLICACIÓN EN ESPAÑOL: Usamos el subjuntivo en cláusulas dependientes después de expresiones de esperanza o deseo. 
+Patrón: [expresión de esperanza/deseo] + que + [verbo en subjuntivo]
+Ejemplo: "Deseo que tú (venir) - vengas a la fiesta."
+
+Exercise 2
+  Sentence: Dile a Juan que ___ (ir) a la farmacia y compre la medicina para mamá.
+  Translation: Tell Juan to go to the pharmacy and buy mom's medicine.
+  User answer: vaya
+  Correct: True
+  Explanation: La regla gramatical es que se usa el subjuntivo después de ciertas expresiones impersonales y de influencia, como "dile a Juan que". Esto indica una acción no realizada o incierta. El patrón es: [expresión de influencia] + que + [verbo en subjuntivo].
+
+Explicación en español: Usamos el subjuntivo tras "dile a" para expresar una acción no realizada o incierta. Ejemplo: "Dile a María que (llegar) llegue temprano."
+
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+Exercise 1
+  Sentence: Espero que tú _____ (recibir) una buena oferta de salario.
+  Translation: I hope you have received a good salary offer.
+  User answer: recibieras
+  Correct: False
+  Explanation: The subjunctive is used in the secondary clause after "espero que" to express a hope or a wish. The correct form is the present perfect subjunctive ("hayas recibido"), not the imperfect subjunctive ("recibieras") because we're referring to an action that has potentially happened recently.
+
+Regla gramatical: Usamos el presente perfecto del subjuntivo después de "espero que" para expresar una esperanza sobre una acción reciente. Ejemplo: "Espero que tú hayas aprobado el examen".
+
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+Exercise 1
+  Sentence: Es importante que tú _______ (traer) tu cámara a la fiesta.
+  Translation: It's important that you bring your camera to the party.
+  User answer: traigas
+  Correct: True
+  Explanation: GRAMMATICAL RULE: We use the subjunctive after impersonal expressions such as "es importante que" when the action is not yet realized. The pattern is "Es + adjective + que + subjunctive verb".
+
+EXPLANACIÓN EN ESPAÑOL: Usamos el subjuntivo después de expresiones impersonales como "es importante que" cuando la acción aún no se ha realizado. Ejemplo: "Es necesario que tú estudies para el examen."
+
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
+
+=== Subjunctive Session Log ===
+=== End of Session ===
+
