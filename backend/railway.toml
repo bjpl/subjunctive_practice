@@ -1,0 +1,58 @@
+# Railway Deployment Configuration
+# Spanish Subjunctive Practice - Backend API
+
+[build]
+builder = "nixpacks"
+buildCommand = "pip install -r requirements.txt"
+
+[deploy]
+startCommand = "gunicorn main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT --timeout 120 --access-logfile - --error-logfile -"
+restartPolicyType = "on-failure"
+restartPolicyMaxRetries = 10
+
+[env]
+# Application Settings
+ENVIRONMENT = "production"
+DEBUG = "false"
+PORT = { default = "8000" }
+
+# Python Configuration
+PYTHONUNBUFFERED = "1"
+PYTHONDONTWRITEBYTECODE = "1"
+
+# Database (Auto-populated by Railway PostgreSQL plugin)
+# DATABASE_URL will be automatically set by Railway
+
+# Redis (Auto-populated by Railway Redis plugin)
+# REDIS_URL will be automatically set by Railway
+
+# Security (Set these in Railway dashboard)
+# JWT_SECRET_KEY = "set-in-railway-dashboard"
+# SESSION_SECRET_KEY = "set-in-railway-dashboard"
+
+# OpenAI (Set in Railway dashboard)
+# OPENAI_API_KEY = "set-in-railway-dashboard"
+
+# CORS (Update with your frontend domain)
+# CORS_ORIGINS = "https://your-frontend.railway.app"
+
+# Logging
+LOG_LEVEL = "INFO"
+LOG_FORMAT = "json"
+
+# Workers
+WORKERS = "4"
+
+[healthcheck]
+path = "/health"
+interval = 30
+timeout = 10
+
+[scaling]
+minInstances = 1
+maxInstances = 10
+
+# Resource limits
+[resources]
+cpu = "0.5"
+memory = "512Mi"

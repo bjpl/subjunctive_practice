@@ -1,0 +1,33 @@
+{
+  "swarm": {
+    "tasks": {
+      "status": {
+        "activeTasks": {},
+        "completedTasks": {},
+        "failedTasks": {},
+        "queuedTasks": {},
+        "taskHistory": []
+      }
+    },
+    "agents": {
+      "active": {},
+      "capabilities": {},
+      "workload": {},
+      "performance": {}
+    },
+    "coordination": {
+      "messageQueue": [],
+      "sharedState": {},
+      "synchronizationPoints": [],
+      "conflictResolution": []
+    }
+  },
+  "memoryKeys": {
+    "taskStatus": "swarm/tasks/status",
+    "agentStatus": "swarm/agents/status",
+    "coordinationEvents": "swarm/coordination/events",
+    "results": "swarm/results",
+    "metrics": "swarm/metrics"
+  },
+  "lastUpdate": "2025-09-01T00:00:00.000Z"
+}

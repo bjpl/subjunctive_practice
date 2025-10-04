@@ -1,0 +1,134 @@
+/* Answer Input Wrapper */
+.answer-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.answer-input-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-color, #334155);
+}
+
+/* Answer Input Container */
+.answer-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Answer Input */
+.answer-input {
+  width: 100%;
+  padding: 1rem 3rem 1rem 1rem;
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--text-color, #0f172a);
+  background-color: var(--surface-color, #ffffff);
+  border: 2px solid var(--border-color, #cbd5e1);
+  border-radius: var(--radius-lg, 0.5rem);
+  transition: all var(--transition-fast, 150ms);
+  min-height: 56px;
+}
+
+.answer-input:focus {
+  outline: none;
+  border-color: #6572f3;
+  box-shadow: 0 0 0 4px rgba(101, 114, 243, 0.1);
+}
+
+.answer-input::placeholder {
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+/* Answer Input States */
+.answer-input-correct {
+  border-color: #22c55e;
+  background-color: #f0fdf4;
+  color: #166534;
+}
+
+.answer-input-correct:focus {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.1);
+}
+
+.answer-input-incorrect {
+  border-color: #ef4444;
+  background-color: #fef2f2;
+  color: #991b1b;
+}
+
+.answer-input-incorrect:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+}
+
+.answer-input-disabled {
+  background-color: #f1f5f9;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+/* Answer Input Icon */
+.answer-input-icon {
+  position: absolute;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.answer-input-icon-success {
+  color: #22c55e;
+}
+
+.answer-input-icon-error {
+  color: #ef4444;
+}
+
+/* Dark Theme */
+body.dark-theme .answer-input {
+  background-color: #1e293b;
+  border-color: #475569;
+  color: #f1f5f9;
+}
+
+body.dark-theme .answer-input-correct {
+  background-color: #14532d;
+  border-color: #22c55e;
+  color: #bbf7d0;
+}
+
+body.dark-theme .answer-input-incorrect {
+  background-color: #7f1d1d;
+  border-color: #ef4444;
+  color: #fecaca;
+}
+
+body.dark-theme .answer-input-disabled {
+  background-color: #0f172a;
+  color: #64748b;
+}
+
+/* High Contrast Mode */
+body.high-contrast .answer-input {
+  border-width: 3px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .answer-input {
+    font-size: 1rem;
+    padding: 0.875rem 2.75rem 0.875rem 0.875rem;
+    min-height: 52px;
+  }
+
+  .answer-input-icon {
+    right: 0.875rem;
+  }
+}

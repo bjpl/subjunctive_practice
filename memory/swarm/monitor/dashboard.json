@@ -1,0 +1,57 @@
+{
+  "swarm_id": "swarm-1756696734588-1rik89o3r",
+  "timestamp": "2025-09-01T03:30:32.000Z",
+  "status": "monitoring_active",
+  "monitoring_state": "starting",
+  "agents": {
+    "total": 0,
+    "healthy": 0,
+    "unhealthy": 0,
+    "health_rate": 0.0,
+    "registered_agents": {}
+  },
+  "communication": {
+    "total_messages": 0,
+    "avg_response_time": 0.0,
+    "active_patterns": 0,
+    "communication_matrix": {}
+  },
+  "tasks": {
+    "total": 0,
+    "completed": 0,
+    "active": 0,
+    "blocked": 0,
+    "completion_rate": 0.0,
+    "task_queue": []
+  },
+  "alerts": {
+    "total": 0,
+    "recent": 0,
+    "high_severity": 0,
+    "alert_history": []
+  },
+  "system_metrics": {
+    "uptime": 0,
+    "memory_usage": 0.0,
+    "cpu_usage": 0.0,
+    "network_latency": 0.0
+  },
+  "anomaly_detection": {
+    "active_anomalies": 0,
+    "resolved_anomalies": 0,
+    "detected_patterns": []
+  },
+  "emergent_behaviors": {
+    "patterns_detected": [
+      "swarm_intelligence",
+      "collective_problem_solving",
+      "adaptive_coordination",
+      "distributed_learning"
+    ],
+    "swarm_intelligence_score": 0.0,
+    "collective_problem_solving": 0.5,
+    "adaptive_coordination": 0.38,
+    "distributed_learning": 0.32999999999999996,
+    "overall_emergent_score": 0.3025
+  }
+}

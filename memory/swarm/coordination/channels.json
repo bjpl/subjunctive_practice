@@ -1,0 +1,34 @@
+{
+  "swarm_id": "swarm-1756696734588-1rik89o3r",
+  "communication_channels": {
+    "queen_broadcast": {
+      "type": "one_to_many",
+      "purpose": "strategic_directives_and_updates",
+      "recipients": ["all_workers"],
+      "priority": "high"
+    },
+    "worker_reports": {
+      "type": "many_to_one", 
+      "purpose": "status_updates_and_escalations",
+      "sender": "all_workers",
+      "recipient": "queen",
+      "frequency": "every_5_minutes"
+    },
+    "inter_worker_coordination": {
+      "type": "peer_to_peer",
+      "purpose": "cross_team_dependencies",
+      "participants": "worker_agents",
+      "mediated_by": "queen"
+    }
+  },
+  "message_formats": {
+    "status_report": {
+      "required_fields": ["agent_id", "task_progress", "blockers", "eta", "resource_needs"],
+      "format": "json"
+    },
+    "escalation": {
+      "required_fields": ["agent_id", "issue_type", "severity", "impact", "proposed_solution"],
+      "response_time": "immediate"
+    }
+  }
+}

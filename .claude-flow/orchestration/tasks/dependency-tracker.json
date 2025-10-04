@@ -1,0 +1,32 @@
+{
+  "dependencyGraph": {},
+  "executionOrder": [],
+  "blockedTasks": [],
+  "readyTasks": [],
+  "completedTasks": [],
+  "dependencyRules": {
+    "testing": {
+      "requires": ["implementation"],
+      "description": "Tests require implementation to be completed"
+    },
+    "review": {
+      "requires": ["implementation"],
+      "optional": ["testing"],
+      "description": "Code review can happen after implementation, preferably with tests"
+    },
+    "integration": {
+      "requires": ["implementation", "testing", "review"],
+      "description": "Integration requires all components to be completed and verified"
+    },
+    "deployment": {
+      "requires": ["integration"],
+      "description": "Deployment requires successful integration"
+    }
+  },
+  "parallelizationRules": {
+    "independent_components": "Components without shared dependencies can be developed in parallel",
+    "testing_implementation": "Unit tests can be written in parallel with implementation",
+    "documentation_development": "Documentation can be written in parallel with development",
+    "review_preparation": "Code review setup can happen in parallel with implementation"
+  }
+}

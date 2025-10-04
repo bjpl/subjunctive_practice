@@ -1,0 +1,56 @@
+{
+  "swarm_id": "swarm-1756696734588-1rik89o3r",
+  "queen_status": "active",
+  "initialization_timestamp": "2025-09-01T00:00:00Z",
+  "command_hierarchy": {
+    "queen": {
+      "role": "hierarchical_coordinator",
+      "responsibilities": [
+        "strategic_planning",
+        "task_decomposition", 
+        "agent_supervision",
+        "resource_allocation",
+        "performance_monitoring"
+      ],
+      "authority_level": "supreme"
+    },
+    "worker_tiers": {
+      "research_workers": {
+        "tier": 1,
+        "capabilities": ["research", "analysis", "information_gathering", "requirements_analysis"],
+        "reporting_to": "queen",
+        "max_agents": 3
+      },
+      "code_workers": {
+        "tier": 1, 
+        "capabilities": ["code_generation", "testing", "optimization", "implementation"],
+        "reporting_to": "queen",
+        "max_agents": 4
+      },
+      "analyst_workers": {
+        "tier": 1,
+        "capabilities": ["data_analysis", "performance_monitoring", "reporting", "metrics"],
+        "reporting_to": "queen", 
+        "max_agents": 3
+      }
+    }
+  },
+  "communication_protocols": {
+    "status_reporting_frequency": "5_minutes",
+    "escalation_threshold": "20_percent_delay",
+    "sync_points": ["hourly_standups", "milestone_reviews"],
+    "handoff_validation": "mandatory"
+  },
+  "performance_targets": {
+    "task_completion_rate": "95_percent",
+    "defect_rate": "less_than_5_percent", 
+    "resource_utilization": "optimal_load_balancing"
+  },
+  "decisions_log": [
+    {
+      "timestamp": "2025-09-01T00:00:00Z",
+      "decision": "Initialize hierarchical swarm with specialized worker tiers",
+      "rationale": "Maximize efficiency through clear command structure and role specialization"
+    }
+  ]
+}

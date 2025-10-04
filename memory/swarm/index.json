@@ -1,0 +1,58 @@
+{
+  "swarmId": "swarm-1756696734588-1rik89o3r",
+  "memoryCoordinator": {
+    "initialized": true,
+    "timestamp": "2025-09-01T00:00:00.000Z",
+    "version": "1.0.0"
+  },
+  "namespaces": {
+    "swarm": {
+      "path": "memory/swarm",
+      "description": "Global swarm coordination and decisions",
+      "ttl": 86400000,
+      "encryption": false
+    },
+    "agents": {
+      "path": "memory/agents", 
+      "description": "Agent-specific memory and state",
+      "ttl": 43200000,
+      "encryption": false
+    },
+    "sessions": {
+      "path": "memory/sessions",
+      "description": "Session context and continuity",
+      "ttl": 21600000,
+      "encryption": false
+    },
+    "patterns": {
+      "path": "memory/patterns",
+      "description": "Learning patterns and best practices",
+      "ttl": 604800000,
+      "encryption": false
+    },
+    "consensus": {
+      "path": "memory/consensus",
+      "description": "Consensus protocol state and decisions",
+      "ttl": 86400000,
+      "encryption": true
+    }
+  },
+  "accessPatterns": {
+    "read": ["all"],
+    "write": ["memory-coordinator", "agent-authorized"],
+    "delete": ["memory-coordinator", "admin"],
+    "sync": ["memory-coordinator"]
+  },
+  "consensusProtocol": {
+    "type": "raft",
+    "quorum": 3,
+    "timeout": 5000,
+    "retries": 3
+  },
+  "performance": {
+    "cacheSize": "100MB",
+    "compressionEnabled": true,
+    "indexingEnabled": true,
+    "metricsEnabled": true
+  }
+}

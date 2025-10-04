@@ -1,0 +1,40 @@
+Generic single-database configuration for Alembic.
+
+This directory contains Alembic migration scripts for the Spanish Subjunctive Practice database.
+
+## Usage
+
+Initialize alembic (already done):
+```bash
+alembic init alembic
+```
+
+Create a new migration:
+```bash
+cd backend
+alembic revision --autogenerate -m "Description of changes"
+```
+
+Apply migrations:
+```bash
+cd backend
+alembic upgrade head
+```
+
+Rollback one migration:
+```bash
+cd backend
+alembic downgrade -1
+```
+
+View migration history:
+```bash
+cd backend
+alembic history
+```
+
+View current version:
+```bash
+cd backend
+alembic current
+```

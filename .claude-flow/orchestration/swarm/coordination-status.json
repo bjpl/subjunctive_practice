@@ -1,0 +1,25 @@
+{
+  "swarmId": "swarm-1756696734588-1rik89o3r",
+  "orchestrator": {
+    "id": "task-orchestrator-primary",
+    "status": "active",
+    "capabilities": [
+      "task-decomposition",
+      "dependency-management",
+      "load-balancing",
+      "progress-tracking",
+      "result-synthesis"
+    ],
+    "maxConcurrentTasks": 10,
+    "activeTaskCount": 0
+  },
+  "topology": {
+    "type": "hierarchical",
+    "maxAgents": 8,
+    "strategy": "adaptive",
+    "coordinationMode": "memory-based"
+  },
+  "memoryPath": "swarm/tasks/status",
+  "lastUpdate": "2025-09-01T00:00:00.000Z",
+  "executionMode": "ready"
+}

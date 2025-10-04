@@ -1,0 +1,33 @@
+{
+  "swarm_id": "swarm-1756696734588-1rik89o3r",
+  "alert_system_status": "active",
+  "last_updated": "2025-09-01T03:30:35.000Z",
+  "monitoring_intervals": {
+    "agent_health": 1000,
+    "communication": 2000,
+    "tasks": 3000,
+    "anomalies": 5000,
+    "dashboard_update": 5000
+  },
+  "active_alerts": [],
+  "alert_history": [],
+  "alert_thresholds": {
+    "cpu_critical": 90.0,
+    "memory_critical": 85.0,
+    "response_time_critical": 10.0,
+    "error_rate_critical": 0.15,
+    "communication_drop_critical": 0.6,
+    "task_failure_critical": 0.2
+  },
+  "notification_channels": {
+    "console": true,
+    "file_log": true,
+    "dashboard": true,
+    "memory_store": true
+  },
+  "escalation_rules": {
+    "high_severity_repeat": 3,
+    "critical_immediate": 1,
+    "medium_accumulate": 5
+  }
+}

@@ -1,0 +1,66 @@
+/* Card Base Styles */
+.card {
+  background-color: var(--surface-color, #ffffff);
+  border-radius: var(--radius-lg, 0.5rem);
+  padding: var(--spacing-lg, 1.5rem);
+  border: 1px solid var(--border-color, #e2e8f0);
+  transition: all var(--transition-base, 300ms);
+}
+
+/* Elevated Card */
+.card-elevated {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+              0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.card-elevated:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+              0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Interactive Card */
+.card-interactive {
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
+.card-interactive:hover {
+  border-color: var(--border-hover-color, #cbd5e1);
+  transform: translateY(-2px);
+}
+
+.card-interactive:active {
+  transform: translateY(0);
+}
+
+.card-interactive:focus-visible {
+  outline: 2px solid #6572f3;
+  outline-offset: 2px;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
+
+  .card-interactive:hover {
+    transform: none;
+  }
+}
+
+/* Dark Theme */
+body.dark-theme .card {
+  background-color: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-theme .card-interactive:hover {
+  border-color: #475569;
+}
+
+/* High Contrast Mode */
+body.high-contrast .card {
+  border: 2px solid #ffffff;
+}

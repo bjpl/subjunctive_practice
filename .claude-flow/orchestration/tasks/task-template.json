@@ -1,0 +1,32 @@
+{
+  "taskTemplate": {
+    "id": "",
+    "type": "development|testing|review|research|architecture",
+    "priority": "low|medium|high|critical",
+    "status": "pending|in_progress|completed|failed|blocked",
+    "dependencies": [],
+    "assignedAgent": null,
+    "estimatedDuration": "",
+    "actualDuration": null,
+    "requirements": [],
+    "deliverables": [],
+    "memoryKeys": [],
+    "createdAt": "",
+    "startedAt": null,
+    "completedAt": null,
+    "parentTask": null,
+    "subtasks": []
+  },
+  "executionStrategies": {
+    "parallel": "Execute independent tasks simultaneously",
+    "sequential": "Execute tasks in dependency order",
+    "adaptive": "Mix of parallel and sequential based on resources",
+    "balanced": "Optimize for both speed and resource utilization"
+  },
+  "coordinationProtocol": {
+    "preTask": "npx claude-flow@alpha hooks pre-task --description",
+    "postEdit": "npx claude-flow@alpha hooks post-edit --file",
+    "notify": "npx claude-flow@alpha hooks notify --message",
+    "postTask": "npx claude-flow@alpha hooks post-task --task-id"
+  }
+}

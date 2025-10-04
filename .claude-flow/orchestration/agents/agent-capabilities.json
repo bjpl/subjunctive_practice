@@ -1,0 +1,35 @@
+{
+  "agentTypes": {
+    "coder": {
+      "capabilities": ["implementation", "refactoring", "code-optimization", "api-development"],
+      "loadCapacity": 3,
+      "specializations": ["python", "javascript", "ui-components", "backend-systems"]
+    },
+    "reviewer": {
+      "capabilities": ["code-review", "quality-assurance", "security-audit", "performance-analysis"],
+      "loadCapacity": 2,
+      "specializations": ["security", "performance", "maintainability", "standards-compliance"]
+    },
+    "tester": {
+      "capabilities": ["unit-testing", "integration-testing", "accessibility-testing", "ui-testing"],
+      "loadCapacity": 4,
+      "specializations": ["pytest", "ui-validation", "accessibility-compliance", "regression-testing"]
+    },
+    "researcher": {
+      "capabilities": ["requirements-analysis", "architecture-planning", "best-practices", "documentation"],
+      "loadCapacity": 2,
+      "specializations": ["technical-research", "pattern-analysis", "documentation", "requirements"]
+    },
+    "system-architect": {
+      "capabilities": ["architecture-design", "system-integration", "scalability-planning", "tech-debt-analysis"],
+      "loadCapacity": 1,
+      "specializations": ["system-design", "integration-patterns", "performance-architecture"]
+    }
+  },
+  "currentAgents": [],
+  "loadBalancing": {
+    "algorithm": "weighted-round-robin",
+    "preferredUtilization": 0.75,
+    "autoScaling": true
+  }
+}

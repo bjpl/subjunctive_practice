@@ -1,0 +1,41 @@
+{
+  "consensusState": {
+    "term": 1,
+    "leader": "memory-coord-1756696734588",
+    "votedFor": null,
+    "log": [],
+    "commitIndex": 0,
+    "lastApplied": 0
+  },
+  "participants": [
+    {
+      "id": "memory-coord-1756696734588",
+      "role": "leader",
+      "status": "active",
+      "lastHeartbeat": "2025-09-01T00:00:00.000Z"
+    }
+  ],
+  "decisions": {},
+  "pendingProposals": [],
+  "consensusProtocol": {
+    "type": "raft",
+    "settings": {
+      "election_timeout_min": 5000,
+      "election_timeout_max": 10000,
+      "heartbeat_interval": 1000,
+      "max_entries_per_append": 100
+    }
+  },
+  "memoryConsensus": {
+    "synchronization": {
+      "enabled": true,
+      "conflict_resolution": "last_writer_wins",
+      "merge_strategy": "three_way_merge"
+    },
+    "validation": {
+      "schema_check": true,
+      "integrity_check": true,
+      "permission_check": true
+    }
+  }
+}

@@ -1,0 +1,161 @@
+name: Pull Request Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+jobs:
+  pr-validation:
+    name: Validate PR
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check PR title format
+        uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            docs
+            style
+            refactor
+            perf
+            test
+            build
+            ci
+            chore
+          requireScope: false
+
+      - name: Check for merge conflicts
+        uses: eps1lon/actions-label-merge-conflict@v3
+        with:
+          dirtyLabel: "merge-conflict"
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Check file size
+        run: |
+          max_size=1048576  # 1MB in bytes
+          large_files=$(find . -type f -size +${max_size}c -not -path "*/node_modules/*" -not -path "*/.git/*")
+          if [ -n "$large_files" ]; then
+            echo "::error::Large files detected (>1MB):"
+            echo "$large_files"
+            exit 1
+          fi
+
+      - name: Label PR based on files changed
+        uses: actions/labeler@v5
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          configuration-path: .github/labeler.yml
+
+  size-check:
+    name: PR Size Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check PR size
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const additions = pr.additions;
+            const deletions = pr.deletions;
+            const total = additions + deletions;
+
+            let label = '';
+            if (total < 100) label = 'size/XS';
+            else if (total < 300) label = 'size/S';
+            else if (total < 500) label = 'size/M';
+            else if (total < 1000) label = 'size/L';
+            else label = 'size/XL';
+
+            // Add label
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              labels: [label]
+            });
+
+            // Comment if PR is too large
+            if (total > 1000) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                body: `⚠️ This PR is quite large (${total} lines changed). Consider breaking it into smaller PRs for easier review.`
+              });
+            }
+
+  code-review:
+    name: Automated Code Review
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Danger
+        uses: danger/danger-js@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: "--dangerfile .github/dangerfile.js"
+        continue-on-error: true
+
+  comment-commands:
+    name: PR Comment Commands
+    runs-on: ubuntu-latest
+    if: github.event.issue.pull_request
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Handle PR commands
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const comment = context.payload.comment.body;
+            const pr = context.payload.issue.number;
+
+            // /deploy command
+            if (comment.includes('/deploy')) {
+              await github.rest.actions.createWorkflowDispatch({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id: 'deploy-backend.yml',
+                ref: 'main',
+                inputs: {
+                  environment: 'staging'
+                }
+              });
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr,
+                body: '🚀 Deployment to staging triggered!'
+              });
+            }
+
+            // /test command
+            if (comment.includes('/test')) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr,
+                body: '🧪 Re-running tests...'
+              });
+            }

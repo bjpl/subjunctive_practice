@@ -1,0 +1,50 @@
+{
+  "coordinatorId": "memory-coord-1756696734588",
+  "swarmId": "swarm-1756696734588-1rik89o3r",
+  "status": "active",
+  "capabilities": [
+    "memory-persistence",
+    "cross-agent-sharing", 
+    "consensus-protocols",
+    "pattern-learning",
+    "session-continuity",
+    "memory-optimization"
+  ],
+  "protocols": {
+    "storage": {
+      "format": "json",
+      "compression": "gzip",
+      "encryption": "aes-256",
+      "versioning": true
+    },
+    "sharing": {
+      "method": "pub-sub",
+      "channels": ["memory-updates", "consensus-requests", "pattern-broadcasts"],
+      "authentication": "token-based"
+    },
+    "consensus": {
+      "algorithm": "raft",
+      "election_timeout": 5000,
+      "heartbeat_interval": 1000,
+      "log_replication": true
+    }
+  },
+  "memoryPolicies": {
+    "retention": {
+      "hot_data": "1h",
+      "warm_data": "24h", 
+      "cold_data": "7d",
+      "archive": "30d"
+    },
+    "compression": {
+      "threshold": "1MB",
+      "algorithm": "lz4",
+      "level": 6
+    },
+    "deduplication": {
+      "enabled": true,
+      "hash_algorithm": "sha256",
+      "similarity_threshold": 0.85
+    }
+  }
+}

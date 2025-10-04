@@ -1,0 +1,58 @@
+{
+  "patternTypes": {
+    "access_patterns": {
+      "description": "Common memory access patterns across agents",
+      "examples": [
+        {
+          "pattern": "sequential_read",
+          "frequency": "high",
+          "optimization": "prefetch"
+        },
+        {
+          "pattern": "collaborative_write",
+          "frequency": "medium", 
+          "optimization": "merge_conflicts"
+        },
+        {
+          "pattern": "pattern_search",
+          "frequency": "high",
+          "optimization": "smart_indexing"
+        }
+      ]
+    },
+    "knowledge_patterns": {
+      "description": "Patterns of knowledge sharing and learning",
+      "categories": [
+        "architectural_decisions",
+        "code_patterns",
+        "optimization_strategies",
+        "error_recovery",
+        "performance_insights"
+      ]
+    },
+    "collaboration_patterns": {
+      "description": "Agent collaboration memory patterns",
+      "workflows": [
+        "task_handoff",
+        "result_sharing",
+        "dependency_tracking",
+        "conflict_resolution"
+      ]
+    }
+  },
+  "learningMechanisms": {
+    "pattern_extraction": {
+      "method": "frequency_analysis",
+      "threshold": 0.7,
+      "update_interval": 3600
+    },
+    "success_tracking": {
+      "metrics": ["completion_rate", "error_rate", "performance"],
+      "learning_rate": 0.1
+    },
+    "adaptation": {
+      "enabled": true,
+      "feedback_loops": ["performance", "user_satisfaction", "efficiency"]
+    }
+  }
+}
