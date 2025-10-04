@@ -229,7 +229,7 @@ jobs:
           echo "Release ${{ needs.create-release.outputs.version }} deployed successfully" >> RELEASES.md
 
       - name: Create follow-up issues
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const version = '${{ needs.create-release.outputs.version }}';
