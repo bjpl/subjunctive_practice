@@ -42,7 +42,7 @@ structlog==24.1.0
 sentry-sdk[fastapi]==1.40.3
 
 # Date & Time
-python-dateutil==2.8.2
+python-dateutil==2.9.0.post0
 
 # Utilities
 pyyaml==6.0.1
