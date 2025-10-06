@@ -36,7 +36,7 @@ mkdocs==1.5.3
 mkdocs-material==9.5.9
 
 # Database Management
-alembic-utils==0.8.2
+alembic-utils==0.8.8
 
 # Pre-commit Hooks
 pre-commit==3.6.2
