@@ -238,7 +238,7 @@ export default function ProgressPage() {
                 <CardHeader>
                   <CardTitle>Performance by Exercise Type</CardTitle>
                   <CardDescription>
-                    See how you're doing with different subjunctive types
+                    See how you&apos;re doing with different subjunctive types
                   </CardDescription>
                 </CardHeader>
                 <CardContent>

@@ -2,6 +2,9 @@
 import '@testing-library/jest-dom'
 import { toHaveNoViolations } from 'jest-axe'
 
+// Polyfills are now loaded in jest.polyfills.js (via setupFiles)
+// This ensures they're available before MSW and any test files load
+
 // Import MSW server for API mocking
 import { server } from './tests/mocks/server'
 

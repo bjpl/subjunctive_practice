@@ -52,7 +52,7 @@ export function WeakAreasAnalysis({
     } else if (area.accuracy < 60) {
       return "Practice more exercises and review explanations carefully";
     } else {
-      return "You're close to mastery! A few more practice sessions should do it";
+      return "You&apos;re close to mastery! A few more practice sessions should do it";
     }
   };
 
@@ -77,7 +77,7 @@ export function WeakAreasAnalysis({
               <Target className="h-12 w-12 text-green-600 mb-3" />
               <p className="text-lg font-medium">All Areas Looking Good!</p>
               <p className="text-sm text-muted-foreground mt-1">
-                You're maintaining strong performance across all topics.
+                You&apos;re maintaining strong performance across all topics.
               </p>
             </div>
           ) : (
@@ -141,7 +141,7 @@ export function WeakAreasAnalysis({
               Mastered Topics
             </CardTitle>
             <CardDescription>
-              Topics where you're excelling - keep up the great work!
+              Topics where you&apos;re excelling - keep up the great work!
             </CardDescription>
           </CardHeader>
           <CardContent>

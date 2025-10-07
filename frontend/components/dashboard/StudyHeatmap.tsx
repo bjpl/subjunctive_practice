@@ -190,7 +190,7 @@ export function StudyHeatmap({ data, period = "quarter" }: StudyHeatmapProps) {
                 {stats.currentStreak} Day Streak!
               </p>
               <p className="text-sm text-orange-700 dark:text-orange-200">
-                You're on fire! Keep practicing to maintain your streak.
+                You&apos;re on fire! Keep practicing to maintain your streak.
               </p>
             </div>
           </div>
@@ -202,7 +202,7 @@ export function StudyHeatmap({ data, period = "quarter" }: StudyHeatmapProps) {
             <div>
               <p className="font-medium text-blue-900 dark:text-blue-100">Activity Insight</p>
               <p className="text-sm text-blue-700 dark:text-blue-200">
-                You've been active {stats.activeDays} out of the last{" "}
+                You&apos;ve been active {stats.activeDays} out of the last{" "}
                 {period === "week" ? "7" : period === "month" ? "30" : "90"} days (
                 {Math.round((stats.activeDays / heatmapData.length) * 100)}% of the time).
               </p>

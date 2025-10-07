@@ -113,7 +113,7 @@ export default function PracticePage() {
           <CardHeader>
             <CardTitle className="text-destructive">Error Loading Exercises</CardTitle>
             <CardDescription>
-              We couldn't load the exercises. Please try again.
+              We couldn&apos;t load the exercises. Please try again.
             </CardDescription>
           </CardHeader>
           <CardContent>

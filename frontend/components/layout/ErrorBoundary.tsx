@@ -131,7 +131,7 @@ export const DefaultErrorFallback: React.FC<ErrorBoundaryFallbackProps> = ({
 
         {/* Description */}
         <p className="text-center text-gray-600 dark:text-gray-400 mb-6">
-          We encountered an unexpected error. Don't worry, you can try one of the options below.
+          We encountered an unexpected error. Don&apos;t worry, you can try one of the options below.
         </p>
 
         {/* Error Message */}

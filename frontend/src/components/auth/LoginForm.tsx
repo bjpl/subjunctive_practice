@@ -112,7 +112,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         {onSignUp && (
           <div className="auth-alternate">
             <p>
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <button
                 type="button"
                 className="auth-link"
