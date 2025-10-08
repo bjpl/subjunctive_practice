@@ -3,7 +3,7 @@ Seed data for initial database setup.
 Contains common Spanish verbs and sample exercises.
 """
 
-from backend.models.exercise import VerbType, SubjunctiveTense, ExerciseType, DifficultyLevel
+from models.exercise import VerbType, SubjunctiveTense, ExerciseType, DifficultyLevel
 
 # Common Spanish verbs with subjunctive conjugations
 SEED_VERBS = [
