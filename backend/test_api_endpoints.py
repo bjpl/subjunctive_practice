@@ -85,14 +85,24 @@ def test_get_exercises(token):
 
     if response.status_code == 200:
         data = response.json()
-        print(f"Total exercises: {len(data)}")
-        if data:
+        exercises_list = data.get("exercises", data)  # Handle both list and dict responses
+
+        # If it's a dict with exercises key
+        if isinstance(data, dict) and "exercises" in data:
+            print(f"Total exercises: {data.get('total', len(exercises_list))}")
+            exercises_list = data["exercises"]
+        else:
+            print(f"Total exercises: {len(exercises_list)}")
+
+        if exercises_list:
             print("\nFirst 3 exercises:")
-            for ex in data[:3]:
-                print(f"  - ID: {ex['id']}, Difficulty: {ex['difficulty']}, Trigger: {ex.get('trigger_phrase', 'N/A')}")
-                print(f"    Prompt: {ex['prompt'][:80]}...")
+            for ex in exercises_list[:3]:
+                trigger = ex.get('trigger_phrase', 'N/A')
+                prompt_preview = ex['prompt'][:80] + "..." if len(ex['prompt']) > 80 else ex['prompt']
+                print(f"  - ID: {ex['id']}, Difficulty: {ex['difficulty']}, Trigger: {trigger}")
+                print(f"    Prompt: {prompt_preview}")
         print("✅ Exercises retrieved successfully!")
-        return data
+        return exercises_list
     else:
         print(f"Response: {response.text}")
         print("❌ Failed to get exercises")
@@ -110,17 +120,21 @@ def test_submit_answer(token, exercises):
     exercise = exercises[0]
     print(f"Testing with exercise ID: {exercise['id']}")
     print(f"Prompt: {exercise['prompt']}")
-    print(f"Correct answer: {exercise['correct_answer']}")
+
+    # Submit a test answer (we'll use a common subjunctive form)
+    test_answer = "hable"  # Common present subjunctive form
+    print(f"Test answer: {test_answer}")
 
     payload = {
-        "exercise_id": exercise["id"],
-        "user_answer": exercise["correct_answer"],  # Submit correct answer
-        "time_spent": 10
+        "exercise_id": str(exercise["id"]),
+        "user_answer": test_answer,
+        "time_taken": 10
     }
 
     headers = {"Authorization": f"Bearer {token}"}
+    # Try the exercises submit endpoint instead
     response = requests.post(
-        f"{BASE_URL}/api/progress/attempts",
+        f"{BASE_URL}/api/exercises/submit",
         json=payload,
         headers=headers
     )
@@ -143,7 +157,8 @@ def test_get_progress(token):
     print_section("GET PROGRESS")
 
     headers = {"Authorization": f"Bearer {token}"}
-    response = requests.get(f"{BASE_URL}/api/progress/stats", headers=headers)
+    # Try the correct progress endpoint
+    response = requests.get(f"{BASE_URL}/api/progress", headers=headers)
 
     print(f"Status: {response.status_code}")
 
