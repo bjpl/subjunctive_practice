@@ -24,13 +24,13 @@ class TestExercisesAPI:
 
     def test_get_exercises_requires_auth(self, client: TestClient):
         """Test getting exercises requires authentication."""
-        response = client.get("/api/v1/exercises")
+        response = client.get("/api/exercises")
 
         assert response.status_code in [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN]
 
     def test_get_exercises_success(self, authenticated_client: TestClient):
         """Test successfully getting exercises."""
-        response = authenticated_client.get("/api/v1/exercises")
+        response = authenticated_client.get("/api/exercises")
 
         if response.status_code == status.HTTP_200_OK:
             data = response.json()
@@ -40,7 +40,7 @@ class TestExercisesAPI:
 
     def test_get_exercises_with_limit(self, authenticated_client: TestClient):
         """Test getting exercises with limit parameter."""
-        response = authenticated_client.get("/api/v1/exercises?limit=5")
+        response = authenticated_client.get("/api/exercises?limit=5")
 
         if response.status_code == status.HTTP_200_OK:
             data = response.json()
@@ -48,7 +48,7 @@ class TestExercisesAPI:
 
     def test_get_exercises_with_difficulty_filter(self, authenticated_client: TestClient):
         """Test filtering exercises by difficulty."""
-        response = authenticated_client.get("/api/v1/exercises?difficulty=2")
+        response = authenticated_client.get("/api/exercises?difficulty=2")
 
         if response.status_code == status.HTTP_200_OK:
             data = response.json()
@@ -58,7 +58,7 @@ class TestExercisesAPI:
 
     def test_get_exercises_with_type_filter(self, authenticated_client: TestClient):
         """Test filtering exercises by type."""
-        response = authenticated_client.get("/api/v1/exercises?exercise_type=present_subjunctive")
+        response = authenticated_client.get("/api/exercises?exercise_type=present_subjunctive")
 
         if response.status_code == status.HTTP_200_OK:
             data = response.json()
@@ -67,8 +67,8 @@ class TestExercisesAPI:
 
     def test_get_exercises_random_order(self, authenticated_client: TestClient):
         """Test exercises returned in random order."""
-        response1 = authenticated_client.get("/api/v1/exercises?random_order=true&limit=10")
-        response2 = authenticated_client.get("/api/v1/exercises?random_order=true&limit=10")
+        response1 = authenticated_client.get("/api/exercises?random_order=true&limit=10")
+        response2 = authenticated_client.get("/api/exercises?random_order=true&limit=10")
 
         if response1.status_code == status.HTTP_200_OK and response2.status_code == status.HTTP_200_OK:
             # Order might be different (probabilistic test)
@@ -76,14 +76,14 @@ class TestExercisesAPI:
 
     def test_get_exercises_invalid_difficulty(self, authenticated_client: TestClient):
         """Test getting exercises with invalid difficulty."""
-        response = authenticated_client.get("/api/v1/exercises?difficulty=10")
+        response = authenticated_client.get("/api/exercises?difficulty=10")
 
         # Should reject invalid difficulty
         assert response.status_code in [status.HTTP_400_BAD_REQUEST, status.HTTP_422_UNPROCESSABLE_ENTITY]
 
     def test_get_exercises_invalid_limit(self, authenticated_client: TestClient):
         """Test getting exercises with invalid limit."""
-        response = authenticated_client.get("/api/v1/exercises?limit=1000")
+        response = authenticated_client.get("/api/exercises?limit=1000")
 
         # Should reject invalid limit or apply max
         assert response.status_code in [
@@ -98,13 +98,13 @@ class TestExercisesAPI:
 
     def test_get_exercise_by_id_requires_auth(self, client: TestClient):
         """Test getting exercise by ID requires authentication."""
-        response = client.get("/api/v1/exercises/EX001")
+        response = client.get("/api/exercises/EX001")
 
         assert response.status_code in [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN]
 
     def test_get_exercise_by_id_not_found(self, authenticated_client: TestClient):
         """Test getting non-existent exercise."""
-        response = authenticated_client.get("/api/v1/exercises/NONEXISTENT")
+        response = authenticated_client.get("/api/exercises/NONEXISTENT")
 
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
@@ -115,7 +115,7 @@ class TestExercisesAPI:
     def test_submit_answer_requires_auth(self, client: TestClient):
         """Test submitting answer requires authentication."""
         response = client.post(
-            "/api/v1/exercises/submit",
+            "/api/exercises/submit",
             json={
                 "exercise_id": "EX001",
                 "user_answer": "hable"
@@ -127,7 +127,7 @@ class TestExercisesAPI:
     def test_submit_correct_answer(self, authenticated_client: TestClient):
         """Test submitting correct answer."""
         response = authenticated_client.post(
-            "/api/v1/exercises/submit",
+            "/api/exercises/submit",
             json={
                 "exercise_id": "EX001",
                 "user_answer": "hable",
@@ -144,7 +144,7 @@ class TestExercisesAPI:
     def test_submit_incorrect_answer(self, authenticated_client: TestClient):
         """Test submitting incorrect answer."""
         response = authenticated_client.post(
-            "/api/v1/exercises/submit",
+            "/api/exercises/submit",
             json={
                 "exercise_id": "EX001",
                 "user_answer": "hablo",  # Incorrect - indicative instead of subjunctive
@@ -161,7 +161,7 @@ class TestExercisesAPI:
     def test_submit_answer_missing_exercise_id(self, authenticated_client: TestClient):
         """Test submitting answer without exercise ID."""
         response = authenticated_client.post(
-            "/api/v1/exercises/submit",
+            "/api/exercises/submit",
             json={
                 "user_answer": "hable"
             }
@@ -172,7 +172,7 @@ class TestExercisesAPI:
     def test_submit_answer_missing_answer(self, authenticated_client: TestClient):
         """Test submitting without answer."""
         response = authenticated_client.post(
-            "/api/v1/exercises/submit",
+            "/api/exercises/submit",
             json={
                 "exercise_id": "EX001"
             }
@@ -183,7 +183,7 @@ class TestExercisesAPI:
     def test_submit_answer_nonexistent_exercise(self, authenticated_client: TestClient):
         """Test submitting answer for non-existent exercise."""
         response = authenticated_client.post(
-            "/api/v1/exercises/submit",
+            "/api/exercises/submit",
             json={
                 "exercise_id": "NONEXISTENT",
                 "user_answer": "hable"
@@ -196,7 +196,7 @@ class TestExercisesAPI:
         """Test answer submission includes time-based scoring."""
         # Quick answer
         response_fast = authenticated_client.post(
-            "/api/v1/exercises/submit",
+            "/api/exercises/submit",
             json={
                 "exercise_id": "EX001",
                 "user_answer": "hable",
@@ -206,7 +206,7 @@ class TestExercisesAPI:
 
         # Slow answer
         response_slow = authenticated_client.post(
-            "/api/v1/exercises/submit",
+            "/api/exercises/submit",
             json={
                 "exercise_id": "EX001",
                 "user_answer": "hable",
@@ -225,13 +225,13 @@ class TestExercisesAPI:
 
     def test_get_available_types_requires_auth(self, client: TestClient):
         """Test getting available types requires authentication."""
-        response = client.get("/api/v1/exercises/types/available")
+        response = client.get("/api/exercises/types/available")
 
         assert response.status_code in [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN]
 
     def test_get_available_types_success(self, authenticated_client: TestClient):
         """Test getting available exercise types."""
-        response = authenticated_client.get("/api/v1/exercises/types/available")
+        response = authenticated_client.get("/api/exercises/types/available")
 
         if response.status_code == status.HTTP_200_OK:
             data = response.json()
@@ -246,7 +246,7 @@ class TestExercisesAPI:
     def test_answer_validation_case_insensitive(self, authenticated_client: TestClient):
         """Test answer validation is case insensitive."""
         response = authenticated_client.post(
-            "/api/v1/exercises/submit",
+            "/api/exercises/submit",
             json={
                 "exercise_id": "EX001",
                 "user_answer": "HABLE"  # Uppercase
@@ -261,7 +261,7 @@ class TestExercisesAPI:
     def test_answer_validation_with_whitespace(self, authenticated_client: TestClient):
         """Test answer validation handles whitespace."""
         response = authenticated_client.post(
-            "/api/v1/exercises/submit",
+            "/api/exercises/submit",
             json={
                 "exercise_id": "EX001",
                 "user_answer": "  hable  "  # Extra whitespace
@@ -276,7 +276,7 @@ class TestExercisesAPI:
     def test_answer_provides_explanation(self, authenticated_client: TestClient):
         """Test answer submission provides explanation."""
         response = authenticated_client.post(
-            "/api/v1/exercises/submit",
+            "/api/exercises/submit",
             json={
                 "exercise_id": "EX001",
                 "user_answer": "hable"
@@ -292,7 +292,7 @@ class TestExercisesAPI:
     def test_incorrect_answer_shows_correct_answer(self, authenticated_client: TestClient):
         """Test incorrect answer shows the correct answer."""
         response = authenticated_client.post(
-            "/api/v1/exercises/submit",
+            "/api/exercises/submit",
             json={
                 "exercise_id": "EX001",
                 "user_answer": "wrong_answer"
@@ -311,7 +311,7 @@ class TestExercisesAPI:
 
     def test_pagination_metadata(self, authenticated_client: TestClient):
         """Test pagination metadata is returned."""
-        response = authenticated_client.get("/api/v1/exercises?limit=5")
+        response = authenticated_client.get("/api/exercises?limit=5")
 
         if response.status_code == status.HTTP_200_OK:
             data = response.json()
@@ -328,7 +328,7 @@ class TestExercisesAPI:
         """Test submitting multiple answers tracks attempts."""
         # Submit first answer
         response1 = authenticated_client.post(
-            "/api/v1/exercises/submit",
+            "/api/exercises/submit",
             json={
                 "exercise_id": "EX001",
                 "user_answer": "hable"
@@ -337,7 +337,7 @@ class TestExercisesAPI:
 
         # Submit second answer (same exercise)
         response2 = authenticated_client.post(
-            "/api/v1/exercises/submit",
+            "/api/exercises/submit",
             json={
                 "exercise_id": "EX001",
                 "user_answer": "hable"
@@ -354,7 +354,7 @@ class TestExercisesAPI:
 
     def test_get_exercises_with_zero_limit(self, authenticated_client: TestClient):
         """Test getting exercises with zero limit."""
-        response = authenticated_client.get("/api/v1/exercises?limit=0")
+        response = authenticated_client.get("/api/exercises?limit=0")
 
         # Should reject or return empty
         assert response.status_code in [
@@ -366,7 +366,7 @@ class TestExercisesAPI:
     def test_submit_empty_answer(self, authenticated_client: TestClient):
         """Test submitting empty answer."""
         response = authenticated_client.post(
-            "/api/v1/exercises/submit",
+            "/api/exercises/submit",
             json={
                 "exercise_id": "EX001",
                 "user_answer": ""
@@ -381,7 +381,7 @@ class TestExercisesAPI:
     def test_submit_answer_with_special_characters(self, authenticated_client: TestClient):
         """Test submitting answer with special characters."""
         response = authenticated_client.post(
-            "/api/v1/exercises/submit",
+            "/api/exercises/submit",
             json={
                 "exercise_id": "EX001",
                 "user_answer": "hablé"  # With accent
@@ -396,7 +396,7 @@ class TestExercisesAPI:
         import concurrent.futures
 
         def get_exercises():
-            return authenticated_client.get("/api/v1/exercises?limit=5")
+            return authenticated_client.get("/api/exercises?limit=5")
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
             futures = [executor.submit(get_exercises) for _ in range(5)]

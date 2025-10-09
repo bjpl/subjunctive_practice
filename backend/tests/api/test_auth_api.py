@@ -26,7 +26,7 @@ class TestAuthAPI:
     def test_register_user_success(self, client: TestClient):
         """Test successful user registration."""
         response = client.post(
-            "/api/v1/auth/register",
+            "/api/auth/register",
             json={
                 "username": "newuser",
                 "email": "newuser@example.com",
@@ -46,7 +46,7 @@ class TestAuthAPI:
         """Test registration with duplicate username fails."""
         # Register first user
         client.post(
-            "/api/v1/auth/register",
+            "/api/auth/register",
             json={
                 "username": "testuser",
                 "email": "test1@example.com",
@@ -56,7 +56,7 @@ class TestAuthAPI:
 
         # Try to register with same username
         response = client.post(
-            "/api/v1/auth/register",
+            "/api/auth/register",
             json={
                 "username": "testuser",
                 "email": "test2@example.com",
@@ -71,7 +71,7 @@ class TestAuthAPI:
         """Test registration with duplicate email fails."""
         # Register first user
         client.post(
-            "/api/v1/auth/register",
+            "/api/auth/register",
             json={
                 "username": "user1",
                 "email": "test@example.com",
@@ -81,7 +81,7 @@ class TestAuthAPI:
 
         # Try to register with same email
         response = client.post(
-            "/api/v1/auth/register",
+            "/api/auth/register",
             json={
                 "username": "user2",
                 "email": "test@example.com",
@@ -99,7 +99,7 @@ class TestAuthAPI:
     ])
     def test_register_user_missing_fields(self, client: TestClient, invalid_data, missing_field):
         """Test registration with missing required fields."""
-        response = client.post("/api/v1/auth/register", json=invalid_data)
+        response = client.post("/api/auth/register", json=invalid_data)
 
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
@@ -112,7 +112,7 @@ class TestAuthAPI:
     def test_register_user_invalid_email(self, client: TestClient, invalid_email):
         """Test registration with invalid email format."""
         response = client.post(
-            "/api/v1/auth/register",
+            "/api/auth/register",
             json={
                 "username": "testuser",
                 "email": invalid_email,
@@ -130,7 +130,7 @@ class TestAuthAPI:
         """Test successful login."""
         # Register user first
         client.post(
-            "/api/v1/auth/register",
+            "/api/auth/register",
             json={
                 "username": "loginuser",
                 "email": "login@example.com",
@@ -140,7 +140,7 @@ class TestAuthAPI:
 
         # Login
         response = client.post(
-            "/api/v1/auth/login",
+            "/api/auth/login",
             json={
                 "username": "loginuser",
                 "password": "SecurePass123"
@@ -157,7 +157,7 @@ class TestAuthAPI:
     def test_login_invalid_credentials(self, client: TestClient):
         """Test login with invalid credentials."""
         response = client.post(
-            "/api/v1/auth/login",
+            "/api/auth/login",
             json={
                 "username": "nonexistent",
                 "password": "WrongPassword"
@@ -170,7 +170,7 @@ class TestAuthAPI:
         """Test login with wrong password."""
         # Register user
         client.post(
-            "/api/v1/auth/register",
+            "/api/auth/register",
             json={
                 "username": "testuser2",
                 "email": "test2@example.com",
@@ -180,7 +180,7 @@ class TestAuthAPI:
 
         # Login with wrong password
         response = client.post(
-            "/api/v1/auth/login",
+            "/api/auth/login",
             json={
                 "username": "testuser2",
                 "password": "WrongPass456"
@@ -193,7 +193,7 @@ class TestAuthAPI:
         """Test login password is case sensitive."""
         # Register user
         client.post(
-            "/api/v1/auth/register",
+            "/api/auth/register",
             json={
                 "username": "testuser3",
                 "email": "test3@example.com",
@@ -203,7 +203,7 @@ class TestAuthAPI:
 
         # Login with different case
         response = client.post(
-            "/api/v1/auth/login",
+            "/api/auth/login",
             json={
                 "username": "testuser3",
                 "password": "securepass123"  # lowercase
@@ -220,7 +220,7 @@ class TestAuthAPI:
         """Test successful token refresh."""
         # Register and login
         client.post(
-            "/api/v1/auth/register",
+            "/api/auth/register",
             json={
                 "username": "refreshuser",
                 "email": "refresh@example.com",
@@ -229,7 +229,7 @@ class TestAuthAPI:
         )
 
         login_response = client.post(
-            "/api/v1/auth/login",
+            "/api/auth/login",
             json={
                 "username": "refreshuser",
                 "password": "SecurePass123"
@@ -240,7 +240,7 @@ class TestAuthAPI:
 
         # Refresh token
         response = client.post(
-            "/api/v1/auth/refresh",
+            "/api/auth/refresh",
             json={"refresh_token": refresh_token}
         )
 
@@ -252,7 +252,7 @@ class TestAuthAPI:
     def test_refresh_with_invalid_token(self, client: TestClient):
         """Test refresh with invalid token."""
         response = client.post(
-            "/api/v1/auth/refresh",
+            "/api/auth/refresh",
             json={"refresh_token": "invalid.token.here"}
         )
 
@@ -262,7 +262,7 @@ class TestAuthAPI:
         """Test refresh with access token instead of refresh token fails."""
         # Register and login
         client.post(
-            "/api/v1/auth/register",
+            "/api/auth/register",
             json={
                 "username": "tokenuser",
                 "email": "token@example.com",
@@ -271,7 +271,7 @@ class TestAuthAPI:
         )
 
         login_response = client.post(
-            "/api/v1/auth/login",
+            "/api/auth/login",
             json={
                 "username": "tokenuser",
                 "password": "SecurePass123"
@@ -282,7 +282,7 @@ class TestAuthAPI:
 
         # Try to refresh with access token
         response = client.post(
-            "/api/v1/auth/refresh",
+            "/api/auth/refresh",
             json={"refresh_token": access_token}
         )
 
@@ -294,13 +294,13 @@ class TestAuthAPI:
 
     def test_access_protected_endpoint_without_token(self, client: TestClient):
         """Test accessing protected endpoint without token."""
-        response = client.get("/api/v1/auth/me")
+        response = client.get("/api/auth/me")
 
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
     def test_access_protected_endpoint_with_valid_token(self, authenticated_client: TestClient):
         """Test accessing protected endpoint with valid token."""
-        response = authenticated_client.get("/api/v1/auth/me")
+        response = authenticated_client.get("/api/auth/me")
 
         assert response.status_code == status.HTTP_200_OK
         data = response.json()
@@ -310,14 +310,14 @@ class TestAuthAPI:
     def test_access_protected_endpoint_with_invalid_token(self, client: TestClient):
         """Test accessing protected endpoint with invalid token."""
         client.headers = {"Authorization": "Bearer invalid.token.here"}
-        response = client.get("/api/v1/auth/me")
+        response = client.get("/api/auth/me")
 
         assert response.status_code in [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN]
 
     def test_access_protected_endpoint_with_expired_token(self, client: TestClient, expired_jwt_token):
         """Test accessing protected endpoint with expired token."""
         client.headers = {"Authorization": f"Bearer {expired_jwt_token}"}
-        response = client.get("/api/v1/auth/me")
+        response = client.get("/api/auth/me")
 
         assert response.status_code in [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN]
 
@@ -329,7 +329,7 @@ class TestAuthAPI:
         """Test complete authentication flow."""
         # 1. Register
         register_response = client.post(
-            "/api/v1/auth/register",
+            "/api/auth/register",
             json={
                 "username": "flowuser",
                 "email": "flow@example.com",
@@ -341,7 +341,7 @@ class TestAuthAPI:
 
         # 2. Login
         login_response = client.post(
-            "/api/v1/auth/login",
+            "/api/auth/login",
             json={
                 "username": "flowuser",
                 "password": "SecurePass123"
@@ -352,13 +352,13 @@ class TestAuthAPI:
 
         # 3. Access protected endpoint
         client.headers = {"Authorization": f"Bearer {tokens['access_token']}"}
-        me_response = client.get("/api/v1/auth/me")
+        me_response = client.get("/api/auth/me")
         assert me_response.status_code == status.HTTP_200_OK
         assert me_response.json()["username"] == "flowuser"
 
         # 4. Refresh token
         refresh_response = client.post(
-            "/api/v1/auth/refresh",
+            "/api/auth/refresh",
             json={"refresh_token": tokens["refresh_token"]}
         )
         assert refresh_response.status_code == status.HTTP_200_OK
@@ -366,7 +366,7 @@ class TestAuthAPI:
 
         # 5. Use new access token
         client.headers = {"Authorization": f"Bearer {new_tokens['access_token']}"}
-        me_response2 = client.get("/api/v1/auth/me")
+        me_response2 = client.get("/api/auth/me")
         assert me_response2.status_code == status.HTTP_200_OK
 
     # ========================================================================
@@ -376,7 +376,7 @@ class TestAuthAPI:
     def test_register_with_very_long_username(self, client: TestClient):
         """Test registration with very long username."""
         response = client.post(
-            "/api/v1/auth/register",
+            "/api/auth/register",
             json={
                 "username": "a" * 100,
                 "email": "long@example.com",
@@ -394,7 +394,7 @@ class TestAuthAPI:
     def test_register_with_special_characters_in_username(self, client: TestClient):
         """Test registration with special characters in username."""
         response = client.post(
-            "/api/v1/auth/register",
+            "/api/auth/register",
             json={
                 "username": "test@user#123",
                 "email": "special@example.com",
@@ -413,7 +413,7 @@ class TestAuthAPI:
         """Test login updates last login time."""
         # Register
         client.post(
-            "/api/v1/auth/register",
+            "/api/auth/register",
             json={
                 "username": "timeuser",
                 "email": "time@example.com",
@@ -423,7 +423,7 @@ class TestAuthAPI:
 
         # First login
         response1 = client.post(
-            "/api/v1/auth/login",
+            "/api/auth/login",
             json={
                 "username": "timeuser",
                 "password": "SecurePass123"
@@ -435,7 +435,7 @@ class TestAuthAPI:
         time.sleep(0.1)
 
         response2 = client.post(
-            "/api/v1/auth/login",
+            "/api/auth/login",
             json={
                 "username": "timeuser",
                 "password": "SecurePass123"
