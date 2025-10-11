@@ -98,6 +98,3 @@ hive-mind-prompt-*.txt
 # Backup files
 *.backup
 backups/
-
-# Temporary development reports
-daily_dev_startup_reports/
