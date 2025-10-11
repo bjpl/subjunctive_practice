@@ -527,6 +527,391 @@ SEED_VERBS = [
             "ellos/ellas/ustedes": "estudiaran"
         }
     },
+    {
+        "infinitive": "trabajar",
+        "english_translation": "to work",
+        "verb_type": VerbType.REGULAR,
+        "is_irregular": False,
+        "frequency_rank": 22,
+        "present_subjunctive": {
+            "yo": "trabaje",
+            "tú": "trabajes",
+            "él/ella/usted": "trabaje",
+            "nosotros": "trabajemos",
+            "vosotros": "trabajéis",
+            "ellos/ellas/ustedes": "trabajen"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "trabajara",
+            "tú": "trabajaras",
+            "él/ella/usted": "trabajara",
+            "nosotros": "trabajáramos",
+            "vosotros": "trabajarais",
+            "ellos/ellas/ustedes": "trabajaran"
+        }
+    },
+    {
+        "infinitive": "cantar",
+        "english_translation": "to sing",
+        "verb_type": VerbType.REGULAR,
+        "is_irregular": False,
+        "frequency_rank": 23,
+        "present_subjunctive": {
+            "yo": "cante",
+            "tú": "cantes",
+            "él/ella/usted": "cante",
+            "nosotros": "cantemos",
+            "vosotros": "cantéis",
+            "ellos/ellas/ustedes": "canten"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "cantara",
+            "tú": "cantaras",
+            "él/ella/usted": "cantara",
+            "nosotros": "cantáramos",
+            "vosotros": "cantarais",
+            "ellos/ellas/ustedes": "cantaran"
+        }
+    },
+    {
+        "infinitive": "llegar",
+        "english_translation": "to arrive",
+        "verb_type": VerbType.REGULAR,
+        "is_irregular": False,
+        "frequency_rank": 24,
+        "irregularity_notes": "Spelling change: g→gu before e",
+        "present_subjunctive": {
+            "yo": "llegue",
+            "tú": "llegues",
+            "él/ella/usted": "llegue",
+            "nosotros": "lleguemos",
+            "vosotros": "lleguéis",
+            "ellos/ellas/ustedes": "lleguen"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "llegara",
+            "tú": "llegaras",
+            "él/ella/usted": "llegara",
+            "nosotros": "llegáramos",
+            "vosotros": "llegarais",
+            "ellos/ellas/ustedes": "llegaran"
+        }
+    },
+    {
+        "infinitive": "comer",
+        "english_translation": "to eat",
+        "verb_type": VerbType.REGULAR,
+        "is_irregular": False,
+        "frequency_rank": 25,
+        "present_subjunctive": {
+            "yo": "coma",
+            "tú": "comas",
+            "él/ella/usted": "coma",
+            "nosotros": "comamos",
+            "vosotros": "comáis",
+            "ellos/ellas/ustedes": "coman"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "comiera",
+            "tú": "comieras",
+            "él/ella/usted": "comiera",
+            "nosotros": "comiéramos",
+            "vosotros": "comierais",
+            "ellos/ellas/ustedes": "comieran"
+        }
+    },
+    {
+        "infinitive": "beber",
+        "english_translation": "to drink",
+        "verb_type": VerbType.REGULAR,
+        "is_irregular": False,
+        "frequency_rank": 26,
+        "present_subjunctive": {
+            "yo": "beba",
+            "tú": "bebas",
+            "él/ella/usted": "beba",
+            "nosotros": "bebamos",
+            "vosotros": "bebáis",
+            "ellos/ellas/ustedes": "beban"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "bebiera",
+            "tú": "bebieras",
+            "él/ella/usted": "bebiera",
+            "nosotros": "bebiéramos",
+            "vosotros": "bebierais",
+            "ellos/ellas/ustedes": "bebieran"
+        }
+    },
+    {
+        "infinitive": "abrir",
+        "english_translation": "to open",
+        "verb_type": VerbType.REGULAR,
+        "is_irregular": False,
+        "frequency_rank": 27,
+        "present_subjunctive": {
+            "yo": "abra",
+            "tú": "abras",
+            "él/ella/usted": "abra",
+            "nosotros": "abramos",
+            "vosotros": "abráis",
+            "ellos/ellas/ustedes": "abran"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "abriera",
+            "tú": "abrieras",
+            "él/ella/usted": "abriera",
+            "nosotros": "abriéramos",
+            "vosotros": "abrierais",
+            "ellos/ellas/ustedes": "abrieran"
+        }
+    },
+    {
+        "infinitive": "escribir",
+        "english_translation": "to write",
+        "verb_type": VerbType.REGULAR,
+        "is_irregular": False,
+        "frequency_rank": 28,
+        "present_subjunctive": {
+            "yo": "escriba",
+            "tú": "escribas",
+            "él/ella/usted": "escriba",
+            "nosotros": "escribamos",
+            "vosotros": "escribáis",
+            "ellos/ellas/ustedes": "escriban"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "escribiera",
+            "tú": "escribieras",
+            "él/ella/usted": "escribiera",
+            "nosotros": "escribiéramos",
+            "vosotros": "escribierais",
+            "ellos/ellas/ustedes": "escribieran"
+        }
+    },
+    {
+        "infinitive": "cerrar",
+        "english_translation": "to close",
+        "verb_type": VerbType.STEM_CHANGING,
+        "is_irregular": False,
+        "frequency_rank": 29,
+        "irregularity_notes": "Stem-changing e>ie",
+        "present_subjunctive": {
+            "yo": "cierre",
+            "tú": "cierres",
+            "él/ella/usted": "cierre",
+            "nosotros": "cerremos",
+            "vosotros": "cerréis",
+            "ellos/ellas/ustedes": "cierren"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "cerrara",
+            "tú": "cerraras",
+            "él/ella/usted": "cerrara",
+            "nosotros": "cerráramos",
+            "vosotros": "cerrarais",
+            "ellos/ellas/ustedes": "cerraran"
+        }
+    },
+    {
+        "infinitive": "entender",
+        "english_translation": "to understand",
+        "verb_type": VerbType.STEM_CHANGING,
+        "is_irregular": False,
+        "frequency_rank": 30,
+        "irregularity_notes": "Stem-changing e>ie",
+        "present_subjunctive": {
+            "yo": "entienda",
+            "tú": "entiendas",
+            "él/ella/usted": "entienda",
+            "nosotros": "entendamos",
+            "vosotros": "entendáis",
+            "ellos/ellas/ustedes": "entiendan"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "entendiera",
+            "tú": "entendieras",
+            "él/ella/usted": "entendiera",
+            "nosotros": "entendiéramos",
+            "vosotros": "entendierais",
+            "ellos/ellas/ustedes": "entendieran"
+        }
+    },
+    {
+        "infinitive": "volver",
+        "english_translation": "to return",
+        "verb_type": VerbType.STEM_CHANGING,
+        "is_irregular": False,
+        "frequency_rank": 31,
+        "irregularity_notes": "Stem-changing o>ue",
+        "present_subjunctive": {
+            "yo": "vuelva",
+            "tú": "vuelvas",
+            "él/ella/usted": "vuelva",
+            "nosotros": "volvamos",
+            "vosotros": "volváis",
+            "ellos/ellas/ustedes": "vuelvan"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "volviera",
+            "tú": "volvieras",
+            "él/ella/usted": "volviera",
+            "nosotros": "volviéramos",
+            "vosotros": "volvierais",
+            "ellos/ellas/ustedes": "volvieran"
+        }
+    },
+    {
+        "infinitive": "servir",
+        "english_translation": "to serve",
+        "verb_type": VerbType.STEM_CHANGING,
+        "is_irregular": False,
+        "frequency_rank": 32,
+        "irregularity_notes": "Stem-changing e>i",
+        "present_subjunctive": {
+            "yo": "sirva",
+            "tú": "sirvas",
+            "él/ella/usted": "sirva",
+            "nosotros": "sirvamos",
+            "vosotros": "sirváis",
+            "ellos/ellas/ustedes": "sirvan"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "sirviera",
+            "tú": "sirvieras",
+            "él/ella/usted": "sirviera",
+            "nosotros": "sirviéramos",
+            "vosotros": "sirvierais",
+            "ellos/ellas/ustedes": "sirvieran"
+        }
+    },
+    {
+        "infinitive": "repetir",
+        "english_translation": "to repeat",
+        "verb_type": VerbType.STEM_CHANGING,
+        "is_irregular": False,
+        "frequency_rank": 33,
+        "irregularity_notes": "Stem-changing e>i",
+        "present_subjunctive": {
+            "yo": "repita",
+            "tú": "repitas",
+            "él/ella/usted": "repita",
+            "nosotros": "repitamos",
+            "vosotros": "repitáis",
+            "ellos/ellas/ustedes": "repitan"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "repitiera",
+            "tú": "repitieras",
+            "él/ella/usted": "repitiera",
+            "nosotros": "repitiéramos",
+            "vosotros": "repitierais",
+            "ellos/ellas/ustedes": "repitieran"
+        }
+    },
+    {
+        "infinitive": "empezar",
+        "english_translation": "to begin/start",
+        "verb_type": VerbType.STEM_CHANGING,
+        "is_irregular": False,
+        "frequency_rank": 34,
+        "irregularity_notes": "Stem-changing e>ie, spelling change z→c before e",
+        "present_subjunctive": {
+            "yo": "empiece",
+            "tú": "empieces",
+            "él/ella/usted": "empiece",
+            "nosotros": "empecemos",
+            "vosotros": "empecéis",
+            "ellos/ellas/ustedes": "empiecen"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "empezara",
+            "tú": "empezaras",
+            "él/ella/usted": "empezara",
+            "nosotros": "empezáramos",
+            "vosotros": "empezarais",
+            "ellos/ellas/ustedes": "empezaran"
+        }
+    },
+    {
+        "infinitive": "terminar",
+        "english_translation": "to finish",
+        "verb_type": VerbType.REGULAR,
+        "is_irregular": False,
+        "frequency_rank": 35,
+        "present_subjunctive": {
+            "yo": "termine",
+            "tú": "termines",
+            "él/ella/usted": "termine",
+            "nosotros": "terminemos",
+            "vosotros": "terminéis",
+            "ellos/ellas/ustedes": "terminen"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "terminara",
+            "tú": "terminaras",
+            "él/ella/usted": "terminara",
+            "nosotros": "termináramos",
+            "vosotros": "terminarais",
+            "ellos/ellas/ustedes": "terminaran"
+        }
+    },
+    {
+        "infinitive": "salir",
+        "english_translation": "to leave/go out",
+        "verb_type": VerbType.IRREGULAR,
+        "is_irregular": True,
+        "frequency_rank": 36,
+        "irregularity_notes": "Irregular yo form: salgo → salg-",
+        "present_subjunctive": {
+            "yo": "salga",
+            "tú": "salgas",
+            "él/ella/usted": "salga",
+            "nosotros": "salgamos",
+            "vosotros": "salgáis",
+            "ellos/ellas/ustedes": "salgan"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "saliera",
+            "tú": "salieras",
+            "él/ella/usted": "saliera",
+            "nosotros": "saliéramos",
+            "vosotros": "salierais",
+            "ellos/ellas/ustedes": "salieran"
+        }
+    },
+    {
+        "infinitive": "haber",
+        "english_translation": "to have (auxiliary)",
+        "verb_type": VerbType.IRREGULAR,
+        "is_irregular": True,
+        "frequency_rank": 37,
+        "irregularity_notes": "Highly irregular, used as auxiliary and impersonal 'hay'",
+        "present_subjunctive": {
+            "yo": "haya",
+            "tú": "hayas",
+            "él/ella/usted": "haya",
+            "nosotros": "hayamos",
+            "vosotros": "hayáis",
+            "ellos/ellas/ustedes": "hayan"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "hubiera",
+            "tú": "hubieras",
+            "él/ella/usted": "hubiera",
+            "nosotros": "hubiéramos",
+            "vosotros": "hubierais",
+            "ellos/ellas/ustedes": "hubieran"
+        },
+        "imperfect_subjunctive_se": {
+            "yo": "hubiese",
+            "tú": "hubieses",
+            "él/ella/usted": "hubiese",
+            "nosotros": "hubiésemos",
+            "vosotros": "hubieseis",
+            "ellos/ellas/ustedes": "hubiesen"
+        }
+    },
 ]
 
 # Sample achievements

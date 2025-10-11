@@ -12,7 +12,12 @@ from backend.schemas.user import (
 from backend.schemas.exercise import (
     VerbResponse,
     ExerciseResponse,
+    ExerciseWithAnswer,
     ScenarioResponse,
+    ScenarioWithExercises,
+    AnswerSubmit,
+    AnswerValidation,
+    ExerciseListResponse,
 )
 from backend.schemas.progress import (
     SessionCreate,
@@ -33,7 +38,12 @@ __all__ = [
     # Exercise schemas
     "VerbResponse",
     "ExerciseResponse",
+    "ExerciseWithAnswer",
     "ScenarioResponse",
+    "ScenarioWithExercises",
+    "AnswerSubmit",
+    "AnswerValidation",
+    "ExerciseListResponse",
     # Progress schemas
     "SessionCreate",
     "SessionResponse",

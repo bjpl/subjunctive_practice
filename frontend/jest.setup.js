@@ -11,7 +11,20 @@ import { server } from './tests/mocks/server'
 // Extend Jest matchers for accessibility testing
 expect.extend(toHaveNoViolations)
 
-// Setup MSW server (imported from tests/mocks/server.ts which handles lifecycle)
+// Setup MSW server lifecycle hooks
+beforeAll(() => {
+  server.listen({
+    onUnhandledRequest: 'warn'
+  })
+})
+
+afterEach(() => {
+  server.resetHandlers()
+})
+
+afterAll(() => {
+  server.close()
+})
 
 // Mock Next.js router
 jest.mock('next/router', () => require('next-router-mock'))

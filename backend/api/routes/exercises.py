@@ -4,29 +4,95 @@ Exercise routes: get exercises, submit answers, validation.
 
 from typing import List, Optional, Dict, Any
 from fastapi import APIRouter, HTTPException, status, Depends, Query
+from sqlalchemy.orm import Session
 import json
 import random
 from pathlib import Path
 from datetime import datetime
+import logging
 
 from core.security import get_current_active_user
-from models.schemas import (
+from core.database import get_db_session
+from models.exercise import Exercise, ExerciseType, SubjunctiveTense, DifficultyLevel
+from models.progress import Attempt
+from schemas.exercise import (
     ExerciseResponse,
     AnswerSubmit,
     AnswerValidation,
     ExerciseListResponse
 )
 
+# Configure logging
+logger = logging.getLogger(__name__)
+
 
 router = APIRouter(prefix="/exercises", tags=["Exercises"])
 
 
-# Exercise data file
+# Exercise data file (fallback only - deprecated)
 EXERCISE_DATA_FILE = Path("user_data/fallback_exercises.json")
 
 
-def load_exercises() -> List[Dict[str, Any]]:
-    """Load exercises from JSON file."""
+def load_exercises_from_db(
+    db: Session,
+    difficulty: Optional[int] = None,
+    exercise_type: Optional[str] = None,
+    limit: int = 50,
+    random_order: bool = True
+) -> List[Exercise]:
+    """
+    Load exercises from database with optional filtering.
+
+    Args:
+        db: Database session
+        difficulty: Filter by difficulty level (1-5)
+        exercise_type: Filter by subjunctive type
+        limit: Maximum number of exercises to return
+        random_order: Randomize exercise order
+
+    Returns:
+        List of Exercise objects from database
+    """
+    logger.info(f"Querying database for exercises (difficulty={difficulty}, type={exercise_type}, limit={limit})")
+
+    query = db.query(Exercise).filter(Exercise.is_active == True)
+
+    # Apply filters
+    if difficulty is not None:
+        # Convert difficulty int to DifficultyLevel enum
+        try:
+            diff_level = DifficultyLevel(difficulty)
+            query = query.filter(Exercise.difficulty == diff_level)
+        except ValueError:
+            logger.warning(f"Invalid difficulty level: {difficulty}")
+
+    if exercise_type:
+        # Try to match SubjunctiveTense enum
+        try:
+            tense = SubjunctiveTense(exercise_type)
+            query = query.filter(Exercise.tense == tense)
+        except ValueError:
+            logger.warning(f"Invalid exercise type: {exercise_type}")
+
+    # Execute query
+    exercises = query.all()
+
+    logger.info(f"Found {len(exercises)} exercises in database")
+
+    # Randomize if requested
+    if random_order:
+        random.shuffle(exercises)
+
+    # Apply limit
+    return exercises[:limit]
+
+
+def load_exercises_from_json() -> List[Dict[str, Any]]:
+    """
+    Load exercises from JSON file (DEPRECATED - fallback only).
+    This is kept for backward compatibility but should not be used.
+    """
+    logger.warning("Using deprecated JSON fallback for exercises - database should be seeded")
     if EXERCISE_DATA_FILE.exists():
         with open(EXERCISE_DATA_FILE, "r") as f:
             data = json.load(f)
@@ -58,7 +124,8 @@ async def get_exercises(
     exercise_type: Optional[str] = Query(None, description="Filter by subjunctive type"),
     limit: int = Query(10, ge=1, le=50, description="Number of exercises to return"),
     random_order: bool = Query(True, description="Randomize exercise order"),
-    current_user: Dict[str, Any] = Depends(get_current_active_user)
+    current_user: Dict[str, Any] = Depends(get_current_active_user),
+    db: Session = Depends(get_db_session)
 ):
     """
     Get practice exercises with optional filtering.
@@ -70,59 +137,69 @@ async def get_exercises(
 
     Requires authentication.
     """
-    exercises = load_exercises()
+    # Load exercises from database
+    exercises = load_exercises_from_db(
+        db=db,
+        difficulty=difficulty,
+        exercise_type=exercise_type,
+        limit=limit,
+        random_order=random_order
+    )
 
     if not exercises:
+        logger.warning("No exercises found in database")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="No exercises available"
         )
 
-    # Apply filters
-    filtered_exercises = exercises
-
-    if difficulty is not None:
-        filtered_exercises = [ex for ex in filtered_exercises if ex.get("difficulty") == difficulty]
-
-    if exercise_type:
-        filtered_exercises = [ex for ex in filtered_exercises if ex.get("type") == exercise_type]
-
-    # Randomize if requested
-    if random_order:
-        filtered_exercises = random.sample(
-            filtered_exercises,
-            min(len(filtered_exercises), limit)
-        )
-    else:
-        filtered_exercises = filtered_exercises[:limit]
+    logger.info(f"Returning {len(exercises)} exercises to user {current_user.get('sub')}")
 
     # Convert to response models (exclude answers)
     exercise_responses = [
         ExerciseResponse(
-            id=ex["id"],
-            type=ex["type"],
-            prompt=ex["prompt"],
-            difficulty=ex["difficulty"],
-            explanation=ex.get("explanation"),
-            hints=ex.get("hints", []),
-            tags=ex.get("tags", [])
+            id=str(ex.id),
+            type=ex.tense.value,
+            prompt=ex.prompt,
+            difficulty=ex.difficulty.value,
+            explanation=ex.explanation,
+            hints=[ex.hint] if ex.hint else [],
+            tags=[]  # TODO: Add tags to database model
         )
-        for ex in filtered_exercises
+        for ex in exercises
     ]
+
+    # Get total count for pagination
+    total_query = db.query(Exercise).filter(Exercise.is_active == True)
+    if difficulty is not None:
+        try:
+            diff_level = DifficultyLevel(difficulty)
+            total_query = total_query.filter(Exercise.difficulty == diff_level)
+        except ValueError:
+            pass
+    if exercise_type:
+        try:
+            tense = SubjunctiveTense(exercise_type)
+            total_query = total_query.filter(Exercise.tense == tense)
+        except ValueError:
+            pass
+
+    total_count = total_query.count()
 
     return ExerciseListResponse(
         exercises=exercise_responses,
         total=len(exercise_responses),
         page=1,
         page_size=limit,
-        has_more=len(exercises) > limit
+        has_more=total_count > limit
     )
 
 
 @router.get("/{exercise_id}", response_model=ExerciseResponse)
 async def get_exercise_by_id(
     exercise_id: str,
-    current_user: Dict[str, Any] = Depends(get_current_active_user)
+    current_user: Dict[str, Any] = Depends(get_current_active_user),
+    db: Session = Depends(get_db_session)
 ):
     """
     Get a specific exercise by ID.
@@ -131,31 +208,46 @@ async def get_exercise_by_id(
 
     Requires authentication.
     """
-    exercises = load_exercises()
+    # Convert exercise_id to int
+    try:
+        ex_id = int(exercise_id)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Invalid exercise ID format: {exercise_id}"
+        )
 
-    exercise = next((ex for ex in exercises if ex["id"] == exercise_id), None)
+    # Query database
+    exercise = db.query(Exercise).filter(
+        Exercise.id == ex_id,
+        Exercise.is_active == True
+    ).first()
 
     if not exercise:
+        logger.warning(f"Exercise {exercise_id} not found in database")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Exercise {exercise_id} not found"
         )
 
+    logger.info(f"Returning exercise {exercise_id} to user {current_user.get('sub')}")
+
     return ExerciseResponse(
-        id=exercise["id"],
-        type=exercise["type"],
-        prompt=exercise["prompt"],
-        difficulty=exercise["difficulty"],
-        explanation=exercise.get("explanation"),
-        hints=exercise.get("hints", []),
-        tags=exercise.get("tags", [])
+        id=str(exercise.id),
+        type=exercise.tense.value,
+        prompt=exercise.prompt,
+        difficulty=exercise.difficulty.value,
+        explanation=exercise.explanation,
+        hints=[exercise.hint] if exercise.hint else [],
+        tags=[]  # TODO: Add tags to database model
     )
 
 
 @router.post("/submit", response_model=AnswerValidation)
 async def submit_answer(
     submission: AnswerSubmit,
-    current_user: Dict[str, Any] = Depends(get_current_active_user)
+    current_user: Dict[str, Any] = Depends(get_current_active_user),
+    db: Session = Depends(get_db_session)
 ):
     """
     Submit an answer for validation.
@@ -167,17 +259,29 @@ async def submit_answer(
     Returns validation result with feedback and score.
     Requires authentication.
     """
-    exercises = load_exercises()
+    # Convert exercise_id to int
+    try:
+        ex_id = int(submission.exercise_id)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Invalid exercise ID format: {submission.exercise_id}"
+        )
 
-    exercise = next((ex for ex in exercises if ex["id"] == submission.exercise_id), None)
+    # Query database for exercise
+    exercise = db.query(Exercise).filter(
+        Exercise.id == ex_id,
+        Exercise.is_active == True
+    ).first()
 
     if not exercise:
+        logger.warning(f"Exercise {submission.exercise_id} not found for answer submission")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Exercise {submission.exercise_id} not found"
         )
 
-    correct_answer = exercise["answer"]
+    correct_answer = exercise.correct_answer
     is_correct = validate_answer(submission.user_answer, correct_answer)
 
     # Calculate score based on correctness and time
@@ -197,36 +301,100 @@ async def submit_answer(
         feedback = f"Not quite. The correct answer is '{correct_answer}'."
 
     # Get alternative answers
-    alternative_answers = correct_answer.split('/') if '/' in correct_answer else []
+    alternative_answers = []
+    if exercise.alternative_answers:
+        alternative_answers = exercise.alternative_answers
+    elif '/' in correct_answer:
+        alternative_answers = correct_answer.split('/')
 
-    # Save user's attempt (in production, save to database)
-    save_user_attempt(
-        current_user["sub"],
-        submission.exercise_id,
-        submission.user_answer,
-        is_correct,
-        base_score
+    # Save user's attempt to database
+    save_user_attempt_to_db(
+        db=db,
+        user_id=current_user["sub"],
+        exercise_id=ex_id,
+        user_answer=submission.user_answer,
+        is_correct=is_correct,
+        score=base_score
     )
+
+    logger.info(f"User {current_user.get('sub')} submitted answer for exercise {ex_id}: correct={is_correct}")
 
     return AnswerValidation(
         is_correct=is_correct,
         correct_answer=correct_answer,
         user_answer=submission.user_answer,
         feedback=feedback,
-        explanation=exercise.get("explanation", ""),
+        explanation=exercise.explanation or "",
         score=base_score,
         alternative_answers=alternative_answers
     )
 
 
-def save_user_attempt(
+def save_user_attempt_to_db(
+    db: Session,
+    user_id: str,
+    exercise_id: int,
+    user_answer: str,
+    is_correct: bool,
+    score: int
+):
+    """
+    Save user attempt to database.
+
+    Note: This creates a standalone attempt without a session.
+    For full session tracking, create a Session first.
+    """
+    # Convert user_id string to int (assuming format like "user_7")
+    try:
+        if isinstance(user_id, str):
+            # Extract numeric part if user_id is like "user_7"
+            user_id_int = int(user_id.split('_')[-1]) if '_' in user_id else int(user_id)
+        else:
+            user_id_int = int(user_id)
+    except (ValueError, IndexError):
+        logger.error(f"Invalid user_id format: {user_id}")
+        # For now, skip saving if we can't parse user_id
+        # In production, we'd want better user ID handling
+        return
+
+    # Create a simple session for this attempt
+    from models.progress import Session as PracticeSession
+
+    practice_session = PracticeSession(
+        user_id=user_id_int,
+        started_at=datetime.utcnow(),
+        ended_at=datetime.utcnow(),
+        total_exercises=1,
+        correct_answers=1 if is_correct else 0,
+        score_percentage=score,
+        session_type="practice",
+        is_completed=True
+    )
+    db.add(practice_session)
+    db.flush()  # Get the session ID
+
+    attempt = Attempt(
+        session_id=practice_session.id,
+        user_id=user_id_int,
+        exercise_id=exercise_id,
+        user_answer=user_answer,
+        is_correct=is_correct,
+        time_taken_seconds=None
+    )
+    db.add(attempt)
+    db.commit()
+    logger.info(f"Saved attempt for user {user_id} on exercise {exercise_id}")
+
+
+def save_user_attempt_to_json(
     user_id: str,
     exercise_id: str,
     user_answer: str,
     is_correct: bool,
     score: int
 ):
-    """Save user attempt to file (in production, use database)."""
+    """Save user attempt to file (DEPRECATED - fallback only)."""
+    logger.warning("Using deprecated JSON fallback for saving attempts")
     attempts_file = Path(f"user_data/attempts_{user_id}.json")
     attempts_file.parent.mkdir(exist_ok=True)
 
@@ -249,13 +417,18 @@ def save_user_attempt(
 
 @router.get("/types/available", response_model=List[str])
 async def get_available_exercise_types(
-    current_user: Dict[str, Any] = Depends(get_current_active_user)
+    current_user: Dict[str, Any] = Depends(get_current_active_user),
+    db: Session = Depends(get_db_session)
 ):
     """
     Get list of available exercise types.
 
     Requires authentication.
     """
-    exercises = load_exercises()
-    types = list(set(ex["type"] for ex in exercises))
-    return sorted(types)
+    # Query distinct exercise types from database
+    types = db.query(Exercise.tense).filter(Exercise.is_active == True).distinct().all()
+    type_values = sorted([t[0].value for t in types if t[0] is not None])
+
+    logger.info(f"Available exercise types: {type_values}")
+
+    return type_values

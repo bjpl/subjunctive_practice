@@ -17,13 +17,25 @@ from core.security import (
     create_refresh_token,
     decode_token
 )
-from models.schemas import (
-    UserCreate,
-    UserLogin,
-    UserResponse,
-    Token,
-    TokenRefresh
-)
+from schemas.user import UserCreate, UserResponse
+from pydantic import BaseModel
+
+# Token schemas - should be moved to schemas/auth.py
+class UserLogin(BaseModel):
+    """Schema for user login."""
+    username: str
+    password: str
+
+class Token(BaseModel):
+    """Schema for authentication token response."""
+    access_token: str
+    refresh_token: str
+    token_type: str = "bearer"
+    expires_in: int  # seconds
+
+class TokenRefresh(BaseModel):
+    """Schema for token refresh request."""
+    refresh_token: str
 
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
