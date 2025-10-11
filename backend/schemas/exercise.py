@@ -104,3 +104,32 @@ class ScenarioResponse(ScenarioBase):
 class ScenarioWithExercises(ScenarioResponse):
     """Schema for scenario with exercises."""
     exercises: List[ExerciseResponse] = []
+
+
+# ==================== Answer Submission & Validation ====================
+
+class AnswerSubmit(BaseModel):
+    """Schema for submitting an exercise answer."""
+    exercise_id: str
+    user_answer: str = Field(..., min_length=1, max_length=200)
+    time_taken: Optional[int] = Field(None, description="Time taken in seconds")
+
+
+class AnswerValidation(BaseModel):
+    """Schema for answer validation response."""
+    is_correct: bool
+    correct_answer: str
+    user_answer: str
+    feedback: str
+    explanation: Optional[str] = None
+    score: int = Field(..., ge=0, le=100)
+    alternative_answers: Optional[List[str]] = Field(default_factory=list)
+
+
+class ExerciseListResponse(BaseModel):
+    """Schema for paginated exercise list."""
+    exercises: List[ExerciseResponse]
+    total: int
+    page: int = 1
+    page_size: int = 10
+    has_more: bool = False
