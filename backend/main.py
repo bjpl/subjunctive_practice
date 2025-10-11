@@ -17,7 +17,19 @@ from core.middleware import (
     RequestLoggingMiddleware,
     ErrorHandlingMiddleware
 )
-from models.schemas import HealthCheck
+from schemas.user import UserResponse
+from schemas.progress import ProgressResponse
+
+# HealthCheck schema needs to be created in schemas module
+# For now, create inline until proper schema is added
+from pydantic import BaseModel
+
+class HealthCheck(BaseModel):
+    """Schema for health check endpoint."""
+    status: str = "healthy"
+    timestamp: str
+    version: str
+    environment: str
 from api.routes import auth, exercises, progress
 
 

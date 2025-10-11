@@ -5,11 +5,22 @@ const createJestConfig = nextJest({
   dir: './',
 })
 
+// Workaround for MSW 2.x + Next.js hanging issue
+// See: https://github.com/mswjs/msw/issues/1786
+if (typeof globalThis.ReadableStream === 'undefined') {
+  globalThis.ReadableStream = class ReadableStream {}
+}
+
 // Add any custom config to be passed to Jest
 const customJestConfig = {
   setupFiles: ['<rootDir>/jest.polyfills.js'],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   testEnvironment: 'jest-environment-jsdom',
+  testEnvironmentOptions: {
+    customExportConditions: [''],
+  },
+  testTimeout: 10000,
+  maxWorkers: 1,
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
     '^@/components/(.*)$': '<rootDir>/components/$1',
@@ -30,7 +41,7 @@ const customJestConfig = {
     '!**/coverage/**',
     '!**/dist/**',
   ],
-  coverageThresholds: {
+  coverageThreshold: {
     global: {
       branches: 70,
       functions: 70,
@@ -49,7 +60,7 @@ const customJestConfig = {
     '/dist/',
   ],
   transformIgnorePatterns: [
-    '/node_modules/',
+    '/node_modules/(?!(msw)/)',
     '^.+\\.module\\.(css|sass|scss)$',
   ],
   moduleDirectories: ['node_modules', '<rootDir>/'],

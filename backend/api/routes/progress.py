@@ -10,7 +10,32 @@ from datetime import datetime, timedelta
 from collections import defaultdict
 
 from core.security import get_current_active_user
-from models.schemas import ProgressResponse, StatisticsResponse
+from pydantic import BaseModel, Field
+from typing import Optional, Dict, Any, List
+
+# These schemas need to be properly defined - temporary inline versions
+class ProgressResponse(BaseModel):
+    """Schema for user progress data."""
+    user_id: str
+    total_exercises: int = 0
+    correct_answers: int = 0
+    incorrect_answers: int = 0
+    accuracy_rate: float = Field(..., ge=0.0, le=100.0)
+    current_streak: int = 0
+    best_streak: int = 0
+    last_practice: Optional[datetime] = None
+    level: int = Field(..., ge=1, le=10)
+    experience_points: int = 0
+
+class StatisticsResponse(BaseModel):
+    """Schema for detailed user statistics."""
+    user_id: str
+    overall_stats: Dict[str, Any]
+    by_type: Dict[str, Dict[str, Any]]  # Stats by subjunctive type
+    by_difficulty: Dict[int, Dict[str, Any]]  # Stats by difficulty level
+    recent_performance: List[Dict[str, Any]]  # Last 10 exercises
+    learning_insights: List[str]  # AI-generated insights
+    practice_calendar: List[str]  # Dates of practice
 
 
 router = APIRouter(prefix="/progress", tags=["Progress & Statistics"])
