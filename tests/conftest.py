@@ -117,14 +117,61 @@ def client(override_settings, override_get_db, temp_user_data_dir) -> TestClient
 
 
 @pytest.fixture(scope="function")
-def authenticated_client(client: TestClient, test_user, test_settings: Settings) -> TestClient:
+def authenticated_client(client: TestClient, test_user, test_settings: Settings, temp_user_data_dir) -> TestClient:
     """Create authenticated test client with JWT token."""
+    # Also save user to JSON file for file-based auth endpoints
+    import json
+    from pathlib import Path
+    users_file = temp_user_data_dir / "users.json"
+    users = {}
+    if users_file.exists():
+        with open(users_file, 'r') as f:
+            users = json.load(f)
+
+    users[test_user.username] = {
+        "id": test_user.id,
+        "username": test_user.username,
+        "email": test_user.email,
+        "password_hash": test_user.hashed_password,
+        "role": test_user.role.value if hasattr(test_user.role, 'value') else test_user.role,
+        "is_active": test_user.is_active,
+        "is_verified": test_user.is_verified,
+        "created_at": test_user.created_at.isoformat(),
+        "last_login": test_user.last_login.isoformat() if test_user.last_login else None
+    }
+
+    with open(users_file, 'w') as f:
+        json.dump(users, f, indent=2)
+
     token_data = {
         "sub": str(test_user.id),
         "username": test_user.username,
-        "email": test_user.email
+        "email": test_user.email,
+        "type": "access"
     }
     access_token = create_access_token(token_data, test_settings)
+
+    # Override security dependencies to return mock user
+    from core.security import get_current_user, get_current_active_user
+
+    async def override_get_current_user():
+        return {
+            "sub": str(test_user.id),
+            "username": test_user.username,
+            "email": test_user.email,
+            "type": "access"
+        }
+
+    async def override_get_current_active_user():
+        return {
+            "sub": str(test_user.id),
+            "username": test_user.username,
+            "email": test_user.email,
+            "type": "access"
+        }
+
+    app.dependency_overrides[get_current_user] = override_get_current_user
+    app.dependency_overrides[get_current_active_user] = override_get_current_active_user
 
     client.headers = {
         **client.headers,

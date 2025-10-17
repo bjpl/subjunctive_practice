@@ -1,0 +1,67 @@
+# Auto-labeler configuration for PR labeling
+
+# Backend code changes
+backend:
+  - backend/**/*.py
+  - backend/**
+
+# API changes
+api:
+  - api/**/*.py
+  - backend/api/**
+
+# Database changes
+database:
+  - database/**
+  - models/**/*.py
+  - alembic/**
+  - '**/*migration*.py'
+
+# Service layer changes
+services:
+  - services/**/*.py
+  - backend/services/**
+
+# Core functionality
+core:
+  - core/**/*.py
+  - backend/core/**
+
+# Tests
+tests:
+  - tests/**/*.py
+  - test_*.py
+  - '**/test_*.py'
+
+# Documentation
+documentation:
+  - '**/*.md'
+  - docs/**
+  - README.md
+
+# Dependencies
+dependencies:
+  - requirements.txt
+  - requirements-dev.txt
+  - pyproject.toml
+
+# CI/CD
+ci-cd:
+  - .github/**
+  - Dockerfile
+  - docker-compose.yml
+  - Makefile
+
+# Configuration
+config:
+  - '**/*.yml'
+  - '**/*.yaml'
+  - '**/*.toml'
+  - '**/*.ini'
+  - .env.example
+
+# Security
+security:
+  - '**/auth*.py'
+  - '**/security*.py'
+  - '**/middleware*.py'
