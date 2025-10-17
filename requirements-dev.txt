@@ -1,0 +1,48 @@
+# Development Dependencies
+# Spanish Subjunctive Practice Application
+
+# Include production requirements
+-r requirements.txt
+
+# Testing
+pytest==8.4.2
+pytest-asyncio==0.23.5
+pytest-cov==4.1.0
+pytest-mock==3.15.1
+pytest-env==1.1.5
+httpx==0.26.0
+faker==23.2.1
+
+# Code Quality
+black==24.2.0
+flake8==7.3.0
+mypy==1.18.2
+isort==5.13.2
+pylint==3.0.3
+
+# Type Stubs
+types-redis==4.6.0.20240218
+types-python-jose==3.3.4.20240106
+types-passlib==1.7.7.20250602
+types-python-dateutil==2.9.0.20250822
+
+# Development Tools
+ipython==8.21.0
+ipdb==0.13.13
+watchdog==4.0.0
+
+# Documentation
+mkdocs==1.5.3
+mkdocs-material==9.5.9
+
+# Database Management
+alembic-utils==0.8.8
+
+# Pre-commit Hooks
+pre-commit==3.6.2
+
+# Environment Management
+python-dotenv==1.0.1
+
+# API Documentation
+httpie==3.2.2
