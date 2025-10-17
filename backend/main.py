@@ -18,7 +18,6 @@ from core.middleware import (
     ErrorHandlingMiddleware
 )
 from schemas.user import UserResponse
-from schemas.progress import ProgressResponse
 
 # HealthCheck schema needs to be created in schemas module
 # For now, create inline until proper schema is added
@@ -27,9 +26,12 @@ from pydantic import BaseModel
 class HealthCheck(BaseModel):
     """Schema for health check endpoint."""
     status: str = "healthy"
-    timestamp: str
+    timestamp: datetime
     version: str
     environment: str
+    database_connected: bool = False
+    redis_connected: bool = False
+    anthropic_configured: bool = False
 from api.routes import auth, exercises, progress
 
 
@@ -138,8 +140,8 @@ async def health_check():
         except Exception as e:
             logger.error(f"Redis connection check failed: {e}")
 
-    # Check OpenAI configuration
-    openai_configured = bool(settings.OPENAI_API_KEY)
+    # Check Anthropic Claude configuration
+    anthropic_configured = bool(settings.ANTHROPIC_API_KEY)
 
     return HealthCheck(
         status="healthy",
@@ -148,7 +150,7 @@ async def health_check():
         environment=settings.ENVIRONMENT,
         database_connected=database_connected,
         redis_connected=redis_connected,
-        openai_configured=openai_configured
+        anthropic_configured=anthropic_configured
     )
 
 

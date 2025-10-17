@@ -45,11 +45,11 @@ class Settings(BaseSettings):
     # Redis
     REDIS_URL: Optional[str] = Field(default=None, env="REDIS_URL")
 
-    # OpenAI
-    OPENAI_API_KEY: Optional[str] = Field(default=None, env="OPENAI_API_KEY")
-    OPENAI_MODEL: str = Field(default="gpt-4o-mini", env="OPENAI_MODEL")
-    OPENAI_MAX_TOKENS: int = Field(default=1000, env="OPENAI_MAX_TOKENS")
-    OPENAI_TEMPERATURE: float = Field(default=0.7, env="OPENAI_TEMPERATURE")
+    # Anthropic Claude
+    ANTHROPIC_API_KEY: Optional[str] = Field(default=None, env="ANTHROPIC_API_KEY")
+    ANTHROPIC_MODEL: str = Field(default="claude-3-5-sonnet-20241022", env="ANTHROPIC_MODEL")
+    ANTHROPIC_MAX_TOKENS: int = Field(default=1000, env="ANTHROPIC_MAX_TOKENS")
+    ANTHROPIC_TEMPERATURE: float = Field(default=0.7, env="ANTHROPIC_TEMPERATURE")
 
     # Rate Limiting
     RATE_LIMIT_ENABLED: bool = True

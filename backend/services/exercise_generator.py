@@ -10,8 +10,8 @@ from typing import Dict, List, Optional, Tuple
 import random
 import logging
 
-from backend.services.conjugation import ConjugationEngine
-from backend.utils.spanish_grammar import (
+from services.conjugation import ConjugationEngine
+from utils.spanish_grammar import (
     WEIRDO_TRIGGERS,
     IRREGULAR_VERBS,
     STEM_CHANGING_VERBS,

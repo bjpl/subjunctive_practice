@@ -2,14 +2,14 @@
 Pydantic schemas for API request/response validation.
 """
 
-from backend.schemas.user import (
+from .user import (
     UserCreate,
     UserUpdate,
     UserResponse,
     UserProfileResponse,
     UserPreferenceUpdate,
 )
-from backend.schemas.exercise import (
+from .exercise import (
     VerbResponse,
     ExerciseResponse,
     ExerciseWithAnswer,
@@ -19,7 +19,7 @@ from backend.schemas.exercise import (
     AnswerValidation,
     ExerciseListResponse,
 )
-from backend.schemas.progress import (
+from .progress import (
     SessionCreate,
     SessionResponse,
     AttemptCreate,

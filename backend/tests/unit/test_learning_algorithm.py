@@ -11,7 +11,7 @@ Tests cover:
 
 import pytest
 from datetime import datetime, timedelta
-from backend.services.learning_algorithm import (
+from services.learning_algorithm import (
     SM2Algorithm,
     SM2Card,
     AdaptiveDifficultyManager,

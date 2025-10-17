@@ -9,7 +9,7 @@ spelling changes.
 from typing import Dict, List, Optional, Tuple, Union
 import logging
 
-from backend.utils.spanish_grammar import (
+from utils.spanish_grammar import (
     REGULAR_ENDINGS,
     IRREGULAR_VERBS,
     STEM_CHANGING_VERBS,

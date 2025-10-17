@@ -10,13 +10,13 @@ Tests cover:
 """
 
 import pytest
-from backend.services.feedback import (
+from services.feedback import (
     FeedbackGenerator,
     ErrorAnalyzer,
     Feedback,
     ErrorPattern
 )
-from backend.services.conjugation import ConjugationEngine, ValidationResult
+from services.conjugation import ConjugationEngine, ValidationResult
 
 
 @pytest.mark.unit

@@ -14,6 +14,8 @@ venv/
 env/
 ENV/
 .venv/
+backend/venv/
+**/venv/
 
 # Environment files
 .env

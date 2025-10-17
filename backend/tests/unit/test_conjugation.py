@@ -11,7 +11,7 @@ Tests cover:
 """
 
 import pytest
-from backend.services.conjugation import (
+from services.conjugation import (
     ConjugationEngine,
     ConjugationResult,
     ValidationResult

@@ -5,7 +5,7 @@ Pydantic schemas for exercise-related models.
 from pydantic import BaseModel, Field, ConfigDict
 from datetime import datetime
 from typing import Optional, List, Dict, Any
-from backend.models.exercise import VerbType, SubjunctiveTense, ExerciseType, DifficultyLevel
+from models.exercise import VerbType, SubjunctiveTense, ExerciseType, DifficultyLevel
 
 
 class VerbBase(BaseModel):
@@ -84,7 +84,7 @@ class ScenarioBase(BaseModel):
     theme: str = Field(..., max_length=50)
     context: Optional[str] = None
     image_url: Optional[str] = None
-    recommended_level: Optional[str] = Field(None, regex=r"^[ABC][12]$")
+    recommended_level: Optional[str] = Field(None, pattern=r"^[ABC][12]$")
 
 
 class ScenarioCreate(ScenarioBase):

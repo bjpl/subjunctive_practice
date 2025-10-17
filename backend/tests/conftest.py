@@ -23,15 +23,15 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.pool import StaticPool
 
-from backend.main import app
-from backend.core.database import Base, get_db
-from backend.core.config import Settings, get_settings
-from backend.core.security import create_access_token, hash_password
-from backend.models.user import User, UserProfile, UserPreference
-from backend.services.conjugation import ConjugationEngine
-from backend.services.exercise_generator import ExerciseGenerator
-from backend.services.learning_algorithm import LearningAlgorithm, SM2Card
-from backend.services.feedback import FeedbackGenerator, ErrorAnalyzer
+from main import app
+from core.database import Base, get_db
+from core.config import Settings, get_settings
+from core.security import create_access_token, hash_password
+from models.user import User, UserProfile, UserPreference
+from services.conjugation import ConjugationEngine
+from services.exercise_generator import ExerciseGenerator
+from services.learning_algorithm import LearningAlgorithm, SM2Card
+from services.feedback import FeedbackGenerator, ErrorAnalyzer
 
 
 # ============================================================================
@@ -264,19 +264,16 @@ def feedback_generator(conjugation_engine: ConjugationEngine, error_analyzer: Er
 # ============================================================================
 
 @pytest.fixture
-def mock_openai():
-    """Mock OpenAI API calls."""
-    with patch("openai.ChatCompletion.create") as mock:
-        mock.return_value = Mock(
-            choices=[
-                Mock(
-                    message=Mock(
-                        content="Mocked OpenAI response"
-                    )
-                )
-            ]
-        )
-        yield mock
+def mock_anthropic():
+    """Mock Anthropic Claude API calls."""
+    with patch("anthropic.Anthropic") as mock_client:
+        # Mock the messages.create method
+        mock_instance = Mock()
+        mock_response = Mock()
+        mock_response.content = [Mock(text="Mocked Claude response")]
+        mock_instance.messages.create.return_value = mock_response
+        mock_client.return_value = mock_instance
+        yield mock_instance
 
 
 @pytest.fixture
@@ -377,8 +374,8 @@ def temp_user_data_dir(temp_dir: Path) -> Path:
     user_data.mkdir(exist_ok=True)
 
     # Patch the USER_DATA_FILE paths
-    with patch("backend.api.routes.auth.USER_DATA_FILE", user_data / "users.json"):
-        with patch("backend.api.routes.exercises.EXERCISE_DATA_FILE", user_data / "fallback_exercises.json"):
+    with patch("api.routes.auth.USER_DATA_FILE", user_data / "users.json"):
+        with patch("api.routes.exercises.EXERCISE_DATA_FILE", user_data / "fallback_exercises.json"):
             yield user_data
 
 

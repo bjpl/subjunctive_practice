@@ -10,8 +10,8 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass
 import logging
 
-from backend.services.conjugation import ConjugationEngine, ValidationResult
-from backend.utils.spanish_grammar import WEIRDO_TRIGGERS
+from services.conjugation import ConjugationEngine, ValidationResult
+from utils.spanish_grammar import WEIRDO_TRIGGERS
 
 
 logger = logging.getLogger(__name__)
@@ -597,7 +597,7 @@ class FeedbackGenerator:
 
 # Example usage
 if __name__ == "__main__":
-    from backend.services.conjugation import ConjugationEngine
+    from services.conjugation import ConjugationEngine
 
     engine = ConjugationEngine()
     analyzer = ErrorAnalyzer()

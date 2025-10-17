@@ -11,14 +11,14 @@ Tests cover:
 import pytest
 from datetime import timedelta
 from jose import jwt, JWTError
-from backend.core.security import (
+from core.security import (
     hash_password,
     verify_password,
     create_access_token,
     create_refresh_token,
     decode_token
 )
-from backend.core.config import Settings
+from core.config import Settings
 from fastapi import HTTPException
 
 

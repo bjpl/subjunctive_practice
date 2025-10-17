@@ -11,8 +11,8 @@ Tests cover:
 """
 
 import pytest
-from backend.services.exercise_generator import ExerciseGenerator, Exercise
-from backend.services.conjugation import ConjugationEngine
+from services.exercise_generator import ExerciseGenerator, Exercise
+from services.conjugation import ConjugationEngine
 
 
 @pytest.mark.unit

@@ -5,7 +5,7 @@ Pydantic schemas for user-related models.
 from pydantic import BaseModel, EmailStr, Field, ConfigDict
 from datetime import datetime
 from typing import Optional
-from backend.models.user import UserRole, LanguageLevel
+from models.user import UserRole, LanguageLevel
 
 
 class UserBase(BaseModel):
@@ -67,7 +67,7 @@ class UserPreferenceUpdate(BaseModel):
     difficulty_preference: Optional[int] = Field(None, ge=1, le=3)
     email_notifications: Optional[bool] = None
     reminder_enabled: Optional[bool] = None
-    reminder_time: Optional[str] = Field(None, regex=r"^([01]\d|2[0-3]):([0-5]\d)$")
+    reminder_time: Optional[str] = Field(None, pattern=r"^([01]\d|2[0-3]):([0-5]\d)$")
     show_explanations: Optional[bool] = None
     auto_advance: Optional[bool] = None
     audio_enabled: Optional[bool] = None
