@@ -45,4 +45,4 @@ pre-commit==3.6.2
 python-dotenv==1.0.1
 
 # API Documentation
-httpie==3.2.2
+httpie==3.2.4
