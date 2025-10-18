@@ -1,6 +1,7 @@
 import { http, HttpResponse } from 'msw';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+// Match the API client base URL exactly
+const API_BASE_URL = 'http://localhost:8000/api';
 
 export const handlers = [
   // Auth endpoints
@@ -9,7 +10,7 @@ export const handlers = [
 
     if (body.email === 'existing@example.com') {
       return HttpResponse.json(
-        { message: 'User already exists' },
+        { detail: 'User already exists' },
         { status: 400 }
       );
     }
@@ -28,9 +29,10 @@ export const handlers = [
   http.post(`${API_BASE_URL}/auth/login`, async ({ request }) => {
     const body = await request.json() as { email: string; password: string };
 
-    if (body.email === 'wrong@example.com' || body.password === 'wrongpass') {
+    // More specific check for wrong credentials
+    if (body.email === 'wrong@example.com' && body.password === 'wrongpass') {
       return HttpResponse.json(
-        { message: 'Invalid credentials' },
+        { detail: 'Invalid credentials' },
         { status: 401 }
       );
     }

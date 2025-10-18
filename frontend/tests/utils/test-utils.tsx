@@ -1,20 +1,22 @@
 import React, { ReactElement } from 'react';
 import { render, RenderOptions } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { configureStore, PreloadedState } from '@reduxjs/toolkit';
-import authReducer from '@/store/slices/auth-slice';
-
-// Mock store type
-interface ExtendedRenderOptions extends Omit<RenderOptions, 'wrapper'> {
-  preloadedState?: PreloadedState<RootState>;
-  store?: ReturnType<typeof setupStore>;
-}
+import { configureStore } from '@reduxjs/toolkit';
+import authReducer from '@/store/slices/authSlice';
+import exerciseReducer from '@/store/slices/exerciseSlice';
+import progressReducer from '@/store/slices/progressSlice';
+import uiReducer from '@/store/slices/uiSlice';
+import settingsReducer from '@/store/slices/settingsSlice';
 
 // Create a test store
-export function setupStore(preloadedState?: PreloadedState<RootState>) {
+export function setupStore(preloadedState?: Partial<RootState>) {
   return configureStore({
     reducer: {
       auth: authReducer,
+      exercise: exerciseReducer,
+      progress: progressReducer,
+      ui: uiReducer,
+      settings: settingsReducer,
     },
     preloadedState,
   });
@@ -22,6 +24,12 @@ export function setupStore(preloadedState?: PreloadedState<RootState>) {
 
 export type RootState = ReturnType<ReturnType<typeof setupStore>['getState']>;
 export type AppStore = ReturnType<typeof setupStore>;
+
+// Mock store type
+interface ExtendedRenderOptions extends Omit<RenderOptions, 'wrapper'> {
+  preloadedState?: Partial<RootState>;
+  store?: ReturnType<typeof setupStore>;
+}
 
 // Custom render function with Redux provider
 export function renderWithProviders(

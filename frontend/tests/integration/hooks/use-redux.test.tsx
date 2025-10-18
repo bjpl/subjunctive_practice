@@ -2,7 +2,7 @@ import { renderHook } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { useAppDispatch, useAppSelector } from '@/hooks/use-redux';
-import authReducer, { logout } from '@/store/slices/auth-slice';
+import authReducer, { logout } from '@/store/slices/authSlice';
 
 const createTestStore = () =>
   configureStore({
@@ -42,7 +42,7 @@ describe('useAppSelector Hook', () => {
       <Provider store={store}>{children}</Provider>
     );
 
-    const { result } = renderHook(
+    const { result, rerender } = renderHook(
       () => useAppSelector((state) => state.auth.isAuthenticated),
       { wrapper: customWrapper }
     );
@@ -54,6 +54,9 @@ describe('useAppSelector Hook', () => {
       type: 'auth/login/fulfilled',
       payload: { user: { id: 1 }, access_token: 'token' },
     });
+
+    // Force re-render to get updated state
+    rerender();
 
     // Hook should re-render with new state
     expect(result.current).toBe(true);

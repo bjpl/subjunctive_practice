@@ -241,12 +241,18 @@ class TestJWTTokens:
 
     def test_token_different_each_time(self, test_settings):
         """Test tokens are different even with same data (due to timestamps)."""
+        import time
         data = {"sub": "user123"}
 
         token1 = create_access_token(data, test_settings)
+        time.sleep(1.1)  # Wait over 1 second to ensure different timestamp
         token2 = create_access_token(data, test_settings)
 
         # Tokens should be different due to different iat and exp
+        # Decode to verify timestamps are different
+        payload1 = decode_token(token1, test_settings)
+        payload2 = decode_token(token2, test_settings)
+        assert payload1["iat"] != payload2["iat"] or payload1["exp"] != payload2["exp"]
         assert token1 != token2
 
     def test_token_with_empty_data(self, test_settings):
@@ -295,13 +301,14 @@ class TestSecurityEdgeCases:
         assert verify_password(password, hashed) is True
 
     def test_password_with_null_bytes(self):
-        """Test password with null bytes."""
-        # Note: Bcrypt may truncate at null byte
-        password = "test\x00password"
-        hashed = hash_password(password)
+        """Test password with null bytes - bcrypt rejects null bytes."""
+        from passlib.exc import PasswordValueError
 
-        # Verification behavior may vary
-        assert hashed is not None
+        password = "test\x00password"
+
+        # Bcrypt doesn't allow null bytes - expect error
+        with pytest.raises(PasswordValueError):
+            hash_password(password)
 
     def test_token_with_large_payload(self, test_settings):
         """Test token with large payload."""

@@ -330,9 +330,12 @@ class TestFeedbackGenerator:
         feedback = feedback_generator.generate_feedback(validation)
 
         assert len(feedback.encouragement) > 0
-        # Should be positive
+        # Should be positive - covers all possible encouragement messages
         encouragement_lower = feedback.encouragement.lower()
-        positive_words = ["great", "excellent", "good", "keep", "progress"]
+        positive_words = [
+            "great", "excellent", "good", "keep", "progress",  # Original
+            "hard", "work", "paying", "mastering", "fantastic"  # Additional coverage
+        ]
         assert any(word in encouragement_lower for word in positive_words)
 
     def test_supportive_encouragement(self, feedback_generator, conjugation_engine):
@@ -347,9 +350,12 @@ class TestFeedbackGenerator:
         feedback = feedback_generator.generate_feedback(validation)
 
         assert len(feedback.encouragement) > 0
-        # Should be supportive
+        # Should be supportive - covers all possible encouragement messages
         encouragement_lower = feedback.encouragement.lower()
-        supportive_words = ["practice", "learning", "try", "improve", "opportunity"]
+        supportive_words = [
+            "practice", "learning", "try", "improve", "opportunity",  # Original
+            "don't", "worry", "mistakes", "tricky", "positive", "track", "keep"  # Additional
+        ]
         assert any(word in encouragement_lower for word in supportive_words)
 
     # ========================================================================

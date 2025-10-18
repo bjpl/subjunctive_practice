@@ -15,7 +15,7 @@ describe('Alert Components', () => {
 
     it('applies destructive variant styles', () => {
       render(<Alert variant="destructive" data-testid="alert">Error</Alert>);
-      expect(screen.getByTestId('alert')).toHaveClass('destructive');
+      expect(screen.getByTestId('alert')).toHaveClass('text-destructive');
     });
 
     it('applies custom className', () => {

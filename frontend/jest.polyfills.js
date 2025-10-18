@@ -19,3 +19,22 @@ if (typeof global.ReadableStream === 'undefined') {
   const { ReadableStream } = require('stream/web')
   global.ReadableStream = ReadableStream
 }
+
+// TransformStream polyfill for MSW 2.x
+if (typeof global.TransformStream === 'undefined') {
+  const { TransformStream } = require('stream/web')
+  global.TransformStream = TransformStream
+}
+
+// BroadcastChannel polyfill for MSW 2.x (WebSocket support)
+if (typeof global.BroadcastChannel === 'undefined') {
+  global.BroadcastChannel = class BroadcastChannel {
+    constructor(name) {
+      this.name = name
+    }
+    postMessage() {}
+    close() {}
+    addEventListener() {}
+    removeEventListener() {}
+  }
+}

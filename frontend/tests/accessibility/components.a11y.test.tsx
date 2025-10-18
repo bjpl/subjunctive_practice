@@ -29,7 +29,7 @@ describe('Accessibility Tests - UI Components', () => {
 
     it('should have proper disabled state', async () => {
       const { container, getByRole } = render(<Button disabled>Disabled</Button>);
-      expect(getByRole('button')).toHaveAttribute('aria-disabled', 'true');
+      expect(getByRole('button')).toBeDisabled();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
     });

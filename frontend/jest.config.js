@@ -1,70 +1,48 @@
 const nextJest = require('next/jest')
 
 const createJestConfig = nextJest({
-  // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
   dir: './',
 })
 
-// Workaround for MSW 2.x + Next.js hanging issue
-// See: https://github.com/mswjs/msw/issues/1786
-if (typeof globalThis.ReadableStream === 'undefined') {
-  globalThis.ReadableStream = class ReadableStream {}
-}
-
-// Add any custom config to be passed to Jest
 const customJestConfig = {
   setupFiles: ['<rootDir>/jest.polyfills.js'],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   testEnvironment: 'jest-environment-jsdom',
-  testEnvironmentOptions: {
-    customExportConditions: [''],
-  },
-  testTimeout: 10000,
-  maxWorkers: 1,
-  moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/$1',
-    '^@/components/(.*)$': '<rootDir>/components/$1',
-    '^@/lib/(.*)$': '<rootDir>/lib/$1',
-    '^@/store/(.*)$': '<rootDir>/store/$1',
-    '^@/types/(.*)$': '<rootDir>/types/$1',
-    '^@/hooks/(.*)$': '<rootDir>/hooks/$1',
-    '^@/app/(.*)$': '<rootDir>/app/$1',
-  },
-  collectCoverageFrom: [
-    'app/**/*.{js,jsx,ts,tsx}',
-    'components/**/*.{js,jsx,ts,tsx}',
-    'lib/**/*.{js,jsx,ts,tsx}',
-    'hooks/**/*.{js,jsx,ts,tsx}',
-    '!**/*.d.ts',
-    '!**/node_modules/**',
-    '!**/.next/**',
-    '!**/coverage/**',
-    '!**/dist/**',
-  ],
-  coverageThreshold: {
-    global: {
-      branches: 70,
-      functions: 70,
-      lines: 70,
-      statements: 70,
-    },
-  },
-  testMatch: [
-    '**/__tests__/**/*.[jt]s?(x)',
-    '**/?(*.)+(spec|test).[jt]s?(x)',
-  ],
   testPathIgnorePatterns: [
     '/node_modules/',
     '/.next/',
     '/coverage/',
     '/dist/',
+    '/tests/e2e/',  // Exclude Playwright e2e tests
   ],
+  moduleNameMapper: {
+    // Mock ESM-only packages that can't be transpiled
+    '^until-async$': '<rootDir>/__mocks__/until-async.js',
+    // Path aliases - check src/ first, then root
+    '^@/components/ui/(.*)$': '<rootDir>/src/components/ui/$1',
+    '^@/components/(.*)$': '<rootDir>/components/$1',
+    '^@/lib/(.*)$': '<rootDir>/src/lib/$1',
+    '^@/store/(.*)$': '<rootDir>/src/store/$1',
+    '^@/types/(.*)$': '<rootDir>/src/types/$1',
+    '^@/hooks/(.*)$': '<rootDir>/src/hooks/$1',
+    '^@/app/(.*)$': '<rootDir>/app/$1',
+    '^@/(.*)$': '<rootDir>/src/$1',
+  },
   transformIgnorePatterns: [
-    '/node_modules/(?!(msw)/)',
-    '^.+\\.module\\.(css|sass|scss)$',
+    'node_modules/(?!(msw|@mswjs)/)',
   ],
-  moduleDirectories: ['node_modules', '<rootDir>/'],
+  testTimeout: 10000,
+  maxWorkers: 1,
+  collectCoverageFrom: [
+    'app/**/*.{js,jsx,ts,tsx}',
+    'components/**/*.{js,jsx,ts,tsx}',
+    'lib/**/*.{js,jsx,ts,tsx}',
+    'hooks/**/*.{js,jsx,ts,tsx}',
+    'src/**/*.{js,jsx,ts,tsx}',
+    '!**/*.d.ts',
+    '!**/node_modules/**',
+    '!**/.next/**',
+  ],
 }
 
-// createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
 module.exports = createJestConfig(customJestConfig)

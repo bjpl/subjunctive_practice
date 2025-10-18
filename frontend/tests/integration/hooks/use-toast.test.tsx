@@ -22,7 +22,7 @@ describe('useToast Hook', () => {
     expect(result.current.toasts[0].description).toBe('This is a test');
   });
 
-  it('can dismiss a toast', () => {
+  it('can dismiss a toast', async () => {
     const { result } = renderHook(() => useToast());
 
     let toastId: string;
@@ -38,6 +38,14 @@ describe('useToast Hook', () => {
 
     act(() => {
       result.current.dismiss(toastId!);
+    });
+
+    // Toast is marked as not open, but removal is delayed
+    expect(result.current.toasts[0]?.open).toBe(false);
+
+    // Wait for removal delay
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 150));
     });
 
     expect(result.current.toasts).toHaveLength(0);
