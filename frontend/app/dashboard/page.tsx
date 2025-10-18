@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "@/hooks/use-redux";
-import { logout } from "@/store/slices/auth-slice";
+import { logout } from "@/store/slices/authSlice";
 import { useGetUserProgressQuery, useGetUserStatisticsQuery } from "@/store/api/progressApi";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";

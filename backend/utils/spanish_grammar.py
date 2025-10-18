@@ -316,11 +316,8 @@ IRREGULAR_VERBS = {
         }
     },
     "querer": {
-        "present_subjunctive": {
-            "yo": "quiera", "tú": "quieras", "él/ella/usted": "quiera",
-            "nosotros/nosotras": "queramos", "vosotros/vosotras": "queráis",
-            "ellos/ellas/ustedes": "quieran"
-        },
+        # Present subjunctive follows stem-changing pattern (e→ie)
+        # Only imperfect forms are truly irregular
         "imperfect_subjunctive_ra": {
             "yo": "quisiera", "tú": "quisieras", "él/ella/usted": "quisiera",
             "nosotros/nosotras": "quisiéramos", "vosotros/vosotras": "quisierais",

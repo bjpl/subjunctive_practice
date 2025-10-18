@@ -101,6 +101,9 @@ class Exercise(Base):
     trigger_phrase = Column(String(100), nullable=True)  # "espero que", "no creo que"
     hint = Column(Text, nullable=True)
 
+    # Categorization
+    tags = Column(JSON, default=list, nullable=False)  # ["trigger-phrases", "common-verbs"]
+
     # Metadata
     is_active = Column(Boolean, default=True, nullable=False)
     usage_count = Column(Integer, default=0, nullable=False)

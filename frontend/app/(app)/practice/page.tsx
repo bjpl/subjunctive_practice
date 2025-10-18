@@ -10,6 +10,9 @@ import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { CheckCircle2, XCircle, Lightbulb, ArrowRight, Home } from "lucide-react";
+import { TagFilter } from "@/components/practice/TagFilter";
+import { TagList } from "@/components/practice/TagBadge";
+import { useExerciseTags } from "@/hooks/useExerciseTags";
 
 export default function PracticePage() {
   const router = useRouter();
@@ -25,10 +28,14 @@ export default function PracticePage() {
     startTime: Date.now(),
   });
 
-  // Fetch exercises
+  // Tag filtering
+  const { selectedTags, setTags } = useExerciseTags([]);
+
+  // Fetch exercises with tag filters
   const { data: exerciseData, isLoading, error } = useGetExercisesQuery({
     limit: 10,
     random_order: true,
+    tags: selectedTags.length > 0 ? selectedTags : undefined,
   });
 
   // Submit answer mutation
@@ -152,17 +159,27 @@ export default function PracticePage() {
     <div className="min-h-screen bg-background p-4 md:p-8">
       <div className="mx-auto max-w-4xl">
         {/* Header */}
-        <div className="mb-6 flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">Practice Session</h1>
-            <p className="text-muted-foreground">
-              Exercise {currentIndex + 1} of {exerciseData.exercises.length}
-            </p>
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h1 className="text-3xl font-bold">Practice Session</h1>
+              <p className="text-muted-foreground">
+                Exercise {currentIndex + 1} of {exerciseData.exercises.length}
+              </p>
+            </div>
+            <Button variant="outline" onClick={() => router.push("/dashboard")}>
+              <Home className="mr-2 h-4 w-4" />
+              Exit
+            </Button>
           </div>
-          <Button variant="outline" onClick={() => router.push("/dashboard")}>
-            <Home className="mr-2 h-4 w-4" />
-            Exit
-          </Button>
+
+          {/* Tag Filter */}
+          <div className="flex items-center gap-2">
+            <TagFilter
+              selectedTags={selectedTags}
+              onTagsChange={setTags}
+            />
+          </div>
         </div>
 
         {/* Progress Bar */}
@@ -213,7 +230,7 @@ export default function PracticePage() {
         {currentExercise && (
           <Card className="mb-6">
             <CardHeader>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between mb-2">
                 <CardTitle>Exercise</CardTitle>
                 <div className="flex items-center gap-2">
                   <span className="rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
@@ -224,6 +241,11 @@ export default function PracticePage() {
                   </span>
                 </div>
               </div>
+              {currentExercise.tags && currentExercise.tags.length > 0 && (
+                <div className="flex items-center gap-2">
+                  <TagList tags={currentExercise.tags} size="sm" maxDisplay={8} />
+                </div>
+              )}
             </CardHeader>
             <CardContent>
               <p className="mb-6 text-lg">{currentExercise.prompt}</p>

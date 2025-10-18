@@ -48,6 +48,7 @@ class ExerciseBase(BaseModel):
     explanation: Optional[str] = None
     trigger_phrase: Optional[str] = None
     hint: Optional[str] = None
+    tags: List[str] = Field(default_factory=list)
 
 
 class ExerciseCreate(ExerciseBase):
@@ -69,6 +70,7 @@ class ExerciseResponse(ExerciseBase):
     is_active: bool
     usage_count: int
     success_rate: int
+    tags: Optional[List[str]] = Field(default_factory=list)
 
 
 class ExerciseWithAnswer(ExerciseResponse):

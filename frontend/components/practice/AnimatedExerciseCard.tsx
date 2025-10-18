@@ -11,6 +11,7 @@ import {
 } from "@/lib/animations";
 import { useSwipeNavigation } from "@/hooks/useSwipeGesture";
 import { CheckCircle2, XCircle } from "lucide-react";
+import { TagList } from "./TagBadge";
 
 interface AnimatedExerciseCardProps {
   children: React.ReactNode;
@@ -20,6 +21,7 @@ interface AnimatedExerciseCardProps {
   type: string;
   verb: string;
   tense: string;
+  tags?: string[];
   feedbackState?: "correct" | "incorrect" | null;
   onNext?: () => void;
   onPrevious?: () => void;
@@ -40,6 +42,7 @@ export const AnimatedExerciseCard: React.FC<AnimatedExerciseCardProps> = ({
   type,
   verb,
   tense,
+  tags = [],
   feedbackState,
   onNext,
   onPrevious,
@@ -138,6 +141,11 @@ export const AnimatedExerciseCard: React.FC<AnimatedExerciseCardProps> = ({
               <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                 {tense}
               </div>
+              {tags && tags.length > 0 && (
+                <div className="mt-2">
+                  <TagList tags={tags} size="sm" maxDisplay={5} />
+                </div>
+              )}
             </div>
 
             {/* Progress Indicator */}

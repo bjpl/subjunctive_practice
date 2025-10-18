@@ -122,6 +122,7 @@ def validate_answer(user_answer: str, correct_answer: str) -> bool:
 async def get_exercises(
     difficulty: Optional[int] = Query(None, ge=1, le=5, description="Filter by difficulty"),
     exercise_type: Optional[str] = Query(None, description="Filter by subjunctive type"),
+    tags: Optional[str] = Query(None, description="Filter by tags (comma-separated)"),
     limit: int = Query(10, ge=1, le=50, description="Number of exercises to return"),
     random_order: bool = Query(True, description="Randomize exercise order"),
     current_user: Dict[str, Any] = Depends(get_current_active_user),
@@ -132,6 +133,7 @@ async def get_exercises(
 
     - **difficulty**: Filter by difficulty level (1-5)
     - **exercise_type**: Filter by subjunctive type (present_subjunctive, imperfect_subjunctive, etc.)
+    - **tags**: Filter by tags (comma-separated, e.g., "trigger-phrases,common-verbs")
     - **limit**: Number of exercises to return (default: 10)
     - **random_order**: Randomize exercise order (default: true)
 
@@ -146,6 +148,14 @@ async def get_exercises(
         random_order=random_order
     )
 
+    # Apply tag filtering if specified
+    if tags:
+        tag_list = [tag.strip() for tag in tags.split(',')]
+        exercises = [
+            ex for ex in exercises
+            if ex.tags and any(tag in ex.tags for tag in tag_list)
+        ]
+
     if not exercises:
         logger.warning("No exercises found in database")
         raise HTTPException(
@@ -155,17 +165,9 @@ async def get_exercises(
 
     logger.info(f"Returning {len(exercises)} exercises to user {current_user.get('sub')}")
 
-    # Convert to response models (exclude answers)
+    # Convert to response models using from_attributes (Pydantic v2)
     exercise_responses = [
-        ExerciseResponse(
-            id=str(ex.id),
-            type=ex.tense.value,
-            prompt=ex.prompt,
-            difficulty=ex.difficulty.value,
-            explanation=ex.explanation,
-            hints=[ex.hint] if ex.hint else [],
-            tags=[]  # TODO: Add tags to database model
-        )
+        ExerciseResponse.model_validate(ex)
         for ex in exercises
     ]
 
@@ -232,15 +234,7 @@ async def get_exercise_by_id(
 
     logger.info(f"Returning exercise {exercise_id} to user {current_user.get('sub')}")
 
-    return ExerciseResponse(
-        id=str(exercise.id),
-        type=exercise.tense.value,
-        prompt=exercise.prompt,
-        difficulty=exercise.difficulty.value,
-        explanation=exercise.explanation,
-        hints=[exercise.hint] if exercise.hint else [],
-        tags=[]  # TODO: Add tags to database model
-    )
+    return ExerciseResponse.model_validate(exercise)
 
 
 @router.post("/submit", response_model=AnswerValidation)

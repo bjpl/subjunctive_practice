@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAppDispatch } from "@/hooks/use-redux";
-import { login } from "@/store/slices/auth-slice";
+import { login } from "@/store/slices/authSlice";
 import { useToast } from "@/hooks/use-toast";
 
 const loginSchema = z.object({

@@ -1,66 +1,24 @@
-import React from 'react';
-import { InputProps } from '../../types';
-import './Input.css';
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
-export const Input: React.FC<InputProps> = ({
-  id,
-  name,
-  label,
-  type = 'text',
-  value,
-  onChange,
-  onBlur,
-  error,
-  helpText,
-  placeholder,
-  disabled = false,
-  required = false,
-  autoComplete,
-  className = '',
-}) => {
-  const inputClasses = [
-    'input',
-    error ? 'input-error' : '',
-    disabled ? 'input-disabled' : '',
-    className,
-  ].filter(Boolean).join(' ');
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {}
 
-  return (
-    <div className="input-wrapper">
-      <label htmlFor={id} className="input-label">
-        {label}
-        {required && <span className="input-required" aria-label="required"> *</span>}
-      </label>
-
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ className, type, ...props }, ref) => {
+    return (
       <input
-        id={id}
-        name={name}
         type={type}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        onBlur={onBlur}
-        placeholder={placeholder}
-        disabled={disabled}
-        required={required}
-        autoComplete={autoComplete}
-        className={inputClasses}
-        aria-invalid={error ? 'true' : 'false'}
-        aria-describedby={
-          error ? `${id}-error` : helpText ? `${id}-help` : undefined
-        }
+        className={cn(
+          "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+          className
+        )}
+        ref={ref}
+        {...props}
       />
+    );
+  }
+);
+Input.displayName = "Input";
 
-      {helpText && !error && (
-        <p id={`${id}-help`} className="input-help">
-          {helpText}
-        </p>
-      )}
-
-      {error && (
-        <p id={`${id}-error`} className="input-error-message" role="alert">
-          {error}
-        </p>
-      )}
-    </div>
-  );
-};
+export { Input };

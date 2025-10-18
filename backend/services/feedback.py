@@ -154,6 +154,10 @@ class ErrorAnalyzer:
         context: Optional[Dict]
     ) -> str:
         """Get detailed explanation for error type"""
+        # Handle None context
+        if context is None:
+            context = {}
+
         explanations = {
             "mood_confusion": (
                 f"You used the indicative mood, but this sentence requires the subjunctive. "
@@ -197,6 +201,10 @@ class ErrorAnalyzer:
         context: Optional[Dict]
     ) -> List[str]:
         """Get specific suggestions based on error type"""
+        # Handle None context
+        if context is None:
+            context = {}
+
         suggestions = []
 
         if error_type == "mood_confusion":

@@ -84,6 +84,7 @@ export interface ExerciseState {
 export interface ExerciseFilters {
   difficulty?: number;
   exercise_type?: string;
+  tags?: string[];
   limit: number;
   random_order: boolean;
 }

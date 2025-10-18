@@ -15,7 +15,8 @@ from core.security import (
     verify_password,
     create_access_token,
     create_refresh_token,
-    decode_token
+    decode_token,
+    get_current_user
 )
 from schemas.user import UserCreate, UserResponse
 from pydantic import BaseModel
@@ -94,18 +95,20 @@ async def register_user(
         )
 
     # Create new user
-    user_id = f"user_{len(users) + 1}_{user_data.username}"
+    user_id = len(users) + 1
     hashed_password = hash_password(user_data.password)
 
     user = {
-        "user_id": user_id,
+        "id": user_id,
         "username": user_data.username,
         "email": user_data.email,
         "full_name": user_data.full_name,
         "password_hash": hashed_password,
+        "role": "student",
+        "is_active": True,
+        "is_verified": False,
         "created_at": datetime.utcnow().isoformat(),
-        "last_login": None,
-        "is_active": True
+        "last_login": None
     }
 
     users[user_data.username] = user
@@ -113,10 +116,12 @@ async def register_user(
 
     # Return user response (without password)
     return UserResponse(
-        user_id=user["user_id"],
+        id=user["id"],
         username=user["username"],
         email=user["email"],
-        full_name=user["full_name"],
+        role=user["role"],
+        is_active=user["is_active"],
+        is_verified=user["is_verified"],
         created_at=datetime.fromisoformat(user["created_at"]),
         last_login=None
     )
@@ -168,7 +173,7 @@ async def login_user(
 
     # Create tokens
     token_data = {
-        "sub": user["user_id"],
+        "sub": str(user["id"]),
         "username": user["username"],
         "email": user["email"]
     }
@@ -235,7 +240,7 @@ async def refresh_access_token(
 
 @router.get("/me", response_model=UserResponse)
 async def get_current_user_info(
-    current_user: Dict[str, Any] = Depends(get_settings)
+    current_user: Dict[str, Any] = Depends(get_current_user)
 ):
     """
     Get current authenticated user information.
@@ -254,10 +259,12 @@ async def get_current_user_info(
         )
 
     return UserResponse(
-        user_id=user["user_id"],
+        id=user["id"],
         username=user["username"],
         email=user["email"],
-        full_name=user.get("full_name"),
+        role=user["role"],
+        is_active=user["is_active"],
+        is_verified=user["is_verified"],
         created_at=datetime.fromisoformat(user["created_at"]),
         last_login=datetime.fromisoformat(user["last_login"]) if user.get("last_login") else None
     )

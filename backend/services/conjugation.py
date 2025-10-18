@@ -162,8 +162,10 @@ class ConjugationEngine:
         if tense not in ["present_subjunctive", "imperfect_subjunctive_ra", "imperfect_subjunctive_se"]:
             raise ValueError(f"Invalid tense: {tense}")
 
-        # Check if irregular verb
-        if verb in self.irregular_verbs:
+        # Check if irregular verb (takes precedence)
+        # Irregular verbs are taught as irregular, not stem-changing
+        # But only if this specific tense has an irregular conjugation
+        if verb in self.irregular_verbs and tense in self.irregular_verbs[verb]:
             return self._conjugate_irregular(verb, tense, person)
 
         # Check if stem-changing verb
@@ -247,16 +249,21 @@ class ConjugationEngine:
             regular_stem = get_verb_stem(verb)
             conjugation = regular_stem + ending
 
-        # Apply spelling changes if needed
+        # Apply spelling changes if needed (for both stem-changing and regular)
         has_spelling_change = False
         spelling_rule = None
 
-        if not use_stem_change:
-            original_conjugation = conjugation
+        original_conjugation = conjugation
+        if use_stem_change:
+            # For stem-changing verbs, apply spelling changes to the changed stem
+            conjugation = apply_spelling_changes(verb, changed_stem, ending)
+        else:
+            # For regular conjugation, apply spelling changes to the regular stem
             conjugation = apply_spelling_changes(verb, get_verb_stem(verb), ending)
-            if conjugation != original_conjugation:
-                has_spelling_change = True
-                spelling_rule = self._identify_spelling_change(verb, conjugation)
+
+        if conjugation != original_conjugation:
+            has_spelling_change = True
+            spelling_rule = self._identify_spelling_change(verb, conjugation)
 
         return ConjugationResult(
             verb=verb,
