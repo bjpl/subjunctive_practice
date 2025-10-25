@@ -12,7 +12,6 @@ Usage:
 
 import asyncio
 import sys
-import os
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -26,7 +25,7 @@ from passlib.context import CryptContext
 # Import models
 from backend.models.user import User
 from backend.models.exercise import Exercise, ExerciseType, DifficultyLevel, UserAnswer
-from backend.models.progress import Progress, Achievement, UserAchievement
+from backend.models.progress import Progress, Achievement
 from backend.core.config import settings
 
 # Password hashing
@@ -392,7 +391,7 @@ async def main():
     print("🧪 TEST DATA CREATION SCRIPT")
     print("="*60)
     print("\nThis script will create test users and sample data.")
-    print("Test accounts will have password: TestPass123!\n")
+    print("Test accounts will have password: [REDACTED] (see script source for password)\n")
 
     # Check for reset flag
     reset = "--reset" in sys.argv
@@ -438,10 +437,13 @@ async def main():
 
             for user in TEST_USERS:
                 print(f"  Email: {user['email']}")
-                print(f"  Password: {user['password']}")
+                print(f"  Password: [REDACTED]")
                 print(f"  Level: {user['level']} | XP: {user['xp']} | Exercises: {user['exercises_completed']}")
                 print(f"  Description: {user['description']}")
                 print()
+
+            print("ℹ️  Note: All test accounts use the same password.")
+            print("   Check the TEST_USERS configuration in this script for the password.")
 
             print("🚀 You can now use these accounts for user testing!")
             print("\nNext steps:")
