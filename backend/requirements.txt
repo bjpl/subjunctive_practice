@@ -10,7 +10,7 @@ pydantic-settings==2.11.0
 # Database
 sqlalchemy==2.0.43
 alembic==1.13.1
-psycopg2-binary==2.9.9
+psycopg2-binary==2.9.11
 asyncpg==0.29.0
 
 # Redis & Caching
