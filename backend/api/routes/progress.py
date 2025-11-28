@@ -10,6 +10,8 @@ from datetime import datetime, timedelta
 from collections import defaultdict
 
 from core.security import get_current_active_user
+from core.database import get_db_session
+from sqlalchemy.orm import Session
 from pydantic import BaseModel, Field
 from typing import Optional, Dict, Any, List
 
@@ -175,7 +177,8 @@ async def get_user_progress(
 
 @router.get("/statistics", response_model=StatisticsResponse)
 async def get_user_statistics(
-    current_user: Dict[str, Any] = Depends(get_current_active_user)
+    current_user: Dict[str, Any] = Depends(get_current_active_user),
+    db: Session = Depends(get_db_session)
 ):
     """
     Get detailed user learning statistics and analytics.
@@ -225,8 +228,13 @@ async def get_user_statistics(
     }
 
     # Load exercise data for type analysis
-    from .exercises import load_exercises
-    exercises = {ex["id"]: ex for ex in load_exercises()}
+    from .exercises import load_exercises_from_db
+    db_exercises = load_exercises_from_db(db, limit=1000)
+    exercises = {str(ex.id): {
+        "id": str(ex.id),
+        "type": ex.tense.value if ex.tense else "unknown",
+        "difficulty": ex.difficulty.value if ex.difficulty else 1
+    } for ex in db_exercises}
 
     # Statistics by type
     by_type = defaultdict(lambda: {"total": 0, "correct": 0, "accuracy": 0.0})

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Exercise } from '../../types';
-import { Card } from '../ui/Card';
+import { Card } from '@/components/ui/card';
 import './ExerciseCard.css';
 
 interface ExerciseCardProps {

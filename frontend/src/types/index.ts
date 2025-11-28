@@ -1,7 +1,8 @@
 // Core Types for Spanish Subjunctive Practice App
+// Note: For API types, use types from @/types/api.ts instead
 
 export interface User {
-  id: string;
+  id: number; // Changed from string to match backend
   email: string;
   username: string;
   createdAt: Date;
@@ -98,6 +99,25 @@ export interface ToastNotification {
   type: 'success' | 'error' | 'warning' | 'info';
   message: string;
   duration?: number;
+}
+
+export interface LoginCredentials {
+  username: string;
+  password: string;
+}
+
+export interface RegisterData {
+  username: string;
+  email: string;
+  password: string;
+  full_name?: string;
+}
+
+export interface LoginResponse {
+  access_token: string;
+  refresh_token: string;
+  token_type: string;
+  expires_in: number;
 }
 
 export interface ButtonProps {

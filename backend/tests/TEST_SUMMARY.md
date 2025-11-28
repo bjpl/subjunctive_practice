@@ -182,7 +182,7 @@ A comprehensive testing infrastructure has been created for the FastAPI backend 
 - `error_analyzer`: ErrorAnalyzer instance
 
 **Mock Fixtures:**
-- `mock_openai`: Mock OpenAI API
+- `mock_anthropic`: Mock Anthropic Claude API (for AI-powered features)
 - `mock_redis`: Mock Redis client
 
 **Factory Fixtures:**

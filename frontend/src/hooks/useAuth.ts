@@ -8,7 +8,7 @@ import { useAppDispatch } from './useAppDispatch';
 import {
   setCredentials,
   logout as logoutAction,
-  clearAuthError,
+  clearError as clearAuthError,
 } from '../store/slices/authSlice';
 import {
   useLoginMutation,
@@ -25,7 +25,6 @@ export const useAuth = () => {
   const accessToken = useAppSelector((state) => state.auth.accessToken);
   const refreshToken = useAppSelector((state) => state.auth.refreshToken);
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
-  const isLoading = useAppSelector((state) => state.auth.isLoading);
   const error = useAppSelector((state) => state.auth.error);
 
   // Mutations
@@ -37,16 +36,29 @@ export const useAuth = () => {
   const login = useCallback(
     async (credentials: LoginCredentials) => {
       try {
+        // Step 1: Login to get tokens
         const tokens = await loginMutation(credentials).unwrap();
-        // Get user data from token or make separate request
-        const userData: ApiUser = {
-          user_id: 'temp', // Will be updated by getCurrentUser
-          username: credentials.username,
-          email: '',
-          created_at: new Date().toISOString(),
-        };
-        dispatch(setCredentials({ user: userData, tokens }));
-        return tokens;
+
+        // Step 2: Fetch user data using the new token
+        const userResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}/auth/me`,
+          {
+            headers: {
+              Authorization: `Bearer ${tokens.access_token}`,
+            },
+          }
+        );
+
+        if (!userResponse.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+
+        const user: ApiUser = await userResponse.json();
+
+        // Step 3: Store both tokens and user in Redux state
+        dispatch(setCredentials({ tokens, user }));
+
+        return { tokens, user };
       } catch (err) {
         throw err;
       }
@@ -58,13 +70,21 @@ export const useAuth = () => {
   const register = useCallback(
     async (data: RegisterData) => {
       try {
+        // Step 1: Register user (returns user object directly)
         const user = await registerMutation(data).unwrap();
-        return user;
+
+        // Step 2: Automatically log in with the new credentials
+        const loginResult = await login({
+          username: data.username,
+          password: data.password,
+        });
+
+        return loginResult;
       } catch (err) {
         throw err;
       }
     },
-    [registerMutation]
+    [registerMutation, login]
   );
 
   // Logout
@@ -96,7 +116,7 @@ export const useAuth = () => {
     accessToken,
     refreshToken,
     isAuthenticated,
-    isLoading: isLoading || isLoggingIn || isRegistering,
+    isLoading: isLoggingIn || isRegistering,
     error,
 
     // Actions

@@ -5,11 +5,13 @@ Authentication routes: registration, login, token refresh.
 from datetime import datetime, timedelta
 from typing import Dict, Any
 from fastapi import APIRouter, HTTPException, status, Depends
+from sqlalchemy.orm import Session
 import json
 import os
 from pathlib import Path
 
 from core.config import get_settings, Settings
+from core.database import get_db_session
 from core.security import (
     hash_password,
     verify_password,
@@ -18,6 +20,7 @@ from core.security import (
     decode_token,
     get_current_user
 )
+from models.user import User, UserRole, UserProfile, UserPreference
 from schemas.user import UserCreate, UserResponse
 from pydantic import BaseModel
 
@@ -42,13 +45,17 @@ class TokenRefresh(BaseModel):
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 
-# Simple file-based user storage for development
-# In production, replace with database
+# DEPRECATED: File-based user storage (kept as fallback)
+# Use database storage for all new operations
 USER_DATA_FILE = Path("user_data/users.json")
 
 
 def load_users() -> Dict[str, Any]:
-    """Load users from JSON file."""
+    """
+    DEPRECATED: Load users from JSON file.
+    Use database queries instead.
+    Kept for backward compatibility only.
+    """
     USER_DATA_FILE.parent.mkdir(exist_ok=True)
     if USER_DATA_FILE.exists():
         with open(USER_DATA_FILE, "r") as f:
@@ -57,7 +64,11 @@ def load_users() -> Dict[str, Any]:
 
 
 def save_users(users: Dict[str, Any]) -> None:
-    """Save users to JSON file."""
+    """
+    DEPRECATED: Save users to JSON file.
+    Use database operations instead.
+    Kept for backward compatibility only.
+    """
     USER_DATA_FILE.parent.mkdir(exist_ok=True)
     with open(USER_DATA_FILE, "w") as f:
         json.dump(users, f, indent=2, default=str)
@@ -66,6 +77,7 @@ def save_users(users: Dict[str, Any]) -> None:
 @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 async def register_user(
     user_data: UserCreate,
+    db: Session = Depends(get_db_session),
     settings: Settings = Depends(get_settings)
 ):
     """
@@ -78,58 +90,71 @@ async def register_user(
 
     Returns user information and authentication tokens.
     """
-    users = load_users()
-
     # Check if username already exists
-    if user_data.username in users:
+    existing_user = db.query(User).filter(User.username == user_data.username).first()
+    if existing_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Username already registered"
         )
 
     # Check if email already exists
-    if any(u.get("email") == user_data.email for u in users.values()):
+    existing_email = db.query(User).filter(User.email == user_data.email).first()
+    if existing_email:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Email already registered"
         )
 
     # Create new user
-    user_id = len(users) + 1
     hashed_password = hash_password(user_data.password)
 
-    user = {
-        "id": user_id,
-        "username": user_data.username,
-        "email": user_data.email,
-        "full_name": user_data.full_name,
-        "password_hash": hashed_password,
-        "role": "student",
-        "is_active": True,
-        "is_verified": False,
-        "created_at": datetime.utcnow().isoformat(),
-        "last_login": None
-    }
+    user = User(
+        username=user_data.username,
+        email=user_data.email,
+        hashed_password=hashed_password,
+        role=UserRole.STUDENT,
+        is_active=True,
+        is_verified=False
+    )
 
-    users[user_data.username] = user
-    save_users(users)
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+
+    # Create default user profile
+    profile = UserProfile(
+        user_id=user.id,
+        full_name=user_data.full_name
+    )
+    db.add(profile)
+
+    # Create default user preferences
+    preferences = UserPreference(
+        user_id=user.id
+    )
+    db.add(preferences)
+
+    db.commit()
+    db.refresh(user)
 
     # Return user response (without password)
     return UserResponse(
-        id=user["id"],
-        username=user["username"],
-        email=user["email"],
-        role=user["role"],
-        is_active=user["is_active"],
-        is_verified=user["is_verified"],
-        created_at=datetime.fromisoformat(user["created_at"]),
-        last_login=None
+        id=user.id,
+        username=user.username,
+        email=user.email,
+        role=user.role,
+        is_active=user.is_active,
+        is_verified=user.is_verified,
+        created_at=user.created_at,
+        last_login=user.last_login
     )
 
 
 @router.post("/login", response_model=Token)
 async def login_user(
     credentials: UserLogin,
+    db: Session = Depends(get_db_session),
     settings: Settings = Depends(get_settings)
 ):
     """
@@ -140,10 +165,8 @@ async def login_user(
 
     Returns JWT access token and refresh token.
     """
-    users = load_users()
-
-    # Find user
-    user = users.get(credentials.username)
+    # Find user by username
+    user = db.query(User).filter(User.username == credentials.username).first()
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -152,7 +175,7 @@ async def login_user(
         )
 
     # Verify password
-    if not verify_password(credentials.password, user["password_hash"]):
+    if not verify_password(credentials.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid username or password",
@@ -160,22 +183,21 @@ async def login_user(
         )
 
     # Check if user is active
-    if not user.get("is_active", True):
+    if not user.is_active:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="User account is disabled"
         )
 
     # Update last login
-    user["last_login"] = datetime.utcnow().isoformat()
-    users[credentials.username] = user
-    save_users(users)
+    user.last_login = datetime.utcnow()
+    db.commit()
 
     # Create tokens
     token_data = {
-        "sub": str(user["id"]),
-        "username": user["username"],
-        "email": user["email"]
+        "sub": str(user.id),
+        "username": user.username,
+        "email": user.email
     }
 
     access_token = create_access_token(token_data, settings)
@@ -240,6 +262,7 @@ async def refresh_access_token(
 
 @router.get("/me", response_model=UserResponse)
 async def get_current_user_info(
+    db: Session = Depends(get_db_session),
     current_user: Dict[str, Any] = Depends(get_current_user)
 ):
     """
@@ -247,10 +270,11 @@ async def get_current_user_info(
 
     Requires valid access token.
     """
-    users = load_users()
+    # Get user ID from token
+    user_id = int(current_user.get("sub"))
 
-    username = current_user.get("username")
-    user = users.get(username)
+    # Query user from database
+    user = db.query(User).filter(User.id == user_id).first()
 
     if not user:
         raise HTTPException(
@@ -259,12 +283,12 @@ async def get_current_user_info(
         )
 
     return UserResponse(
-        id=user["id"],
-        username=user["username"],
-        email=user["email"],
-        role=user["role"],
-        is_active=user["is_active"],
-        is_verified=user["is_verified"],
-        created_at=datetime.fromisoformat(user["created_at"]),
-        last_login=datetime.fromisoformat(user["last_login"]) if user.get("last_login") else None
+        id=user.id,
+        username=user.username,
+        email=user.email,
+        role=user.role,
+        is_active=user.is_active,
+        is_verified=user.is_verified,
+        created_at=user.created_at,
+        last_login=user.last_login
     )
