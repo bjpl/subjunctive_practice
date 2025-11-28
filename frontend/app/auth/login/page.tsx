@@ -1,16 +1,15 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useAppDispatch } from "@/hooks/use-redux";
-import { login } from "@/store/slices/authSlice";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 
 const loginSchema = z.object({
@@ -22,9 +21,8 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
   const router = useRouter();
-  const dispatch = useAppDispatch();
+  const { login, isLoading } = useAuth();
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -35,9 +33,8 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    setIsLoading(true);
     try {
-      await dispatch(login(data)).unwrap();
+      await login(data);
       toast({
         title: "Success",
         description: "Logged in successfully",
@@ -49,8 +46,6 @@ export default function LoginPage() {
         description: error instanceof Error ? error.message : "Failed to login",
         variant: "destructive",
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -94,6 +89,14 @@ export default function LoginPage() {
             </Button>
           </form>
         </CardContent>
+        <CardFooter className="flex justify-center">
+          <p className="text-sm text-muted-foreground">
+            Don&apos;t have an account?{" "}
+            <Link href="/auth/register" className="text-primary hover:underline">
+              Register
+            </Link>
+          </p>
+        </CardFooter>
       </Card>
     </div>
   );
