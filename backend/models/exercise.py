@@ -92,6 +92,7 @@ class Exercise(Base):
     prompt = Column(Text, nullable=False)
     correct_answer = Column(String(200), nullable=False)
     alternative_answers = Column(JSON, nullable=True)  # ["fuese", "fuera"]
+    person = Column(String(50), nullable=True)  # "yo", "tú", "él/ella/usted", etc.
 
     # For multiple choice
     distractors = Column(JSON, nullable=True)  # ["hablo", "hablé", "hablaré"]

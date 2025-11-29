@@ -72,7 +72,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
         <FallbackComponent
           error={this.state.error}
           resetError={this.resetError}
-          componentStack={this.state.errorInfo?.componentStack}
+          componentStack={this.state.errorInfo?.componentStack ?? undefined}
         />
       );
     }

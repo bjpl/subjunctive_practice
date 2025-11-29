@@ -42,6 +42,11 @@ export interface PracticeSession {
   score: number;
   completed: boolean;
   settings: SessionSettings;
+  // Backend-compatible properties
+  started_at: string; // ISO timestamp
+  correct_answers: number;
+  exercises_completed: number;
+  total_time: number;
 }
 
 export interface Answer {
@@ -121,7 +126,7 @@ export interface LoginResponse {
 }
 
 export interface ButtonProps {
-  variant?: 'primary' | 'secondary' | 'success' | 'danger' | 'ghost';
+  variant?: 'default' | 'primary' | 'secondary' | 'success' | 'danger' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
   fullWidth?: boolean;
   loading?: boolean;
@@ -139,7 +144,7 @@ export interface InputProps {
   label: string;
   type?: 'text' | 'email' | 'password' | 'number';
   value: string;
-  onChange: (value: string) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: () => void;
   error?: string;
   helpText?: string;
@@ -158,6 +163,36 @@ export interface ModalProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
   showCloseButton?: boolean;
   closeOnOverlayClick?: boolean;
+}
+
+export interface ExerciseAttempt {
+  id: string;
+  exerciseId: string;
+  userId: string;
+  userAnswer: string;
+  isCorrect: boolean;
+  score: number;
+  timeSpent: number;
+  hintsUsed: number;
+  timestamp: string;
+  feedback?: string;
+  // Backend-compatible snake_case properties
+  exercise_id: string;
+  is_correct: boolean;
+}
+
+export interface Progress {
+  totalExercises: number;
+  correctAnswers: number;
+  accuracy: number;
+  currentStreak: number;
+  level: number;
+  xp: number;
+  // Backend-compatible snake_case properties
+  total_exercises: number;
+  correct_answers: number;
+  completed_exercises: number;
+  streak: number;
 }
 
 export interface CardProps {

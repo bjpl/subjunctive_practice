@@ -60,6 +60,15 @@ export interface ExerciseAnswer {
   exercise_id: string;
   user_answer: string;
   time_taken?: number;
+  session_id?: number;
+  // Custom exercise metadata
+  verb?: string;
+  tense?: string;
+  person?: string;
+  correct_answer?: string;
+  alternative_answers?: string[];
+  explanation?: string;
+  trigger_phrase?: string;
 }
 
 export interface AnswerValidation {
@@ -70,6 +79,16 @@ export interface AnswerValidation {
   explanation?: string;
   score: number;
   alternative_answers?: string[];
+  // Enhanced feedback
+  error_type?: string;
+  suggestions?: string[];
+  related_rules?: string[];
+  encouragement?: string;
+  next_steps?: string[];
+  // Spaced repetition
+  next_review_date?: string;
+  interval_days?: number;
+  difficulty_level?: string;
 }
 
 export interface ExerciseState {
@@ -98,6 +117,119 @@ export interface ExerciseListResponse {
   page: number;
   page_size: number;
   has_more: boolean;
+}
+
+// ==================== Custom Practice Types ====================
+
+export interface CustomPracticeRequest {
+  verbs: string[];
+  tense: string;
+  persons: string[];
+  difficulty: number;
+  custom_context: string;
+  trigger_category: string;
+  exercise_count: number;
+  include_hints: boolean;
+  include_explanations: boolean;
+}
+
+export interface GeneratedExercise {
+  id: string;
+  verb: string;
+  verb_translation: string;
+  tense: string;
+  person: string;
+  prompt: string;
+  correct_answer: string;
+  alternative_answers: string[];
+  hint?: string;
+  explanation?: string;
+  trigger_phrase?: string;
+  difficulty: number;
+}
+
+export interface CustomPracticeResponse {
+  exercises: GeneratedExercise[];
+  total: number;
+  config_summary: {
+    verbs: string[];
+    verb_count: number;
+    tense: string;
+    persons: string[];
+    difficulty: number;
+    trigger_category: string;
+    has_custom_context: boolean;
+  };
+}
+
+export interface AvailableVerb {
+  infinitive: string;
+  translation: string;
+  type: string;
+  is_irregular: boolean;
+  frequency_rank: number;
+}
+
+export interface AvailableVerbsResponse {
+  verbs: AvailableVerb[];
+  total: number;
+}
+
+// ==================== Session Management Types ====================
+
+export interface SessionStartRequest {
+  session_type?: string;
+}
+
+export interface SessionStartResponse {
+  session_id: number;
+  started_at: string;
+}
+
+export interface SessionEndRequest {
+  session_id: number;
+}
+
+export interface SessionEndResponse {
+  session_id: number;
+  started_at: string;
+  ended_at: string;
+  duration_seconds: number;
+  total_exercises: number;
+  correct_answers: number;
+  score_percentage: number;
+  session_type: string;
+}
+
+// ==================== Spaced Repetition Types ====================
+
+export interface DueReviewItem {
+  verb_id: number;
+  verb_infinitive: string;
+  verb_translation: string;
+  tense: string;
+  person?: string;
+  days_overdue: number;
+  difficulty_level: string;
+  easiness_factor: number;
+  next_review_date: string;
+  review_count: number;
+  success_rate: number;
+}
+
+export interface DueReviewResponse {
+  items: DueReviewItem[];
+  total_due: number;
+  next_review_date?: string;
+}
+
+export interface ReviewStatsResponse {
+  total_due: number;
+  due_by_difficulty: Record<string, number>;
+  average_retention: number;
+  total_reviewed: number;
+  reviews_today: number;
+  streak_days: number;
 }
 
 // ==================== Progress Types ====================

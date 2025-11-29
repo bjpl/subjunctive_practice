@@ -5,7 +5,7 @@
 import { useCallback } from 'react';
 import { useAppSelector } from './useAppSelector';
 import { useAppDispatch } from './useAppDispatch';
-import { addToast, removeToast, clearToasts } from '../store/slices/uiSlice';
+import { addToast, removeToast, clearAllToasts } from '../store/slices/uiSlice';
 import type { Toast } from '../types/api';
 
 export const useToast = () => {
@@ -23,7 +23,7 @@ export const useToast = () => {
   // Show success toast
   const success = useCallback(
     (message: string, duration = 3000) => {
-      dispatch(addToast({ type: 'success', message, duration }));
+      dispatch(addToast({ id: Date.now().toString(), type: 'success', message, duration }));
     },
     [dispatch]
   );
@@ -31,7 +31,7 @@ export const useToast = () => {
   // Show error toast
   const error = useCallback(
     (message: string, duration = 5000) => {
-      dispatch(addToast({ type: 'error', message, duration }));
+      dispatch(addToast({ id: Date.now().toString(), type: 'error', message, duration }));
     },
     [dispatch]
   );
@@ -39,7 +39,7 @@ export const useToast = () => {
   // Show info toast
   const info = useCallback(
     (message: string, duration = 3000) => {
-      dispatch(addToast({ type: 'info', message, duration }));
+      dispatch(addToast({ id: Date.now().toString(), type: 'info', message, duration }));
     },
     [dispatch]
   );
@@ -47,7 +47,7 @@ export const useToast = () => {
   // Show warning toast
   const warning = useCallback(
     (message: string, duration = 4000) => {
-      dispatch(addToast({ type: 'warning', message, duration }));
+      dispatch(addToast({ id: Date.now().toString(), type: 'warning', message, duration }));
     },
     [dispatch]
   );
@@ -62,7 +62,7 @@ export const useToast = () => {
 
   // Clear all toasts
   const clearAll = useCallback(() => {
-    dispatch(clearToasts());
+    dispatch(clearAllToasts());
   }, [dispatch]);
 
   return {

@@ -21,7 +21,7 @@ export const StatsCard: React.FC<StatsCardProps> = ({
   color = 'primary',
 }) => {
   return (
-    <Card className={`stats-card stats-card-${color}`} elevated>
+    <Card className={`stats-card stats-card-${color}`}>
       <div className="stats-card-header">
         <div className="stats-card-icon">{icon}</div>
         {trend && (

@@ -63,31 +63,35 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       </div>
 
       <div className="auth-form-content">
-        <Input
-          id="email"
-          name="email"
-          label="Email Address"
-          type="email"
-          value={email}
-          onChange={setEmail}
-          error={errors.email}
-          placeholder="you@example.com"
-          autoComplete="email"
-          required
-        />
+        <div className="form-field">
+          <label htmlFor="email">Email Address</label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="you@example.com"
+            autoComplete="email"
+            required
+          />
+          {errors.email && <span className="error-message">{errors.email}</span>}
+        </div>
 
-        <Input
-          id="password"
-          name="password"
-          label="Password"
-          type="password"
-          value={password}
-          onChange={setPassword}
-          error={errors.password}
-          placeholder="Enter your password"
-          autoComplete="current-password"
-          required
-        />
+        <div className="form-field">
+          <label htmlFor="password">Password</label>
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter your password"
+            autoComplete="current-password"
+            required
+          />
+          {errors.password && <span className="error-message">{errors.password}</span>}
+        </div>
 
         {onForgotPassword && (
           <button
@@ -101,12 +105,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
         <Button
           type="submit"
-          variant="primary"
+          variant="default"
           size="lg"
-          fullWidth
-          loading={isLoading}
+          className="w-full"
         >
-          Sign In
+          {isLoading ? 'Signing in...' : 'Sign In'}
         </Button>
 
         {onSignUp && (

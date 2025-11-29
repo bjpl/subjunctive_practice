@@ -6,13 +6,8 @@ import { useCallback } from 'react';
 import { useAppSelector } from './useAppSelector';
 import { useAppDispatch } from './useAppDispatch';
 import {
-  setProgress,
-  setStatistics,
-  incrementExerciseCount,
-  incrementCorrectAnswers,
-  incrementIncorrectAnswers,
-  addExperiencePoints,
-  resetProgress,
+  updateStatistics,
+  resetProgressState,
 } from '../store/slices/progressSlice';
 import {
   useGetUserProgressQuery,
@@ -48,17 +43,14 @@ export const useProgress = () => {
   // Update progress from server
   const refreshProgress = useCallback(async () => {
     const result = await refetchProgress();
-    if (result.data) {
-      dispatch(setProgress(result.data));
-    }
     return result;
-  }, [refetchProgress, dispatch]);
+  }, [refetchProgress]);
 
   // Update statistics from server
   const refreshStatistics = useCallback(async () => {
     const result = await refetchStatistics();
     if (result.data) {
-      dispatch(setStatistics(result.data));
+      dispatch(updateStatistics(result.data));
     }
     return result;
   }, [refetchStatistics, dispatch]);
@@ -66,22 +58,32 @@ export const useProgress = () => {
   // Track exercise completion
   const trackExerciseCompletion = useCallback(
     (isCorrect: boolean, score: number) => {
-      dispatch(incrementExerciseCount());
-      if (isCorrect) {
-        dispatch(incrementCorrectAnswers());
-        dispatch(addExperiencePoints(score));
-      } else {
-        dispatch(incrementIncorrectAnswers());
+      // Update statistics based on exercise completion
+      if (statistics) {
+        const updates: Partial<typeof statistics> = {
+          overall_stats: {
+            ...statistics.overall_stats,
+            total_exercises: statistics.overall_stats.total_exercises + 1,
+            correct_answers: isCorrect
+              ? statistics.overall_stats.correct_answers + 1
+              : statistics.overall_stats.correct_answers,
+            average_score: ((statistics.overall_stats.average_score * statistics.overall_stats.total_exercises) + score) / (statistics.overall_stats.total_exercises + 1),
+            accuracy_rate: isCorrect
+              ? (statistics.overall_stats.correct_answers + 1) / (statistics.overall_stats.total_exercises + 1)
+              : statistics.overall_stats.correct_answers / (statistics.overall_stats.total_exercises + 1),
+          },
+        };
+        dispatch(updateStatistics(updates));
       }
     },
-    [dispatch]
+    [dispatch, statistics]
   );
 
   // Reset user progress
   const resetUserProgress = useCallback(async () => {
     try {
       await resetProgressMutation().unwrap();
-      dispatch(resetProgress());
+      dispatch(resetProgressState());
       await refreshProgress();
       await refreshStatistics();
     } catch (err) {

@@ -6,11 +6,8 @@ import { useCallback } from 'react';
 import { useAppSelector } from './useAppSelector';
 import { useAppDispatch } from './useAppDispatch';
 import {
-  updateSettings,
-  updateNotificationSettings,
-  updatePracticeSettings,
-  updateAccessibilitySettings,
-  updateLanguageSettings,
+  updateUserPreferences,
+  updateSessionSettings,
   resetSettings,
 } from '../store/slices/settingsSlice';
 import type { UserSettings } from '../types/api';
@@ -19,46 +16,51 @@ export const useSettings = () => {
   const dispatch = useAppDispatch();
 
   // Selectors
-  const settings = useAppSelector((state) => state.settings.settings);
+  const userPreferences = useAppSelector((state) => state.settings.userPreferences);
+  const sessionSettings = useAppSelector((state) => state.settings.sessionSettings);
   const isLoading = useAppSelector((state) => state.settings.isLoading);
   const error = useAppSelector((state) => state.settings.error);
 
   // Update all settings
   const updateAllSettings = useCallback(
     (newSettings: Partial<UserSettings>) => {
-      dispatch(updateSettings(newSettings));
+      // Update user preferences and session settings from the new settings
+      if (newSettings) {
+        dispatch(updateUserPreferences(newSettings as any));
+        dispatch(updateSessionSettings(newSettings as any));
+      }
     },
     [dispatch]
   );
 
   // Update notification settings
   const updateNotifications = useCallback(
-    (notifications: Partial<UserSettings['notifications']>) => {
-      dispatch(updateNotificationSettings(notifications));
+    (notifications: any) => {
+      dispatch(updateUserPreferences(notifications));
     },
     [dispatch]
   );
 
   // Update practice settings
   const updatePractice = useCallback(
-    (practice: Partial<UserSettings['practice']>) => {
-      dispatch(updatePracticeSettings(practice));
+    (practice: any) => {
+      dispatch(updateSessionSettings(practice));
     },
     [dispatch]
   );
 
   // Update accessibility settings
   const updateAccessibility = useCallback(
-    (accessibility: Partial<UserSettings['accessibility']>) => {
-      dispatch(updateAccessibilitySettings(accessibility));
+    (accessibility: any) => {
+      dispatch(updateUserPreferences(accessibility));
     },
     [dispatch]
   );
 
   // Update language settings
   const updateLanguage = useCallback(
-    (language: Partial<UserSettings['language']>) => {
-      dispatch(updateLanguageSettings(language));
+    (language: any) => {
+      dispatch(updateUserPreferences(language));
     },
     [dispatch]
   );
@@ -68,9 +70,35 @@ export const useSettings = () => {
     dispatch(resetSettings());
   }, [dispatch]);
 
+  // Map settingsSlice state to UserSettings structure
+  const settings: UserSettings = {
+    notifications: {
+      email: false,
+      push: false,
+      streakReminders: false,
+    },
+    practice: {
+      dailyGoal: sessionSettings.exerciseCount || 10,
+      autoAdvance: true,
+      showHints: sessionSettings.hintsEnabled,
+      showExplanations: sessionSettings.feedbackType !== 'minimal',
+    },
+    accessibility: {
+      fontSize: userPreferences.fontSize,
+      highContrast: false,
+      reduceMotion: userPreferences.reducedMotion,
+    },
+    language: {
+      interface: userPreferences.language,
+      practice: userPreferences.language,
+    },
+  };
+
   return {
     // State
     settings,
+    userPreferences,
+    sessionSettings,
     isLoading,
     error,
 

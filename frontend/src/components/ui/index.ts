@@ -3,7 +3,7 @@ export { Button } from './button';
 export { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './card';
 export { Input } from './input';
 export { Modal } from './Modal';
-export { Toast, ToastContainer } from './Toast';
+export { Toast, ToastProvider, ToastViewport, ToastTitle, ToastDescription, ToastClose, ToastAction } from './Toast';
 export { Spinner, FullPageSpinner } from './Spinner';
 export { Alert, AlertDescription, AlertTitle } from './alert';
 export { Badge, badgeVariants } from './badge';

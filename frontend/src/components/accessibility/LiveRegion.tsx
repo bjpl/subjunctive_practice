@@ -32,8 +32,8 @@ export function LiveRegion({ message, priority = 'polite', clearDelay = 5000 }: 
       }, clearDelay);
 
       return () => {
-        clearTimeout(timeout);
-        clearTimeout(clearTimeout);
+        window.clearTimeout(timeout);
+        window.clearTimeout(clearTimeout);
       };
     }
   }, [message, clearDelay]);

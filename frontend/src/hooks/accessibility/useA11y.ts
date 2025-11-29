@@ -51,7 +51,7 @@ export function useA11y(): UseA11yReturn {
 
     const handleChange = () => {
       const systemPrefs = getA11yPreferences();
-      setPreferences((current) => ({
+      setPreferences((current: A11yPreferences) => ({
         ...current,
         reducedMotion: systemPrefs.reducedMotion,
         darkMode: current.darkMode || systemPrefs.darkMode,
@@ -68,7 +68,7 @@ export function useA11y(): UseA11yReturn {
 
   const updatePreference = useCallback(
     <K extends keyof A11yPreferences>(key: K, value: A11yPreferences[K]) => {
-      setPreferences((current) => ({
+      setPreferences((current: A11yPreferences) => ({
         ...current,
         [key]: value,
       }));

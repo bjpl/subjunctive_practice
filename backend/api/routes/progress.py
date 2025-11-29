@@ -2,18 +2,24 @@
 Progress tracking routes: user progress, statistics, analytics.
 """
 
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 from fastapi import APIRouter, HTTPException, status, Depends
 import json
 from pathlib import Path
 from datetime import datetime, timedelta
 from collections import defaultdict
+import logging
 
 from core.security import get_current_active_user
 from core.database import get_db_session
 from sqlalchemy.orm import Session
 from pydantic import BaseModel, Field
-from typing import Optional, Dict, Any, List
+from models.progress import Attempt, Session as PracticeSession
+from models.user import UserProfile
+from services.gamification import calculate_level_info
+
+# Configure logging
+logger = logging.getLogger(__name__)
 
 # These schemas need to be properly defined - temporary inline versions
 class ProgressResponse(BaseModel):
@@ -43,8 +49,120 @@ class StatisticsResponse(BaseModel):
 router = APIRouter(prefix="/progress", tags=["Progress & Statistics"])
 
 
+def parse_user_id(user_id: str) -> int:
+    """
+    Parse user_id string to integer.
+    Handles formats like "user_7" or "7".
+
+    Args:
+        user_id: User ID string (e.g., "user_7" or "7")
+
+    Returns:
+        Integer user ID
+
+    Raises:
+        ValueError: If user_id format is invalid
+    """
+    try:
+        if isinstance(user_id, int):
+            return user_id
+        if isinstance(user_id, str):
+            # Extract numeric part if user_id is like "user_7"
+            return int(user_id.split('_')[-1]) if '_' in user_id else int(user_id)
+        raise ValueError(f"Invalid user_id type: {type(user_id)}")
+    except (ValueError, IndexError) as e:
+        logger.error(f"Failed to parse user_id: {user_id} - {e}")
+        raise ValueError(f"Invalid user_id format: {user_id}")
+
+
+def load_user_attempts_from_db(db: Session, user_id: str) -> List[Dict[str, Any]]:
+    """
+    Load user's exercise attempts from database.
+
+    Args:
+        db: Database session
+        user_id: User ID (e.g., "user_7" or "7")
+
+    Returns:
+        List of attempt dictionaries
+    """
+    try:
+        user_id_int = parse_user_id(user_id)
+    except ValueError as e:
+        logger.warning(f"Invalid user_id for attempts query: {user_id} - {e}")
+        return []
+
+    attempts = db.query(Attempt).filter(Attempt.user_id == user_id_int).all()
+    logger.info(f"Loaded {len(attempts)} attempts for user {user_id} from database")
+
+    return [
+        {
+            "exercise_id": str(a.exercise_id),
+            "is_correct": a.is_correct,
+            "score": 100 if a.is_correct else 0,
+            "timestamp": a.created_at.isoformat(),
+            "user_answer": a.user_answer
+        }
+        for a in attempts
+    ]
+
+
+def load_streak_data_from_db(db: Session, user_id: str) -> Dict[str, Any]:
+    """
+    Load user's streak data from UserProfile in database.
+
+    Args:
+        db: Database session
+        user_id: User ID (e.g., "user_7" or "7")
+
+    Returns:
+        Dictionary with streak data
+    """
+    try:
+        user_id_int = parse_user_id(user_id)
+    except ValueError as e:
+        logger.warning(f"Invalid user_id for streak query: {user_id} - {e}")
+        return {
+            "current_streak": 0,
+            "best_streak": 0,
+            "last_practice": None,
+            "total_days": 0,
+            "practice_dates": []
+        }
+
+    profile = db.query(UserProfile).filter(UserProfile.user_id == user_id_int).first()
+
+    if not profile:
+        logger.info(f"No profile found for user {user_id}, returning default streak data")
+        return {
+            "current_streak": 0,
+            "best_streak": 0,
+            "last_practice": None,
+            "total_days": 0,
+            "practice_dates": []
+        }
+
+    # Calculate practice dates from attempts
+    attempts = db.query(Attempt).filter(Attempt.user_id == user_id_int).all()
+    practice_dates = sorted(set(a.created_at.date().isoformat() for a in attempts))
+
+    return {
+        "current_streak": profile.current_streak,
+        "best_streak": profile.longest_streak,
+        "last_practice": profile.last_practice_date.isoformat() if profile.last_practice_date else None,
+        "total_days": len(practice_dates),
+        "practice_dates": practice_dates
+    }
+
+
+# DEPRECATED: JSON file functions kept for backward compatibility
+# These should not be used in production - database functions above are preferred
 def load_user_attempts(user_id: str) -> List[Dict[str, Any]]:
-    """Load user's exercise attempts from file."""
+    """
+    DEPRECATED: Load user's exercise attempts from file.
+    Use load_user_attempts_from_db() instead.
+    """
+    logger.warning("Using deprecated JSON fallback for loading attempts - use database instead")
     attempts_file = Path(f"user_data/attempts_{user_id}.json")
     if attempts_file.exists():
         with open(attempts_file, "r") as f:
@@ -53,12 +171,15 @@ def load_user_attempts(user_id: str) -> List[Dict[str, Any]]:
 
 
 def load_streak_data(user_id: str) -> Dict[str, Any]:
-    """Load user's streak data."""
+    """
+    DEPRECATED: Load user's streak data from file.
+    Use load_streak_data_from_db() instead.
+    """
+    logger.warning("Using deprecated JSON fallback for loading streak data - use database instead")
     streak_file = Path("user_data/streaks.json")
     if streak_file.exists():
         with open(streak_file, "r") as f:
             data = json.load(f)
-            # In production, filter by user_id
             return data
     return {
         "current_streak": 0,
@@ -70,18 +191,86 @@ def load_streak_data(user_id: str) -> Dict[str, Any]:
 
 
 def calculate_level_and_xp(total_exercises: int, correct_answers: int) -> tuple:
-    """Calculate user level and experience points."""
-    # XP formula: 10 points per correct answer, 2 per attempt
+    """
+    DEPRECATED: Use calculate_level_info() from services.gamification instead.
+    This function is kept for backwards compatibility only.
+
+    Calculate user level and experience points.
+
+    WARNING: This uses a legacy XP formula that does NOT match the frontend.
+    The formula should be updated to use per-exercise XP tracking instead.
+    """
+    # Legacy XP formula - does not match frontend gamification
+    # Frontend uses: per-exercise XP with difficulty, streak, and accuracy bonuses
+    # Backend (this function) uses: simplified 10 per correct + 2 per attempt
     xp = (correct_answers * 10) + (total_exercises * 2)
 
-    # Level formula: Level = floor(sqrt(xp / 100)) + 1
-    level = min(10, int((xp / 100) ** 0.5) + 1)
+    # Use unified gamification service for level calculation
+    level_info = calculate_level_info(xp)
+    level = level_info["current_level"]
 
     return level, xp
 
 
+def update_streak_in_db(db: Session, user_id_int: int, practice_date: str) -> None:
+    """
+    Update streak data in database for user profile.
+
+    Args:
+        db: Database session
+        user_id_int: Integer user ID
+        practice_date: Practice date in ISO format (YYYY-MM-DD)
+    """
+    # Get or create user profile
+    profile = db.query(UserProfile).filter(UserProfile.user_id == user_id_int).first()
+
+    if not profile:
+        logger.info(f"Creating new profile for user {user_id_int}")
+        profile = UserProfile(user_id=user_id_int)
+        db.add(profile)
+        db.flush()
+
+    # Get all practice dates from attempts
+    attempts = db.query(Attempt).filter(Attempt.user_id == user_id_int).all()
+    practice_dates = sorted(set(a.created_at.date() for a in attempts), reverse=True)
+
+    if not practice_dates:
+        logger.warning(f"No practice dates found for user {user_id_int}")
+        return
+
+    # Calculate current streak
+    current_streak = 0
+    today = datetime.utcnow().date()
+
+    for i, date in enumerate(practice_dates):
+        if i == 0:
+            # First date must be today or yesterday to have an active streak
+            if date == today or date == today - timedelta(days=1):
+                current_streak = 1
+            else:
+                break
+        else:
+            # Check if dates are consecutive
+            if date == practice_dates[i-1] - timedelta(days=1):
+                current_streak += 1
+            else:
+                break
+
+    # Update profile with new streak data
+    profile.current_streak = current_streak
+    profile.longest_streak = max(profile.longest_streak, current_streak)
+    profile.last_practice_date = datetime.fromisoformat(practice_date) if isinstance(practice_date, str) else practice_date
+
+    db.commit()
+    logger.info(f"Updated streak for user {user_id_int}: current={current_streak}, best={profile.longest_streak}")
+
+
 def update_streak_data(user_id: str, practice_date: str) -> Dict[str, Any]:
-    """Update streak data with new practice session."""
+    """
+    DEPRECATED: Update streak data with new practice session.
+    Use update_streak_in_db() instead.
+    """
+    logger.warning("Using deprecated JSON fallback for updating streak data - use database instead")
     streak_file = Path("user_data/streaks.json")
     streak_data = load_streak_data(user_id)
 
@@ -126,7 +315,8 @@ def update_streak_data(user_id: str, practice_date: str) -> Dict[str, Any]:
 
 @router.get("", response_model=ProgressResponse)
 async def get_user_progress(
-    current_user: Dict[str, Any] = Depends(get_current_active_user)
+    current_user: Dict[str, Any] = Depends(get_current_active_user),
+    db: Session = Depends(get_db_session)
 ):
     """
     Get current user's learning progress.
@@ -141,8 +331,10 @@ async def get_user_progress(
     Requires authentication.
     """
     user_id = current_user["sub"]
-    attempts = load_user_attempts(user_id)
-    streak_data = load_streak_data(user_id)
+
+    # Load data from database
+    attempts = load_user_attempts_from_db(db, user_id)
+    streak_data = load_streak_data_from_db(db, user_id)
 
     total_exercises = len(attempts)
     correct_answers = sum(1 for a in attempts if a.get("is_correct", False))
@@ -152,14 +344,22 @@ async def get_user_progress(
 
     level, xp = calculate_level_and_xp(total_exercises, correct_answers)
 
-    # Update streak if practiced today
+    # Update streak in database if practiced today
     today = datetime.utcnow().date().isoformat()
     if attempts and attempts[-1].get("timestamp", "").startswith(today[:10]):
-        streak_data = update_streak_data(user_id, today)
+        try:
+            user_id_int = parse_user_id(user_id)
+            update_streak_in_db(db, user_id_int, today)
+            # Reload streak data after update
+            streak_data = load_streak_data_from_db(db, user_id)
+        except ValueError as e:
+            logger.warning(f"Failed to update streak: {e}")
 
     last_practice = None
     if streak_data.get("last_practice"):
         last_practice = datetime.fromisoformat(streak_data["last_practice"])
+
+    logger.info(f"Returning progress for user {user_id}: {total_exercises} exercises, {accuracy_rate:.1f}% accuracy")
 
     return ProgressResponse(
         user_id=user_id,
@@ -194,8 +394,10 @@ async def get_user_statistics(
     Requires authentication.
     """
     user_id = current_user["sub"]
-    attempts = load_user_attempts(user_id)
-    streak_data = load_streak_data(user_id)
+
+    # Load data from database
+    attempts = load_user_attempts_from_db(db, user_id)
+    streak_data = load_streak_data_from_db(db, user_id)
 
     if not attempts:
         # Return empty statistics for new users
@@ -278,13 +480,53 @@ async def get_user_statistics(
             "timestamp": attempt.get("timestamp", "")
         })
 
-    # Generate learning insights
-    learning_insights = generate_learning_insights(
-        overall_stats,
-        dict(by_type),
-        dict(by_difficulty),
-        recent_performance
-    )
+    # Generate learning insights (AI-powered if available)
+    from services.ai_service import get_ai_service
+    import logging
+    logger = logging.getLogger(__name__)
+
+    ai_service = get_ai_service()
+    learning_insights = []
+
+    if ai_service.is_enabled:
+        # Try AI-powered insights
+        try:
+            # Identify weak areas for AI analysis
+            weak_areas = [
+                {"area": k, "accuracy": v["accuracy"] / 100}
+                for k, v in by_type.items() if v["accuracy"] < 70
+            ]
+
+            # Build user stats for AI
+            ai_user_stats = {
+                "total_exercises": total_exercises,
+                "accuracy": accuracy_rate / 100,
+                "total_study_time_minutes": 0,  # Not tracked in current implementation
+                "total_sessions": len(set(a.get("session_id", 0) for a in attempts))
+            }
+
+            learning_insights = await ai_service.generate_learning_insights(
+                ai_user_stats,
+                weak_areas
+            )
+            logger.info(f"Generated AI-powered insights for user {user_id}")
+        except Exception as e:
+            # Fallback to local insights if AI fails
+            logger.warning(f"AI insights failed, using fallback: {str(e)}")
+            learning_insights = generate_learning_insights(
+                overall_stats,
+                dict(by_type),
+                dict(by_difficulty),
+                recent_performance
+            )
+    else:
+        # Use local insights generation
+        learning_insights = generate_learning_insights(
+            overall_stats,
+            dict(by_type),
+            dict(by_difficulty),
+            recent_performance
+        )
 
     return StatisticsResponse(
         user_id=user_id,
@@ -359,22 +601,55 @@ def generate_learning_insights(
 
 @router.post("/reset")
 async def reset_user_progress(
-    current_user: Dict[str, Any] = Depends(get_current_active_user)
+    current_user: Dict[str, Any] = Depends(get_current_active_user),
+    db: Session = Depends(get_db_session)
 ):
     """
     Reset user's progress (for testing purposes).
 
-    WARNING: This will delete all progress data.
+    WARNING: This will delete all progress data from database.
     Requires authentication.
     """
     user_id = current_user["sub"]
 
-    # Delete attempts file
-    attempts_file = Path(f"user_data/attempts_{user_id}.json")
-    if attempts_file.exists():
-        attempts_file.unlink()
+    try:
+        user_id_int = parse_user_id(user_id)
 
-    return {
-        "message": "Progress reset successfully",
-        "user_id": user_id
-    }
+        # Delete all attempts from database
+        attempts_deleted = db.query(Attempt).filter(Attempt.user_id == user_id_int).delete()
+
+        # Delete all sessions from database
+        sessions_deleted = db.query(PracticeSession).filter(PracticeSession.user_id == user_id_int).delete()
+
+        # Reset user profile streaks
+        profile = db.query(UserProfile).filter(UserProfile.user_id == user_id_int).first()
+        if profile:
+            profile.current_streak = 0
+            profile.longest_streak = 0
+            profile.last_practice_date = None
+
+        db.commit()
+
+        logger.info(f"Reset progress for user {user_id}: deleted {attempts_deleted} attempts, {sessions_deleted} sessions")
+
+        return {
+            "message": "Progress reset successfully",
+            "user_id": user_id,
+            "attempts_deleted": attempts_deleted,
+            "sessions_deleted": sessions_deleted
+        }
+
+    except ValueError as e:
+        logger.error(f"Failed to reset progress: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Invalid user ID format: {user_id}"
+        )
+
+    except Exception as e:
+        logger.error(f"Error resetting progress: {e}")
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to reset progress"
+        )

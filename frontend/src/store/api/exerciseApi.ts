@@ -9,6 +9,15 @@ import type {
   ExerciseAnswer,
   AnswerValidation,
   ExerciseFilters,
+  CustomPracticeRequest,
+  CustomPracticeResponse,
+  AvailableVerbsResponse,
+  SessionStartRequest,
+  SessionStartResponse,
+  SessionEndRequest,
+  SessionEndResponse,
+  DueReviewResponse,
+  ReviewStatsResponse,
 } from '@/types/api';
 
 export const exerciseApi = baseApi.injectEndpoints({
@@ -51,6 +60,48 @@ export const exerciseApi = baseApi.injectEndpoints({
     getExerciseTypes: builder.query<string[], void>({
       query: () => '/exercises/types/available',
     }),
+
+    // Generate custom exercises
+    generateCustomExercises: builder.mutation<CustomPracticeResponse, CustomPracticeRequest>({
+      query: (config) => ({
+        url: '/exercises/generate',
+        method: 'POST',
+        body: config,
+      }),
+    }),
+
+    // Get available verbs for custom practice
+    getAvailableVerbs: builder.query<AvailableVerbsResponse, void>({
+      query: () => '/exercises/verbs/available',
+    }),
+
+    // Session management
+    startSession: builder.mutation<SessionStartResponse, SessionStartRequest>({
+      query: (request) => ({
+        url: '/exercises/session/start',
+        method: 'POST',
+        body: request,
+      }),
+    }),
+
+    endSession: builder.mutation<SessionEndResponse, SessionEndRequest>({
+      query: (request) => ({
+        url: '/exercises/session/end',
+        method: 'POST',
+        body: request,
+      }),
+      invalidatesTags: ['Progress', 'Statistics'],
+    }),
+
+    // Spaced repetition endpoints
+    getDueReviews: builder.query<DueReviewResponse, { limit?: number }>({
+      query: ({ limit = 10 }) => `/exercises/review/due?limit=${limit}`,
+      providesTags: ['Exercise'],
+    }),
+
+    getReviewStats: builder.query<ReviewStatsResponse, void>({
+      query: () => '/exercises/review/stats',
+    }),
   }),
 });
 
@@ -60,4 +111,10 @@ export const {
   useSubmitAnswerMutation,
   useGetExerciseTypesQuery,
   useLazyGetExercisesQuery,
+  useGenerateCustomExercisesMutation,
+  useGetAvailableVerbsQuery,
+  useStartSessionMutation,
+  useEndSessionMutation,
+  useGetDueReviewsQuery,
+  useGetReviewStatsQuery,
 } = exerciseApi;

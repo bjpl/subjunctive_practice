@@ -383,19 +383,160 @@ class LearningAlgorithm:
 
     def __init__(
         self,
-        initial_difficulty: str = "intermediate"
+        initial_difficulty: str = "intermediate",
+        db_session = None
     ):
-        """Initialize learning algorithm"""
+        """
+        Initialize learning algorithm.
+
+        Args:
+            initial_difficulty: Starting difficulty level
+            db_session: SQLAlchemy database session for persistence (optional)
+        """
         self.sm2 = SM2Algorithm()
         self.difficulty_manager = AdaptiveDifficultyManager(initial_difficulty)
         self.cards: Dict[str, SM2Card] = {}
+        self.db = db_session
         self.logger = logging.getLogger(__name__)
+
+    def load_card_from_db(
+        self,
+        user_id: int,
+        verb: str,
+        tense: str,
+        person: str
+    ) -> Optional[SM2Card]:
+        """
+        Load SM2Card from database ReviewSchedule.
+
+        Args:
+            user_id: User ID
+            verb: Verb infinitive
+            tense: Subjunctive tense
+            person: Grammatical person
+
+        Returns:
+            SM2Card if found in database, None otherwise
+        """
+        if not self.db:
+            return None
+
+        from models.progress import ReviewSchedule
+        from models.exercise import Verb
+
+        # Get verb_id from verb infinitive
+        verb_obj = self.db.query(Verb).filter(Verb.infinitive == verb).first()
+        if not verb_obj:
+            self.logger.warning(f"Verb '{verb}' not found in database")
+            return None
+
+        # Query ReviewSchedule
+        # Note: ReviewSchedule stores per-verb data, not per verb+tense+person
+        # We'll use the verb_id and store tense/person info in a JSON field if needed
+        # For now, we'll create separate records per combination by using verb_id
+        review = self.db.query(ReviewSchedule).filter(
+            ReviewSchedule.user_id == user_id,
+            ReviewSchedule.verb_id == verb_obj.id
+        ).first()
+
+        if not review:
+            return None
+
+        # Convert ReviewSchedule to SM2Card
+        item_id = f"{verb}_{tense}_{person}"
+        card = SM2Card(
+            item_id=item_id,
+            verb=verb,
+            tense=tense,
+            person=person,
+            easiness_factor=review.easiness_factor,
+            interval=review.interval_days,
+            repetitions=review.repetitions,
+            next_review=review.next_review_date,
+            last_review=review.last_reviewed_at,
+            total_reviews=review.total_attempts,
+            correct_reviews=review.total_correct,
+            created_at=review.created_at
+        )
+
+        self.logger.info(f"Loaded card from DB: {item_id}")
+        return card
+
+    def save_card_to_db(
+        self,
+        user_id: int,
+        card: SM2Card
+    ) -> None:
+        """
+        Save SM2Card to database ReviewSchedule.
+
+        Args:
+            user_id: User ID
+            card: SM2Card to save
+        """
+        if not self.db:
+            self.logger.warning("No database session available, skipping save")
+            return
+
+        from models.progress import ReviewSchedule
+        from models.exercise import Verb
+
+        # Get verb_id
+        verb_obj = self.db.query(Verb).filter(Verb.infinitive == card.verb).first()
+        if not verb_obj:
+            self.logger.error(f"Cannot save card: verb '{card.verb}' not found in database")
+            return
+
+        # Check if ReviewSchedule exists
+        review = self.db.query(ReviewSchedule).filter(
+            ReviewSchedule.user_id == user_id,
+            ReviewSchedule.verb_id == verb_obj.id
+        ).first()
+
+        if review:
+            # Update existing record
+            review.easiness_factor = card.easiness_factor
+            review.interval_days = card.interval
+            review.repetitions = card.repetitions
+            review.next_review_date = card.next_review
+            review.last_reviewed_at = card.last_review
+            review.review_count = card.total_reviews
+            review.total_attempts = card.total_reviews
+            review.total_correct = card.correct_reviews
+            review.updated_at = datetime.now()
+
+            self.logger.info(f"Updated ReviewSchedule for user {user_id}, verb {card.verb}")
+        else:
+            # Create new record
+            review = ReviewSchedule(
+                user_id=user_id,
+                verb_id=verb_obj.id,
+                easiness_factor=card.easiness_factor,
+                interval_days=card.interval,
+                repetitions=card.repetitions,
+                next_review_date=card.next_review,
+                last_reviewed_at=card.last_review,
+                review_count=card.total_reviews,
+                total_attempts=card.total_reviews,
+                total_correct=card.correct_reviews,
+                created_at=card.created_at
+            )
+            self.db.add(review)
+            self.logger.info(f"Created ReviewSchedule for user {user_id}, verb {card.verb}")
+
+        try:
+            self.db.commit()
+        except Exception as e:
+            self.db.rollback()
+            self.logger.error(f"Failed to save ReviewSchedule: {e}")
+            raise
 
     def add_card(
         self,
         verb: str,
         tense: str,
-        person: str
+        person: str,
+        user_id: Optional[int] = None
     ) -> SM2Card:
         """
         Add a new card to the learning system.
@@ -404,15 +545,25 @@ class LearningAlgorithm:
             verb: Verb infinitive
             tense: Subjunctive tense
             person: Grammatical person
+            user_id: User ID for database persistence (optional)
 
         Returns:
             Created SM2Card
         """
         item_id = f"{verb}_{tense}_{person}"
 
+        # Check in-memory cache first
         if item_id in self.cards:
             return self.cards[item_id]
 
+        # Try loading from database if user_id provided
+        if user_id and self.db:
+            card = self.load_card_from_db(user_id, verb, tense, person)
+            if card:
+                self.cards[item_id] = card
+                return card
+
+        # Create new card
         card = SM2Card(
             item_id=item_id,
             verb=verb,
@@ -432,7 +583,8 @@ class LearningAlgorithm:
         person: str,
         correct: bool,
         response_time_ms: int,
-        difficulty_felt: Optional[int] = None
+        difficulty_felt: Optional[int] = None,
+        user_id: Optional[int] = None
     ) -> Dict:
         """
         Process an exercise result and update learning state.
@@ -444,13 +596,14 @@ class LearningAlgorithm:
             correct: Whether answer was correct
             response_time_ms: Response time in milliseconds
             difficulty_felt: User's perceived difficulty (1-5)
+            user_id: User ID for database persistence (optional)
 
         Returns:
             Dictionary with update results
         """
         # Get or create card
         item_id = f"{verb}_{tense}_{person}"
-        card = self.cards.get(item_id) or self.add_card(verb, tense, person)
+        card = self.cards.get(item_id) or self.add_card(verb, tense, person, user_id)
 
         # Update card with SM-2
         updated_card = self.sm2.process_review(
@@ -461,6 +614,13 @@ class LearningAlgorithm:
         )
 
         self.cards[item_id] = updated_card
+
+        # Save to database if user_id provided
+        if user_id and self.db:
+            try:
+                self.save_card_to_db(user_id, updated_card)
+            except Exception as e:
+                self.logger.error(f"Failed to persist card to database: {e}")
 
         # Update difficulty
         new_difficulty = self.difficulty_manager.record_result(

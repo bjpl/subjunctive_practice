@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "@/styles/globals.css";
 import { Providers } from "./providers";
+import { WebVitalsReporter } from "./web-vitals";
+import { PerformancePanel } from "../components/debug/PerformancePanel";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,6 +24,8 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <Providers>{children}</Providers>
+        <WebVitalsReporter />
+        <PerformancePanel />
       </body>
     </html>
   );

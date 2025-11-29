@@ -39,7 +39,7 @@ export const HintButton: React.FC<HintButtonProps> = ({
         size="sm"
         onClick={handleRequestHint}
         disabled={disabled || !hasMoreHints}
-        ariaLabel={`Request hint ${currentHintIndex + 2} of ${hints.length}`}
+        aria-label={`Request hint ${currentHintIndex + 2} of ${hints.length}`}
       >
         <svg
           width="20"

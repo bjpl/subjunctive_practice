@@ -30,7 +30,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
   };
 
   return (
-    <Card className="exercise-card" elevated>
+    <Card className="exercise-card">
       <div className="exercise-card-header">
         <div className="exercise-card-meta">
           <span className="exercise-number">

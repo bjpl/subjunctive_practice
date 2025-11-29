@@ -7,12 +7,7 @@ import { useAppSelector } from './useAppSelector';
 import { useAppDispatch } from './useAppDispatch';
 import {
   setCurrentExercise,
-  setCurrentAnswer,
-  clearCurrentAnswer,
-  addToHistory,
-  updateFilters,
-  resetFilters,
-  setLastValidation,
+  setAnswer,
   resetExerciseState,
 } from '../store/slices/exerciseSlice';
 import {
@@ -53,14 +48,14 @@ export const useExercise = () => {
   // Update answer
   const updateAnswer = useCallback(
     (answer: string) => {
-      dispatch(setCurrentAnswer(answer));
+      dispatch(setAnswer(answer));
     },
     [dispatch]
   );
 
   // Clear answer
   const clearAnswer = useCallback(() => {
-    dispatch(clearCurrentAnswer());
+    dispatch(setAnswer(null));
   }, [dispatch]);
 
   // Submit answer
@@ -75,8 +70,6 @@ export const useExercise = () => {
           time_taken: timeTaken,
         }).unwrap();
 
-        dispatch(setLastValidation(validation));
-        dispatch(addToHistory(currentExercise));
         return validation;
       } catch (err) {
         throw err;
@@ -85,18 +78,20 @@ export const useExercise = () => {
     [currentExercise, currentAnswer, submitAnswerMutation, dispatch]
   );
 
-  // Update filters
+  // Update filters - not implemented in slice yet
   const setFilters = useCallback(
     (newFilters: Partial<ExerciseFilters>) => {
-      dispatch(updateFilters(newFilters));
+      // TODO: Add updateFilters action to exerciseSlice
+      console.log('setFilters called with:', newFilters);
     },
-    [dispatch]
+    []
   );
 
-  // Reset filters
+  // Reset filters - not implemented in slice yet
   const clearFilters = useCallback(() => {
-    dispatch(resetFilters());
-  }, [dispatch]);
+    // TODO: Add resetFilters action to exerciseSlice
+    console.log('clearFilters called');
+  }, []);
 
   // Reset exercise state
   const resetExercise = useCallback(() => {
@@ -119,8 +114,7 @@ export const useExercise = () => {
 
     const nextExercise = availableExercises[0];
     dispatch(setCurrentExercise(nextExercise));
-    dispatch(clearCurrentAnswer());
-    dispatch(setLastValidation(null));
+    dispatch(setAnswer(null));
     return nextExercise;
   }, [exerciseList, exerciseHistory, dispatch]);
 

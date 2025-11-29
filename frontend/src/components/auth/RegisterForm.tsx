@@ -89,67 +89,74 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
       </div>
 
       <div className="auth-form-content">
-        <Input
-          id="username"
-          name="username"
-          label="Username"
-          type="text"
-          value={username}
-          onChange={setUsername}
-          error={errors.username}
-          placeholder="johndoe"
-          autoComplete="username"
-          required
-        />
+        <div className="form-field">
+          <label htmlFor="username">Username</label>
+          <Input
+            id="username"
+            name="username"
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="johndoe"
+            autoComplete="username"
+            required
+          />
+          {errors.username && <span className="error-message">{errors.username}</span>}
+        </div>
 
-        <Input
-          id="email"
-          name="email"
-          label="Email Address"
-          type="email"
-          value={email}
-          onChange={setEmail}
-          error={errors.email}
-          placeholder="you@example.com"
-          autoComplete="email"
-          required
-        />
+        <div className="form-field">
+          <label htmlFor="email">Email Address</label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="you@example.com"
+            autoComplete="email"
+            required
+          />
+          {errors.email && <span className="error-message">{errors.email}</span>}
+        </div>
 
-        <Input
-          id="password"
-          name="password"
-          label="Password"
-          type="password"
-          value={password}
-          onChange={setPassword}
-          error={errors.password}
-          placeholder="Create a strong password"
-          autoComplete="new-password"
-          required
-          helpText="Must be at least 8 characters with uppercase, lowercase, and number"
-        />
+        <div className="form-field">
+          <label htmlFor="password">Password</label>
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Create a strong password"
+            autoComplete="new-password"
+            required
+          />
+          <span className="help-text">Must be at least 8 characters with uppercase, lowercase, and number</span>
+          {errors.password && <span className="error-message">{errors.password}</span>}
+        </div>
 
-        <Input
-          id="confirmPassword"
-          name="confirmPassword"
-          label="Confirm Password"
-          type="password"
-          value={confirmPassword}
-          onChange={setConfirmPassword}
-          error={errors.confirmPassword}
-          placeholder="Confirm your password"
-          autoComplete="new-password"
-          required
-        />
+        <div className="form-field">
+          <label htmlFor="confirmPassword">Confirm Password</label>
+          <Input
+            id="confirmPassword"
+            name="confirmPassword"
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            placeholder="Confirm your password"
+            autoComplete="new-password"
+            required
+          />
+          {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
+        </div>
 
         <Button
           type="submit"
-          variant="primary"
+          variant="default"
           size="lg"
-          fullWidth
-          loading={isLoading}
+          className="w-full"
         >
-          Create Account
+          {isLoading ? 'Creating account...' : 'Create Account'}
         </Button>
 
         {onSignIn && (

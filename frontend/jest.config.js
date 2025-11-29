@@ -6,43 +6,44 @@ const createJestConfig = nextJest({
 
 const customJestConfig = {
   setupFiles: ['<rootDir>/jest.polyfills.js'],
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   testEnvironment: 'jest-environment-jsdom',
-  testPathIgnorePatterns: [
-    '/node_modules/',
-    '/.next/',
-    '/coverage/',
-    '/dist/',
-    '/tests/e2e/',  // Exclude Playwright e2e tests
-  ],
   moduleNameMapper: {
-    // Mock ESM-only packages that can't be transpiled
-    '^until-async$': '<rootDir>/__mocks__/until-async.js',
-    // Path aliases - check src/ first, then root
-    '^@/components/ui/(.*)$': '<rootDir>/src/components/ui/$1',
-    '^@/components/(.*)$': '<rootDir>/components/$1',
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '^@/components/(.*)$': '<rootDir>/src/components/$1',
     '^@/lib/(.*)$': '<rootDir>/src/lib/$1',
     '^@/store/(.*)$': '<rootDir>/src/store/$1',
     '^@/types/(.*)$': '<rootDir>/src/types/$1',
     '^@/hooks/(.*)$': '<rootDir>/src/hooks/$1',
+    '^@/styles/(.*)$': '<rootDir>/src/styles/$1',
     '^@/app/(.*)$': '<rootDir>/app/$1',
-    '^@/(.*)$': '<rootDir>/src/$1',
   },
-  transformIgnorePatterns: [
-    'node_modules/(?!(msw|@mswjs)/)',
-  ],
-  testTimeout: 10000,
-  maxWorkers: 1,
   collectCoverageFrom: [
-    'app/**/*.{js,jsx,ts,tsx}',
-    'components/**/*.{js,jsx,ts,tsx}',
-    'lib/**/*.{js,jsx,ts,tsx}',
-    'hooks/**/*.{js,jsx,ts,tsx}',
     'src/**/*.{js,jsx,ts,tsx}',
+    'app/**/*.{js,jsx,ts,tsx}',
     '!**/*.d.ts',
     '!**/node_modules/**',
     '!**/.next/**',
+    '!**/coverage/**',
+    '!**/dist/**',
   ],
+  testMatch: [
+    '<rootDir>/tests/**/*.test.{js,jsx,ts,tsx}',
+  ],
+  moduleDirectories: ['node_modules', '<rootDir>/'],
+  testPathIgnorePatterns: ['/node_modules/', '/.next/'],
+  transformIgnorePatterns: [
+    '/node_modules/',
+    '^.+\.module\.(css|sass|scss)$',
+  ],
+  coverageThreshold: {
+    global: {
+      statements: 70,
+      branches: 65,
+      functions: 70,
+      lines: 70,
+    },
+  },
 }
 
 module.exports = createJestConfig(customJestConfig)
