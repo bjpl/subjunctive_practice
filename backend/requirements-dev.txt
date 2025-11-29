@@ -42,7 +42,7 @@ alembic-utils==0.8.8
 pre-commit==3.6.2
 
 # Environment Management
-python-dotenv==1.0.1
+python-dotenv==1.2.1
 
 # API Documentation
 httpie==3.2.2
