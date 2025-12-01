@@ -36,13 +36,12 @@ from api.routes import auth, exercises, progress, achievements
 from api.routes import settings as settings_router
 
 
-# Configure logging
+# Configure logging (stdout only for production compatibility)
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.StreamHandler(sys.stdout),
-        logging.FileHandler('backend.log')
+        logging.StreamHandler(sys.stdout)
     ]
 )
 
