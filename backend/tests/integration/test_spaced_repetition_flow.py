@@ -16,7 +16,7 @@ from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 
 from models.progress import ReviewSchedule, Attempt
-from models.exercise import Verb
+from models.exercise import Verb, VerbType
 from services.learning_algorithm import SM2Algorithm, SM2Card
 
 
@@ -102,6 +102,7 @@ class TestSpacedRepetitionFlow:
         verb = Verb(
             infinitive="hablar",
             english_translation="to speak",
+            verb_type=VerbType.REGULAR,
             is_irregular=False,
             present_subjunctive={"yo": "hable", "tú": "hables"}
         )
@@ -167,6 +168,7 @@ class TestSpacedRepetitionFlow:
         verb = Verb(
             infinitive="ser",
             english_translation="to be",
+            verb_type=VerbType.IRREGULAR,
             is_irregular=True,
             present_subjunctive={"yo": "sea", "tú": "seas"}
         )
@@ -213,9 +215,9 @@ class TestSpacedRepetitionFlow:
     ):
         """Test getting only reviews that are due."""
         # Create verbs
-        verb1 = Verb(infinitive="hablar", english_translation="to speak", is_irregular=False)
-        verb2 = Verb(infinitive="comer", english_translation="to eat", is_irregular=False)
-        verb3 = Verb(infinitive="vivir", english_translation="to live", is_irregular=False)
+        verb1 = Verb(infinitive="hablar", english_translation="to speak", verb_type=VerbType.REGULAR, is_irregular=False, present_subjunctive={"yo": "hable", "tú": "hables"})
+        verb2 = Verb(infinitive="comer", english_translation="to eat", verb_type=VerbType.REGULAR, is_irregular=False, present_subjunctive={"yo": "coma", "tú": "comas"})
+        verb3 = Verb(infinitive="vivir", english_translation="to live", verb_type=VerbType.REGULAR, is_irregular=False, present_subjunctive={"yo": "viva", "tú": "vivas"})
 
         db_session.add_all([verb1, verb2, verb3])
         db_session.commit()
@@ -279,7 +281,7 @@ class TestSpacedRepetitionFlow:
         test_user
     ):
         """Test review statistics tracking."""
-        verb = Verb(infinitive="tener", english_translation="to have", is_irregular=True)
+        verb = Verb(infinitive="tener", english_translation="to have", verb_type=VerbType.IRREGULAR, is_irregular=True, present_subjunctive={"yo": "tenga", "tú": "tengas"})
         db_session.add(verb)
         db_session.commit()
 
@@ -346,7 +348,7 @@ class TestSpacedRepetitionFlow:
         test_user
     ):
         """Test that review cards persist correctly in database."""
-        verb = Verb(infinitive="hacer", english_translation="to do/make", is_irregular=True)
+        verb = Verb(infinitive="hacer", english_translation="to do/make", verb_type=VerbType.IRREGULAR, is_irregular=True, present_subjunctive={"yo": "haga", "tú": "hagas"})
         db_session.add(verb)
         db_session.commit()
 
@@ -392,9 +394,9 @@ class TestSpacedRepetitionFlow:
         """Test that different verbs have independent review schedules."""
         # Create multiple verbs
         verbs = [
-            Verb(infinitive="hablar", english_translation="to speak", is_irregular=False),
-            Verb(infinitive="comer", english_translation="to eat", is_irregular=False),
-            Verb(infinitive="vivir", english_translation="to live", is_irregular=False)
+            Verb(infinitive="hablar", english_translation="to speak", verb_type=VerbType.REGULAR, is_irregular=False, present_subjunctive={"yo": "hable", "tú": "hables"}),
+            Verb(infinitive="comer", english_translation="to eat", verb_type=VerbType.REGULAR, is_irregular=False, present_subjunctive={"yo": "coma", "tú": "comas"}),
+            Verb(infinitive="vivir", english_translation="to live", verb_type=VerbType.REGULAR, is_irregular=False, present_subjunctive={"yo": "viva", "tú": "vivas"})
         ]
         db_session.add_all(verbs)
         db_session.commit()
