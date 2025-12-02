@@ -2,9 +2,13 @@
 Comprehensive AI Service Mock Fixtures
 
 This module provides mock fixtures for all major AI APIs:
-- OpenAI (GPT-4, GPT-3.5)
-- Anthropic Claude (Claude 3.5 Sonnet, Claude 3 Opus)
-- Google Gemini (Gemini Pro, Gemini Ultra)
+- Anthropic Claude (Claude 3.5 Sonnet, Claude 3 Opus) - ACTIVE
+- OpenAI (GPT-4, GPT-3.5) - LEGACY (for testing compatibility only)
+- Google Gemini (Gemini Pro, Gemini Ultra) - FUTURE
+
+NOTE: OpenAI mocks are kept for testing purposes and multi-provider patterns.
+They do NOT require the openai package to be installed as they use mocks.
+The actual application uses Anthropic Claude API exclusively.
 
 Each mock includes:
 - Standard completion responses

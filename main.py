@@ -32,16 +32,16 @@ class HealthCheck(BaseModel):
     database_connected: bool = False
     redis_connected: bool = False
     anthropic_configured: bool = False
-from api.routes import auth, exercises, progress
+from api.routes import auth, exercises, progress, achievements
+from api.routes import settings as settings_router
 
 
-# Configure logging
+# Configure logging (stdout only for production compatibility)
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.StreamHandler(sys.stdout),
-        logging.FileHandler('backend.log')
+        logging.StreamHandler(sys.stdout)
     ]
 )
 
@@ -111,6 +111,8 @@ setup_custom_middleware(app, settings)
 app.include_router(auth.router, prefix=settings.API_V1_PREFIX)
 app.include_router(exercises.router, prefix=settings.API_V1_PREFIX)
 app.include_router(progress.router, prefix=settings.API_V1_PREFIX)
+app.include_router(achievements.router, prefix=settings.API_V1_PREFIX)
+app.include_router(settings_router.router, prefix=settings.API_V1_PREFIX)
 
 
 # Health check endpoint

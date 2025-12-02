@@ -92,6 +92,7 @@ class Exercise(Base):
     prompt = Column(Text, nullable=False)
     correct_answer = Column(String(200), nullable=False)
     alternative_answers = Column(JSON, nullable=True)  # ["fuese", "fuera"]
+    person = Column(String(50), nullable=True)  # "yo", "tú", "él/ella/usted", etc.
 
     # For multiple choice
     distractors = Column(JSON, nullable=True)  # ["hablo", "hablé", "hablaré"]
@@ -100,6 +101,9 @@ class Exercise(Base):
     explanation = Column(Text, nullable=True)
     trigger_phrase = Column(String(100), nullable=True)  # "espero que", "no creo que"
     hint = Column(Text, nullable=True)
+
+    # Categorization
+    tags = Column(JSON, default=list, nullable=False)  # ["trigger-phrases", "common-verbs"]
 
     # Metadata
     is_active = Column(Boolean, default=True, nullable=False)

@@ -4,11 +4,12 @@ SQLAlchemy ORM models for database tables.
 This module exports all database models for easy importing.
 Models are organized by domain:
 - user.py: User, UserProfile, UserPreference
+- settings.py: UserSettings
 - exercise.py: Verb, Exercise, Scenario, ExerciseScenario
 - progress.py: Session, Attempt, Achievement, UserAchievement, ReviewSchedule, UserStatistics
 
 Usage:
-    from models import User, Exercise, Session
+    from models import User, Exercise, Session, UserSettings
     from models.user import UserRole, LanguageLevel
     from models.exercise import VerbType, SubjunctiveTense, ExerciseType, DifficultyLevel
 """
@@ -42,6 +43,10 @@ from .progress import (
     UserStatistics,
 )
 
+from .settings import (
+    UserSettings,
+)
+
 # Export all models
 __all__ = [
     # User models
@@ -66,4 +71,6 @@ __all__ = [
     "UserAchievement",
     "ReviewSchedule",
     "UserStatistics",
+    # Settings models
+    "UserSettings",
 ]

@@ -12,6 +12,14 @@ from .spanish_grammar import (
     apply_spelling_changes
 )
 
+from .user_utils import (
+    UserIdError,
+    parse_user_id,
+    format_user_id,
+    get_user_id_from_token,
+    validate_user_id
+)
+
 __all__ = [
     'REGULAR_ENDINGS',
     'IRREGULAR_VERBS',
@@ -19,5 +27,10 @@ __all__ = [
     'SPELLING_CHANGES',
     'WEIRDO_TRIGGERS',
     'get_verb_type',
-    'apply_spelling_changes'
+    'apply_spelling_changes',
+    'UserIdError',
+    'parse_user_id',
+    'format_user_id',
+    'get_user_id_from_token',
+    'validate_user_id'
 ]

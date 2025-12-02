@@ -912,6 +912,318 @@ SEED_VERBS = [
             "ellos/ellas/ustedes": "hubiesen"
         }
     },
+    {
+        "infinitive": "poner",
+        "english_translation": "to put/place",
+        "verb_type": VerbType.IRREGULAR,
+        "is_irregular": True,
+        "frequency_rank": 38,
+        "irregularity_notes": "Irregular yo form: pongo → pong-",
+        "present_subjunctive": {
+            "yo": "ponga",
+            "tú": "pongas",
+            "él/ella/usted": "ponga",
+            "nosotros": "pongamos",
+            "vosotros": "pongáis",
+            "ellos/ellas/ustedes": "pongan"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "pusiera",
+            "tú": "pusieras",
+            "él/ella/usted": "pusiera",
+            "nosotros": "pusiéramos",
+            "vosotros": "pusierais",
+            "ellos/ellas/ustedes": "pusieran"
+        }
+    },
+    {
+        "infinitive": "traer",
+        "english_translation": "to bring",
+        "verb_type": VerbType.IRREGULAR,
+        "is_irregular": True,
+        "frequency_rank": 39,
+        "irregularity_notes": "Irregular yo form: traigo → traig-",
+        "present_subjunctive": {
+            "yo": "traiga",
+            "tú": "traigas",
+            "él/ella/usted": "traiga",
+            "nosotros": "traigamos",
+            "vosotros": "traigáis",
+            "ellos/ellas/ustedes": "traigan"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "trajera",
+            "tú": "trajeras",
+            "él/ella/usted": "trajera",
+            "nosotros": "trajéramos",
+            "vosotros": "trajerais",
+            "ellos/ellas/ustedes": "trajeran"
+        }
+    },
+    {
+        "infinitive": "conocer",
+        "english_translation": "to know (person/place)",
+        "verb_type": VerbType.IRREGULAR,
+        "is_irregular": True,
+        "frequency_rank": 40,
+        "irregularity_notes": "Spelling change: c→zc before a/o",
+        "present_subjunctive": {
+            "yo": "conozca",
+            "tú": "conozcas",
+            "él/ella/usted": "conozca",
+            "nosotros": "conozcamos",
+            "vosotros": "conozcáis",
+            "ellos/ellas/ustedes": "conozcan"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "conociera",
+            "tú": "conocieras",
+            "él/ella/usted": "conociera",
+            "nosotros": "conociéramos",
+            "vosotros": "conocierais",
+            "ellos/ellas/ustedes": "conocieran"
+        }
+    },
+    {
+        "infinitive": "parecer",
+        "english_translation": "to seem/appear",
+        "verb_type": VerbType.IRREGULAR,
+        "is_irregular": True,
+        "frequency_rank": 41,
+        "irregularity_notes": "Spelling change: c→zc before a/o",
+        "present_subjunctive": {
+            "yo": "parezca",
+            "tú": "parezcas",
+            "él/ella/usted": "parezca",
+            "nosotros": "parezcamos",
+            "vosotros": "parezcáis",
+            "ellos/ellas/ustedes": "parezcan"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "pareciera",
+            "tú": "parecieras",
+            "él/ella/usted": "pareciera",
+            "nosotros": "pareciéramos",
+            "vosotros": "parecierais",
+            "ellos/ellas/ustedes": "parecieran"
+        }
+    },
+    {
+        "infinitive": "seguir",
+        "english_translation": "to follow/continue",
+        "verb_type": VerbType.STEM_CHANGING,
+        "is_irregular": True,
+        "frequency_rank": 42,
+        "irregularity_notes": "Stem-changing e>i, spelling change gu→g before a/o",
+        "present_subjunctive": {
+            "yo": "siga",
+            "tú": "sigas",
+            "él/ella/usted": "siga",
+            "nosotros": "sigamos",
+            "vosotros": "sigáis",
+            "ellos/ellas/ustedes": "sigan"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "siguiera",
+            "tú": "siguieras",
+            "él/ella/usted": "siguiera",
+            "nosotros": "siguiéramos",
+            "vosotros": "siguierais",
+            "ellos/ellas/ustedes": "siguieran"
+        }
+    },
+    {
+        "infinitive": "morir",
+        "english_translation": "to die",
+        "verb_type": VerbType.STEM_CHANGING,
+        "is_irregular": False,
+        "frequency_rank": 43,
+        "irregularity_notes": "Stem-changing o>ue/u",
+        "present_subjunctive": {
+            "yo": "muera",
+            "tú": "mueras",
+            "él/ella/usted": "muera",
+            "nosotros": "muramos",
+            "vosotros": "muráis",
+            "ellos/ellas/ustedes": "mueran"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "muriera",
+            "tú": "murieras",
+            "él/ella/usted": "muriera",
+            "nosotros": "muriéramos",
+            "vosotros": "murierais",
+            "ellos/ellas/ustedes": "murieran"
+        }
+    },
+    {
+        "infinitive": "leer",
+        "english_translation": "to read",
+        "verb_type": VerbType.REGULAR,
+        "is_irregular": False,
+        "frequency_rank": 44,
+        "irregularity_notes": "Spelling change: i→y between vowels",
+        "present_subjunctive": {
+            "yo": "lea",
+            "tú": "leas",
+            "él/ella/usted": "lea",
+            "nosotros": "leamos",
+            "vosotros": "leáis",
+            "ellos/ellas/ustedes": "lean"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "leyera",
+            "tú": "leyeras",
+            "él/ella/usted": "leyera",
+            "nosotros": "leyéramos",
+            "vosotros": "leyerais",
+            "ellos/ellas/ustedes": "leyeran"
+        }
+    },
+    {
+        "infinitive": "oír",
+        "english_translation": "to hear",
+        "verb_type": VerbType.IRREGULAR,
+        "is_irregular": True,
+        "frequency_rank": 45,
+        "irregularity_notes": "Irregular: y inserted, accent changes",
+        "present_subjunctive": {
+            "yo": "oiga",
+            "tú": "oigas",
+            "él/ella/usted": "oiga",
+            "nosotros": "oigamos",
+            "vosotros": "oigáis",
+            "ellos/ellas/ustedes": "oigan"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "oyera",
+            "tú": "oyeras",
+            "él/ella/usted": "oyera",
+            "nosotros": "oyéramos",
+            "vosotros": "oyerais",
+            "ellos/ellas/ustedes": "oyeran"
+        }
+    },
+    {
+        "infinitive": "buscar",
+        "english_translation": "to search/look for",
+        "verb_type": VerbType.REGULAR,
+        "is_irregular": False,
+        "frequency_rank": 46,
+        "irregularity_notes": "Spelling change: c→qu before e",
+        "present_subjunctive": {
+            "yo": "busque",
+            "tú": "busques",
+            "él/ella/usted": "busque",
+            "nosotros": "busquemos",
+            "vosotros": "busquéis",
+            "ellos/ellas/ustedes": "busquen"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "buscara",
+            "tú": "buscaras",
+            "él/ella/usted": "buscara",
+            "nosotros": "buscáramos",
+            "vosotros": "buscarais",
+            "ellos/ellas/ustedes": "buscaran"
+        }
+    },
+    {
+        "infinitive": "pagar",
+        "english_translation": "to pay",
+        "verb_type": VerbType.REGULAR,
+        "is_irregular": False,
+        "frequency_rank": 47,
+        "irregularity_notes": "Spelling change: g→gu before e",
+        "present_subjunctive": {
+            "yo": "pague",
+            "tú": "pagues",
+            "él/ella/usted": "pague",
+            "nosotros": "paguemos",
+            "vosotros": "paguéis",
+            "ellos/ellas/ustedes": "paguen"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "pagara",
+            "tú": "pagaras",
+            "él/ella/usted": "pagara",
+            "nosotros": "pagáramos",
+            "vosotros": "pagarais",
+            "ellos/ellas/ustedes": "pagaran"
+        }
+    },
+    {
+        "infinitive": "jugar",
+        "english_translation": "to play",
+        "verb_type": VerbType.STEM_CHANGING,
+        "is_irregular": False,
+        "frequency_rank": 48,
+        "irregularity_notes": "Stem-changing u>ue, spelling change g→gu before e",
+        "present_subjunctive": {
+            "yo": "juegue",
+            "tú": "juegues",
+            "él/ella/usted": "juegue",
+            "nosotros": "juguemos",
+            "vosotros": "juguéis",
+            "ellos/ellas/ustedes": "jueguen"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "jugara",
+            "tú": "jugaras",
+            "él/ella/usted": "jugara",
+            "nosotros": "jugáramos",
+            "vosotros": "jugarais",
+            "ellos/ellas/ustedes": "jugaran"
+        }
+    },
+    {
+        "infinitive": "contar",
+        "english_translation": "to count/tell",
+        "verb_type": VerbType.STEM_CHANGING,
+        "is_irregular": False,
+        "frequency_rank": 49,
+        "irregularity_notes": "Stem-changing o>ue",
+        "present_subjunctive": {
+            "yo": "cuente",
+            "tú": "cuentes",
+            "él/ella/usted": "cuente",
+            "nosotros": "contemos",
+            "vosotros": "contéis",
+            "ellos/ellas/ustedes": "cuenten"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "contara",
+            "tú": "contaras",
+            "él/ella/usted": "contara",
+            "nosotros": "contáramos",
+            "vosotros": "contarais",
+            "ellos/ellas/ustedes": "contaran"
+        }
+    },
+    {
+        "infinitive": "recordar",
+        "english_translation": "to remember",
+        "verb_type": VerbType.STEM_CHANGING,
+        "is_irregular": False,
+        "frequency_rank": 50,
+        "irregularity_notes": "Stem-changing o>ue",
+        "present_subjunctive": {
+            "yo": "recuerde",
+            "tú": "recuerdes",
+            "él/ella/usted": "recuerde",
+            "nosotros": "recordemos",
+            "vosotros": "recordéis",
+            "ellos/ellas/ustedes": "recuerden"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "recordara",
+            "tú": "recordaras",
+            "él/ella/usted": "recordara",
+            "nosotros": "recordáramos",
+            "vosotros": "recordarais",
+            "ellos/ellas/ustedes": "recordaran"
+        }
+    },
 ]
 
 # Sample achievements

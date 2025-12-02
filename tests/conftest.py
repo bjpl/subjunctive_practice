@@ -24,7 +24,7 @@ from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.pool import StaticPool
 
 from main import app
-from core.database import Base, get_db
+from core.database import Base, get_db, get_db_session
 from core.config import Settings, get_settings
 from core.security import create_access_token, hash_password
 from models.user import User, UserProfile, UserPreference
@@ -49,7 +49,8 @@ def test_settings() -> Settings:
         REFRESH_TOKEN_EXPIRE_DAYS=7,
         ENVIRONMENT="test",
         DEBUG=True,
-        TESTING=True
+        TESTING=True,
+        RATE_LIMIT_ENABLED=False  # Disable rate limiting in tests
     )
 
 
@@ -94,7 +95,7 @@ def db_session(db_engine) -> Generator[Session, None, None]:
 
 @pytest.fixture(scope="function")
 def override_get_db(db_session: Session):
-    """Override get_db dependency with test database."""
+    """Override get_db and get_db_session dependencies with test database."""
     def _override_get_db():
         try:
             yield db_session
@@ -102,6 +103,7 @@ def override_get_db(db_session: Session):
             pass
 
     app.dependency_overrides[get_db] = _override_get_db
+    app.dependency_overrides[get_db_session] = _override_get_db
     yield
     app.dependency_overrides.clear()
 
@@ -483,6 +485,94 @@ def sample_exercises() -> list:
             "category": "Wishes"
         }
     ]
+
+
+@pytest.fixture
+def sample_exercises_with_tags(db_session: Session, db_engine) -> list:
+    """Create sample exercises with tags in the database for testing."""
+    from models.exercise import Verb, Exercise, VerbType, SubjunctiveTense, ExerciseType, DifficultyLevel
+    from core.database import Base
+
+    # Ensure tables exist in the test database
+    Base.metadata.create_all(bind=db_engine)
+
+    # Create test verbs
+    verb1 = Verb(
+        infinitive="hablar",
+        english_translation="to speak",
+        verb_type=VerbType.REGULAR,
+        present_subjunctive={"yo": "hable", "tú": "hables", "él": "hable"},
+        is_irregular=False
+    )
+    verb2 = Verb(
+        infinitive="ser",
+        english_translation="to be",
+        verb_type=VerbType.IRREGULAR,
+        present_subjunctive={"yo": "sea", "tú": "seas", "él": "sea"},
+        is_irregular=True
+    )
+    db_session.add_all([verb1, verb2])
+    db_session.flush()
+
+    # Create exercises with tags
+    exercises = [
+        Exercise(
+            verb_id=verb1.id,
+            exercise_type=ExerciseType.FILL_BLANK,
+            tense=SubjunctiveTense.PRESENT,
+            difficulty=DifficultyLevel.EASY,
+            prompt="Es importante que yo ____ español.",
+            correct_answer="hable",
+            explanation="Use subjunctive after 'es importante que'",
+            trigger_phrase="es importante que",
+            tags=["trigger-phrases", "beginner", "common-verbs"],
+            is_active=True
+        ),
+        Exercise(
+            verb_id=verb2.id,
+            exercise_type=ExerciseType.FILL_BLANK,
+            tense=SubjunctiveTense.PRESENT,
+            difficulty=DifficultyLevel.HARD,
+            prompt="Quiero que tú ____ feliz.",
+            correct_answer="seas",
+            explanation="Use subjunctive after expressions of desire",
+            trigger_phrase="quiero que",
+            tags=["trigger-phrases", "common-verbs"],
+            is_active=True
+        ),
+        Exercise(
+            verb_id=verb1.id,
+            exercise_type=ExerciseType.FILL_BLANK,
+            tense=SubjunctiveTense.PRESENT,
+            difficulty=DifficultyLevel.MEDIUM,
+            prompt="No creo que él ____ mucho.",
+            correct_answer="hable",
+            explanation="Use subjunctive with negated belief",
+            trigger_phrase="no creo que",
+            tags=["trigger-phrases", "a1-level"],
+            is_active=True
+        ),
+        Exercise(
+            verb_id=verb2.id,
+            exercise_type=ExerciseType.FILL_BLANK,
+            tense=SubjunctiveTense.PRESENT,
+            difficulty=DifficultyLevel.MEDIUM,
+            prompt="Espero que todo ____ bien.",
+            correct_answer="sea",
+            explanation="Use subjunctive after expressions of hope",
+            tags=[],  # No tags
+            is_active=True
+        )
+    ]
+
+    db_session.add_all(exercises)
+    db_session.commit()
+
+    # Refresh to get IDs
+    for ex in exercises:
+        db_session.refresh(ex)
+
+    return exercises
 
 
 # ============================================================================

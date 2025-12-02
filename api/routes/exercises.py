@@ -1,5 +1,7 @@
 """
 Exercise routes: get exercises, submit answers, validation.
+
+INTEGRATED VERSION with ConjugationEngine, FeedbackGenerator, and LearningAlgorithm.
 """
 
 from typing import List, Optional, Dict, Any
@@ -21,12 +23,46 @@ from schemas.exercise import (
     AnswerValidation,
     ExerciseListResponse
 )
+from utils.user_utils import parse_user_id, UserIdError
+
+# Learning services
+from services.conjugation import ConjugationEngine
+from services.feedback import FeedbackGenerator, Feedback
+from services.learning_algorithm import LearningAlgorithm
+
+# Custom exercise validation
+from api.custom_exercise_validation import validate_custom_exercise
 
 # Configure logging
 logger = logging.getLogger(__name__)
 
 
 router = APIRouter(prefix="/exercises", tags=["Exercises"])
+
+
+# Learning services singleton instances
+_conjugation_engine: Optional[ConjugationEngine] = None
+_feedback_generator: Optional[FeedbackGenerator] = None
+_learning_algorithm: Optional[LearningAlgorithm] = None
+
+
+def get_learning_services() -> tuple[ConjugationEngine, FeedbackGenerator, LearningAlgorithm]:
+    """
+    Get or create learning service instances (singleton pattern).
+
+    Returns:
+        Tuple of (ConjugationEngine, FeedbackGenerator, LearningAlgorithm)
+    """
+    global _conjugation_engine, _feedback_generator, _learning_algorithm
+
+    if _conjugation_engine is None:
+        logger.info("Initializing learning services...")
+        _conjugation_engine = ConjugationEngine()
+        _feedback_generator = FeedbackGenerator(_conjugation_engine)
+        _learning_algorithm = LearningAlgorithm()
+        logger.info("Learning services initialized successfully")
+
+    return _conjugation_engine, _feedback_generator, _learning_algorithm
 
 
 # Exercise data file (fallback only - deprecated)
@@ -122,6 +158,7 @@ def validate_answer(user_answer: str, correct_answer: str) -> bool:
 async def get_exercises(
     difficulty: Optional[int] = Query(None, ge=1, le=5, description="Filter by difficulty"),
     exercise_type: Optional[str] = Query(None, description="Filter by subjunctive type"),
+    tags: Optional[str] = Query(None, description="Filter by tags (comma-separated)"),
     limit: int = Query(10, ge=1, le=50, description="Number of exercises to return"),
     random_order: bool = Query(True, description="Randomize exercise order"),
     current_user: Dict[str, Any] = Depends(get_current_active_user),
@@ -132,6 +169,7 @@ async def get_exercises(
 
     - **difficulty**: Filter by difficulty level (1-5)
     - **exercise_type**: Filter by subjunctive type (present_subjunctive, imperfect_subjunctive, etc.)
+    - **tags**: Filter by tags (comma-separated, e.g., "trigger-phrases,common-verbs")
     - **limit**: Number of exercises to return (default: 10)
     - **random_order**: Randomize exercise order (default: true)
 
@@ -146,6 +184,14 @@ async def get_exercises(
         random_order=random_order
     )
 
+    # Apply tag filtering if specified
+    if tags:
+        tag_list = [tag.strip() for tag in tags.split(',')]
+        exercises = [
+            ex for ex in exercises
+            if ex.tags and any(tag in ex.tags for tag in tag_list)
+        ]
+
     if not exercises:
         logger.warning("No exercises found in database")
         raise HTTPException(
@@ -155,17 +201,9 @@ async def get_exercises(
 
     logger.info(f"Returning {len(exercises)} exercises to user {current_user.get('sub')}")
 
-    # Convert to response models (exclude answers)
+    # Convert to response models using from_attributes (Pydantic v2)
     exercise_responses = [
-        ExerciseResponse(
-            id=str(ex.id),
-            type=ex.tense.value,
-            prompt=ex.prompt,
-            difficulty=ex.difficulty.value,
-            explanation=ex.explanation,
-            hints=[ex.hint] if ex.hint else [],
-            tags=[]  # TODO: Add tags to database model
-        )
+        ExerciseResponse.model_validate(ex)
         for ex in exercises
     ]
 
@@ -232,15 +270,7 @@ async def get_exercise_by_id(
 
     logger.info(f"Returning exercise {exercise_id} to user {current_user.get('sub')}")
 
-    return ExerciseResponse(
-        id=str(exercise.id),
-        type=exercise.tense.value,
-        prompt=exercise.prompt,
-        difficulty=exercise.difficulty.value,
-        explanation=exercise.explanation,
-        hints=[exercise.hint] if exercise.hint else [],
-        tags=[]  # TODO: Add tags to database model
-    )
+    return ExerciseResponse.model_validate(exercise)
 
 
 @router.post("/submit", response_model=AnswerValidation)
@@ -250,15 +280,40 @@ async def submit_answer(
     db: Session = Depends(get_db_session)
 ):
     """
-    Submit an answer for validation.
+    Submit an answer for validation with intelligent feedback.
 
-    - **exercise_id**: Exercise identifier
+    Uses ConjugationEngine for validation, FeedbackGenerator for rich feedback,
+    and LearningAlgorithm for spaced repetition scheduling.
+
+    Handles both database exercises and custom generated exercises (IDs starting with "gen_").
+
+    - **exercise_id**: Exercise identifier (or "gen_" for custom exercises)
     - **user_answer**: User's submitted answer
     - **time_taken**: Optional time taken in seconds
+    - **verb/tense/person**: Required for custom exercises
 
     Returns validation result with feedback and score.
     Requires authentication.
     """
+    # Get learning services
+    conjugation_engine, feedback_generator, learning_algorithm = get_learning_services()
+
+    # Check if this is a custom generated exercise
+    is_custom_exercise = submission.exercise_id.startswith("gen_")
+
+    if is_custom_exercise:
+        # Handle custom exercise validation
+        return validate_custom_exercise(
+            submission=submission,
+            current_user=current_user,
+            db=db,
+            conjugation_engine=conjugation_engine,
+            feedback_generator=feedback_generator,
+            learning_algorithm=learning_algorithm,
+            save_attempt_func=save_user_attempt_to_db
+        )
+
+    # Standard database exercise validation
     # Convert exercise_id to int
     try:
         ex_id = int(submission.exercise_id)
@@ -333,53 +388,79 @@ async def submit_answer(
 def save_user_attempt_to_db(
     db: Session,
     user_id: str,
-    exercise_id: int,
+    exercise_id: Optional[int],
     user_answer: str,
     is_correct: bool,
-    score: int
+    score: int,
+    session_id: Optional[int] = None,
+    time_taken_seconds: Optional[int] = None
 ):
     """
     Save user attempt to database.
 
-    Note: This creates a standalone attempt without a session.
-    For full session tracking, create a Session first.
+    If session_id is provided, appends attempt to existing session and updates stats.
+    Otherwise, creates a standalone session (legacy behavior for backwards compatibility).
+
+    Args:
+        db: Database session
+        user_id: User ID (string like "user_7" or numeric)
+        exercise_id: Exercise ID (None for custom exercises)
+        user_answer: User's submitted answer
+        is_correct: Whether answer was correct
+        score: Score achieved (0-100)
+        session_id: Optional session ID to append attempt to
+        time_taken_seconds: Optional time taken to complete
     """
-    # Convert user_id string to int (assuming format like "user_7")
+    # Convert user_id string to int using centralized utility
     try:
-        if isinstance(user_id, str):
-            # Extract numeric part if user_id is like "user_7"
-            user_id_int = int(user_id.split('_')[-1]) if '_' in user_id else int(user_id)
-        else:
-            user_id_int = int(user_id)
-    except (ValueError, IndexError):
+        user_id_int = parse_user_id(user_id)
+    except UserIdError:
         logger.error(f"Invalid user_id format: {user_id}")
-        # For now, skip saving if we can't parse user_id
-        # In production, we'd want better user ID handling
+        # Skip saving if we can't parse user_id
         return
 
-    # Create a simple session for this attempt
     from models.progress import Session as PracticeSession
 
-    practice_session = PracticeSession(
-        user_id=user_id_int,
-        started_at=datetime.utcnow(),
-        ended_at=datetime.utcnow(),
-        total_exercises=1,
-        correct_answers=1 if is_correct else 0,
-        score_percentage=score,
-        session_type="practice",
-        is_completed=True
-    )
-    db.add(practice_session)
-    db.flush()  # Get the session ID
+    # If session_id provided, append to existing session
+    if session_id:
+        practice_session = db.query(PracticeSession).filter(
+            PracticeSession.id == session_id,
+            PracticeSession.user_id == user_id_int
+        ).first()
+
+        if practice_session:
+            # Update session stats
+            practice_session.total_exercises = (practice_session.total_exercises or 0) + 1
+            practice_session.correct_answers = (practice_session.correct_answers or 0) + (1 if is_correct else 0)
+            practice_session.score_percentage = (
+                (practice_session.correct_answers / practice_session.total_exercises) * 100
+            ) if practice_session.total_exercises > 0 else 0
+        else:
+            logger.warning(f"Session {session_id} not found for user {user_id}, creating new session")
+            session_id = None  # Fall through to create new session
+
+    # Create a new session if no session_id provided or session not found
+    if not session_id:
+        practice_session = PracticeSession(
+            user_id=user_id_int,
+            started_at=datetime.utcnow(),
+            ended_at=datetime.utcnow(),
+            total_exercises=1,
+            correct_answers=1 if is_correct else 0,
+            score_percentage=score,
+            session_type="practice",
+            is_completed=True
+        )
+        db.add(practice_session)
+        db.flush()  # Get the session ID
 
     attempt = Attempt(
         session_id=practice_session.id,
         user_id=user_id_int,
-        exercise_id=exercise_id,
+        exercise_id=exercise_id,  # Can be None for custom exercises
         user_answer=user_answer,
         is_correct=is_correct,
-        time_taken_seconds=None
+        time_taken_seconds=time_taken_seconds
     )
     db.add(attempt)
     db.commit()
@@ -432,3 +513,217 @@ async def get_available_exercise_types(
     logger.info(f"Available exercise types: {type_values}")
 
     return type_values
+
+
+# ============================================================================
+# Spaced Repetition / Review Endpoints
+# ============================================================================
+
+from schemas.exercise import DueReviewResponse, DueReviewItem, ReviewStatsResponse
+
+
+@router.get("/review/due", response_model=DueReviewResponse)
+async def get_due_reviews(
+    limit: int = Query(10, ge=1, le=50, description="Maximum number of due items to return"),
+    tense: Optional[str] = Query(None, description="Filter by tense"),
+    current_user: Dict[str, Any] = Depends(get_current_active_user),
+    db: Session = Depends(get_db_session)
+):
+    """
+    Get exercises that are due for review based on spaced repetition schedule.
+
+    Returns items ordered by most overdue first, with metadata about difficulty
+    level and review performance.
+    """
+    from models.progress import ReviewSchedule
+    from models.exercise import Verb
+    from datetime import timedelta
+
+    # Parse user ID
+    try:
+        user_id_int = parse_user_id(current_user["sub"])
+    except UserIdError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid user ID format"
+        )
+
+    # Query for due reviews
+    now = datetime.utcnow()
+    query = db.query(ReviewSchedule).filter(
+        ReviewSchedule.user_id == user_id_int,
+        ReviewSchedule.next_review_date <= now
+    ).join(Verb)
+
+    # Order by most overdue first
+    query = query.order_by(ReviewSchedule.next_review_date.asc())
+
+    # Get all due items (we'll limit after processing)
+    due_schedules = query.all()
+
+    # Build response items
+    items = []
+    for schedule in due_schedules:
+        # Calculate days overdue
+        time_diff = now - schedule.next_review_date
+        days_overdue = max(0, time_diff.days)
+
+        # Calculate success rate
+        success_rate = 0.0
+        if schedule.total_attempts > 0:
+            success_rate = (schedule.total_correct / schedule.total_attempts) * 100
+
+        # Determine difficulty level based on SM-2 parameters
+        difficulty_level = "new"
+        if schedule.review_count == 0:
+            difficulty_level = "new"
+        elif schedule.easiness_factor < 2.0:
+            difficulty_level = "learning"
+        elif schedule.easiness_factor < 2.5:
+            difficulty_level = "reviewing"
+        else:
+            difficulty_level = "mastered"
+
+        # Create review item
+        item = DueReviewItem(
+            verb_id=schedule.verb_id,
+            verb_infinitive=schedule.verb.infinitive,
+            verb_translation=schedule.verb.english_translation,
+            tense="present_subjunctive",  # Default, can be customized
+            person=None,  # Will be determined during practice
+            days_overdue=days_overdue,
+            difficulty_level=difficulty_level,
+            easiness_factor=schedule.easiness_factor,
+            next_review_date=schedule.next_review_date,
+            review_count=schedule.review_count,
+            success_rate=success_rate
+        )
+        items.append(item)
+
+        if len(items) >= limit:
+            break
+
+    # Get next upcoming review date (for items not yet due)
+    next_review_query = db.query(ReviewSchedule).filter(
+        ReviewSchedule.user_id == user_id_int,
+        ReviewSchedule.next_review_date > now
+    ).order_by(ReviewSchedule.next_review_date.asc()).first()
+
+    next_review_date = next_review_query.next_review_date if next_review_query else None
+
+    logger.info(f"User {user_id_int} has {len(items)} items due for review")
+
+    return DueReviewResponse(
+        items=items,
+        total_due=len(items),
+        next_review_date=next_review_date
+    )
+
+
+@router.get("/review/stats", response_model=ReviewStatsResponse)
+async def get_review_stats(
+    current_user: Dict[str, Any] = Depends(get_current_active_user),
+    db: Session = Depends(get_db_session)
+):
+    """
+    Get review statistics including:
+    - Count of due cards
+    - Distribution by difficulty level
+    - Average retention rate
+    - Review activity metrics
+    """
+    from models.progress import ReviewSchedule, Session as PracticeSession
+    from datetime import timedelta
+
+    # Parse user ID
+    try:
+        user_id_int = parse_user_id(current_user["sub"])
+    except UserIdError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid user ID format"
+        )
+
+    now = datetime.utcnow()
+    today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+
+    # Get all review schedules for user
+    all_schedules = db.query(ReviewSchedule).filter(
+        ReviewSchedule.user_id == user_id_int
+    ).all()
+
+    # Count due items
+    total_due = 0
+    due_by_difficulty = {
+        "new": 0,
+        "learning": 0,
+        "reviewing": 0,
+        "mastered": 0
+    }
+
+    total_correct = 0
+    total_attempts = 0
+    total_reviewed = 0
+
+    for schedule in all_schedules:
+        # Count reviewed items
+        if schedule.review_count > 0:
+            total_reviewed += 1
+
+        # Accumulate performance metrics
+        total_correct += schedule.total_correct
+        total_attempts += schedule.total_attempts
+
+        # Check if due
+        if schedule.next_review_date <= now:
+            total_due += 1
+
+            # Categorize by difficulty
+            if schedule.review_count == 0:
+                due_by_difficulty["new"] += 1
+            elif schedule.easiness_factor < 2.0:
+                due_by_difficulty["learning"] += 1
+            elif schedule.easiness_factor < 2.5:
+                due_by_difficulty["reviewing"] += 1
+            else:
+                due_by_difficulty["mastered"] += 1
+
+    # Calculate average retention rate
+    average_retention = 0.0
+    if total_attempts > 0:
+        average_retention = (total_correct / total_attempts) * 100
+
+    # Count reviews done today
+    reviews_today = db.query(PracticeSession).filter(
+        PracticeSession.user_id == user_id_int,
+        PracticeSession.session_type == "review",
+        PracticeSession.started_at >= today_start
+    ).count()
+
+    # Calculate streak days (simplified - count consecutive days with reviews)
+    streak_days = 0
+    check_date = today_start
+    for _ in range(365):  # Check up to a year back
+        day_sessions = db.query(PracticeSession).filter(
+            PracticeSession.user_id == user_id_int,
+            PracticeSession.started_at >= check_date,
+            PracticeSession.started_at < check_date + timedelta(days=1),
+            PracticeSession.is_completed == True
+        ).count()
+
+        if day_sessions > 0:
+            streak_days += 1
+            check_date -= timedelta(days=1)
+        else:
+            break
+
+    logger.info(f"Review stats for user {user_id_int}: {total_due} due, {average_retention:.1f}% retention")
+
+    return ReviewStatsResponse(
+        total_due=total_due,
+        due_by_difficulty=due_by_difficulty,
+        average_retention=round(average_retention, 2),
+        total_reviewed=total_reviewed,
+        reviews_today=reviews_today,
+        streak_days=streak_days
+    )

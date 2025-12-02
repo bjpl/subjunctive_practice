@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     VERSION: str = "1.0.0"
     ENVIRONMENT: str = Field(default="development", env="ENVIRONMENT")
     DEBUG: bool = Field(default=False, env="DEBUG")
+    TESTING: bool = Field(default=False, env="TESTING")
 
     # API Configuration
     API_V1_PREFIX: str = "/api"

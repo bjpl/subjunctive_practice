@@ -1,0 +1,1350 @@
+"""
+Exercise routes: get exercises, submit answers, validation.
+
+INTEGRATED VERSION with ConjugationEngine, FeedbackGenerator, and LearningAlgorithm.
+"""
+
+from typing import List, Optional, Dict, Any
+from fastapi import APIRouter, HTTPException, status, Depends, Query
+from sqlalchemy.orm import Session
+import json
+import random
+from pathlib import Path
+from datetime import datetime
+import logging
+
+from core.security import get_current_active_user
+from core.database import get_db_session
+from models.exercise import Exercise, ExerciseType, SubjunctiveTense, DifficultyLevel
+from models.progress import Attempt
+from schemas.exercise import (
+    ExerciseResponse,
+    AnswerSubmit,
+    AnswerValidation,
+    ExerciseListResponse,
+    SessionStartRequest,
+    SessionStartResponse,
+    SessionEndRequest,
+    SessionEndResponse
+)
+
+# Learning services
+from services.conjugation import ConjugationEngine
+from services.feedback import FeedbackGenerator, Feedback
+from services.learning_algorithm import LearningAlgorithm
+
+# Configure logging
+logger = logging.getLogger(__name__)
+
+
+router = APIRouter(prefix="/exercises", tags=["Exercises"])
+
+
+# Learning services singleton instances
+_conjugation_engine: Optional[ConjugationEngine] = None
+_feedback_generator: Optional[FeedbackGenerator] = None
+
+
+def get_learning_services(db: Session = None) -> tuple[ConjugationEngine, FeedbackGenerator, LearningAlgorithm]:
+    """
+    Get or create learning service instances.
+
+    Note: LearningAlgorithm is created per-request with database session
+    to enable proper persistence. ConjugationEngine and FeedbackGenerator
+    are singleton as they don't need database access.
+
+    Args:
+        db: Database session (required for LearningAlgorithm persistence)
+
+    Returns:
+        Tuple of (ConjugationEngine, FeedbackGenerator, LearningAlgorithm)
+    """
+    global _conjugation_engine, _feedback_generator
+
+    if _conjugation_engine is None:
+        logger.info("Initializing learning services...")
+        _conjugation_engine = ConjugationEngine()
+        _feedback_generator = FeedbackGenerator(_conjugation_engine)
+        logger.info("Learning services initialized successfully")
+
+    # Create new LearningAlgorithm instance with db session for each request
+    learning_algorithm = LearningAlgorithm(db_session=db)
+
+    return _conjugation_engine, _feedback_generator, learning_algorithm
+
+
+# Helper functions
+def parse_user_id(user_id_str: str) -> int:
+    """Parse user ID from string format like 'user_7' or '7'."""
+    if isinstance(user_id_str, int):
+        return user_id_str
+    if '_' in str(user_id_str):
+        return int(str(user_id_str).split('_')[-1])
+    return int(user_id_str)
+
+
+def extract_person_from_prompt(prompt: str) -> Optional[str]:
+    """
+    Extract grammatical person from exercise prompt.
+
+    Looks for person indicators in the prompt text.
+    Returns None if person cannot be determined.
+    """
+    prompt_lower = prompt.lower()
+
+    # Person indicators
+    person_patterns = {
+        "yo": ["yo ", "i "],
+        "tú": ["tú ", "you "],
+        "él/ella/usted": ["él ", "ella ", "usted ", "he ", "she "],
+        "nosotros/nosotras": ["nosotros ", "nosotras ", "we "],
+        "vosotros/vosotras": ["vosotros ", "vosotras "],
+        "ellos/ellas/ustedes": ["ellos ", "ellas ", "ustedes ", "they "]
+    }
+
+    for person, patterns in person_patterns.items():
+        for pattern in patterns:
+            if pattern in prompt_lower:
+                return person
+
+    # Default to yo if unclear
+    return "yo"
+
+
+def extract_trigger_category(trigger_phrase: Optional[str]) -> Optional[str]:
+    """
+    Extract WEIRDO category from trigger phrase.
+
+    Returns None if trigger phrase is unknown.
+    """
+    if not trigger_phrase:
+        return None
+
+    from utils.spanish_grammar import WEIRDO_TRIGGERS
+
+    trigger_lower = trigger_phrase.lower()
+
+    for category, data in WEIRDO_TRIGGERS.items():
+        for trigger in data.get("triggers", []):
+            if trigger.lower() in trigger_lower:
+                return category
+
+    return None
+
+
+def normalize_answer(answer: str) -> str:
+    """Normalize answer for comparison."""
+    return answer.strip().lower()
+
+
+def validate_answer(user_answer: str, correct_answer: str) -> bool:
+    """
+    Validate if user answer matches correct answer (simple fallback).
+    Handles multiple acceptable answers separated by '/'.
+    """
+    user_normalized = normalize_answer(user_answer)
+    correct_alternatives = [normalize_answer(ans) for ans in correct_answer.split('/')]
+    return user_normalized in correct_alternatives
+
+
+# Exercise data file (fallback only - deprecated)
+EXERCISE_DATA_FILE = Path("user_data/fallback_exercises.json")
+
+
+def load_exercises_from_db(
+    db: Session,
+    difficulty: Optional[int] = None,
+    exercise_type: Optional[str] = None,
+    limit: int = 50,
+    random_order: bool = True
+) -> List[Exercise]:
+    """Load exercises from database with optional filtering."""
+    logger.info(f"Querying database for exercises (difficulty={difficulty}, type={exercise_type}, limit={limit})")
+
+    query = db.query(Exercise).filter(Exercise.is_active == True)
+
+    # Apply filters
+    if difficulty is not None:
+        try:
+            diff_level = DifficultyLevel(difficulty)
+            query = query.filter(Exercise.difficulty == diff_level)
+        except ValueError:
+            logger.warning(f"Invalid difficulty level: {difficulty}")
+
+    if exercise_type:
+        try:
+            tense = SubjunctiveTense(exercise_type)
+            query = query.filter(Exercise.tense == tense)
+        except ValueError:
+            logger.warning(f"Invalid exercise type: {exercise_type}")
+
+    exercises = query.all()
+    logger.info(f"Found {len(exercises)} exercises in database")
+
+    if random_order:
+        random.shuffle(exercises)
+
+    return exercises[:limit]
+
+
+@router.get("", response_model=ExerciseListResponse)
+async def get_exercises(
+    difficulty: Optional[int] = Query(None, ge=1, le=5),
+    exercise_type: Optional[str] = Query(None),
+    tags: Optional[str] = Query(None),
+    limit: int = Query(10, ge=1, le=50),
+    random_order: bool = Query(True),
+    current_user: Dict[str, Any] = Depends(get_current_active_user),
+    db: Session = Depends(get_db_session)
+):
+    """Get practice exercises with optional filtering."""
+    exercises = load_exercises_from_db(
+        db=db,
+        difficulty=difficulty,
+        exercise_type=exercise_type,
+        limit=limit,
+        random_order=random_order
+    )
+
+    if tags:
+        tag_list = [tag.strip() for tag in tags.split(',')]
+        exercises = [
+            ex for ex in exercises
+            if ex.tags and any(tag in ex.tags for tag in tag_list)
+        ]
+
+    if not exercises:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No exercises available")
+
+    exercise_responses = [ExerciseResponse.model_validate(ex) for ex in exercises]
+
+    # Get total count for pagination
+    total_query = db.query(Exercise).filter(Exercise.is_active == True)
+    if difficulty is not None:
+        try:
+            total_query = total_query.filter(Exercise.difficulty == DifficultyLevel(difficulty))
+        except ValueError:
+            pass
+    if exercise_type:
+        try:
+            total_query = total_query.filter(Exercise.tense == SubjunctiveTense(exercise_type))
+        except ValueError:
+            pass
+
+    total_count = total_query.count()
+
+    return ExerciseListResponse(
+        exercises=exercise_responses,
+        total=len(exercise_responses),
+        page=1,
+        page_size=limit,
+        has_more=total_count > limit
+    )
+
+
+@router.get("/{exercise_id}", response_model=ExerciseResponse)
+async def get_exercise_by_id(
+    exercise_id: str,
+    current_user: Dict[str, Any] = Depends(get_current_active_user),
+    db: Session = Depends(get_db_session)
+):
+    """Get a specific exercise by ID."""
+    try:
+        ex_id = int(exercise_id)
+    except ValueError:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid exercise ID format")
+
+    exercise = db.query(Exercise).filter(Exercise.id == ex_id, Exercise.is_active == True).first()
+
+    if not exercise:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Exercise not found")
+
+    return ExerciseResponse.model_validate(exercise)
+
+
+@router.post("/submit", response_model=AnswerValidation)
+async def submit_answer(
+    submission: AnswerSubmit,
+    current_user: Dict[str, Any] = Depends(get_current_active_user),
+    db: Session = Depends(get_db_session)
+):
+    """
+    Submit an answer for validation with intelligent feedback.
+
+    Uses ConjugationEngine for validation, FeedbackGenerator for rich feedback,
+    and LearningAlgorithm for spaced repetition scheduling.
+    """
+    # Get learning services with database session
+    conjugation_engine, feedback_generator, learning_algorithm = get_learning_services(db)
+
+    # Convert exercise_id to int
+    try:
+        ex_id = int(submission.exercise_id)
+    except ValueError:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid exercise ID format")
+
+    # Query database for exercise with verb relationship
+    exercise = db.query(Exercise).filter(Exercise.id == ex_id, Exercise.is_active == True).first()
+
+    if not exercise:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Exercise not found")
+
+    # Try to extract verb and person information for intelligent validation
+    verb_infinitive = None
+    person = None
+    use_intelligent_validation = False
+
+    if exercise.verb:
+        verb_infinitive = exercise.verb.infinitive
+        person = extract_person_from_prompt(exercise.prompt)
+
+        if person:
+            use_intelligent_validation = True
+            logger.info(f"Using intelligent validation for {verb_infinitive} ({person})")
+
+    # Perform validation
+    if use_intelligent_validation:
+        # Use ConjugationEngine for sophisticated validation
+        tense_map = {
+            SubjunctiveTense.PRESENT: "present_subjunctive",
+            SubjunctiveTense.IMPERFECT: "imperfect_subjunctive_ra",
+            SubjunctiveTense.PRESENT_PERFECT: "present_subjunctive",
+            SubjunctiveTense.PLUPERFECT: "imperfect_subjunctive_ra"
+        }
+        tense = tense_map.get(exercise.tense, "present_subjunctive")
+
+        try:
+            validation_result = conjugation_engine.validate_answer(
+                verb=verb_infinitive,
+                tense=tense,
+                person=person,
+                user_answer=submission.user_answer
+            )
+            is_correct = validation_result.is_correct
+            correct_answer = validation_result.correct_answer
+
+            # Generate rich feedback
+            exercise_context = {
+                "trigger_phrase": exercise.trigger_phrase,
+                "trigger_category": extract_trigger_category(exercise.trigger_phrase) if exercise.trigger_phrase else None,
+                "explanation": exercise.explanation
+            }
+
+            rich_feedback = feedback_generator.generate_feedback(
+                validation_result=validation_result,
+                exercise_context=exercise_context,
+                user_level="intermediate"
+            )
+
+        except Exception as e:
+            logger.warning(f"Intelligent validation failed: {e}, falling back to simple validation")
+            use_intelligent_validation = False
+
+    if not use_intelligent_validation:
+        # Fallback to simple string comparison
+        correct_answer = exercise.correct_answer
+        is_correct = validate_answer(submission.user_answer, correct_answer)
+
+        # Create simple feedback object
+        class SimpleFeedback:
+            is_correct = is_correct
+            message = "Excellent! Your answer is correct." if is_correct else f"Not quite. The correct answer is '{correct_answer}'."
+            explanation = exercise.explanation or ("Great job on this conjugation!" if is_correct else "Review the conjugation rules for this verb.")
+            error_category = None if is_correct else "unknown_error"
+            suggestions = [] if is_correct else ["Review the correct answer and try again"]
+            related_rules = []
+            encouragement = "Keep up the good work!" if is_correct else "Don't worry, mistakes help you learn!"
+            next_steps = ["Continue practicing to reinforce this pattern"] if is_correct else ["Try similar exercises to improve"]
+
+        rich_feedback = SimpleFeedback()
+
+    # Calculate score
+    base_score = 100 if is_correct else 0
+
+    # Time bonus
+    if is_correct and submission.time_taken:
+        if submission.time_taken < 10:
+            base_score = min(100, base_score + 10)
+        elif submission.time_taken < 20:
+            base_score = min(100, base_score + 5)
+
+    # Get alternative answers
+    alternative_answers = []
+    if exercise.alternative_answers:
+        alternative_answers = exercise.alternative_answers
+    elif '/' in correct_answer:
+        alternative_answers = correct_answer.split('/')
+
+    # Process with learning algorithm for spaced repetition
+    learning_result = None
+    if use_intelligent_validation and verb_infinitive and person:
+        try:
+            # Parse user_id to integer
+            user_id_int = parse_user_id(current_user["sub"])
+
+            response_time_ms = (submission.time_taken * 1000) if submission.time_taken else 5000
+            learning_result = learning_algorithm.process_exercise_result(
+                verb=verb_infinitive,
+                tense=tense,
+                person=person,
+                correct=is_correct,
+                response_time_ms=response_time_ms,
+                difficulty_felt=None,
+                user_id=user_id_int
+            )
+            logger.info(f"Learning algorithm updated: next review in {learning_result['interval_days']} days")
+        except Exception as e:
+            logger.error(f"Learning algorithm processing failed: {e}")
+
+    # Save user's attempt to database
+    save_user_attempt_to_db(
+        db=db,
+        user_id=current_user["sub"],
+        exercise_id=ex_id,
+        user_answer=submission.user_answer,
+        is_correct=is_correct,
+        score=base_score,
+        session_id=submission.session_id,
+        time_taken_seconds=submission.time_taken
+    )
+
+    logger.info(f"User {current_user.get('sub')} submitted answer for exercise {ex_id}: correct={is_correct}")
+
+    # Build comprehensive response
+    return AnswerValidation(
+        is_correct=is_correct,
+        correct_answer=correct_answer,
+        user_answer=submission.user_answer,
+        feedback=rich_feedback.message,
+        explanation=rich_feedback.explanation,
+        score=base_score,
+        alternative_answers=alternative_answers,
+        # Enhanced feedback
+        error_type=rich_feedback.error_category,
+        suggestions=rich_feedback.suggestions,
+        related_rules=rich_feedback.related_rules,
+        encouragement=rich_feedback.encouragement,
+        next_steps=rich_feedback.next_steps,
+        # Spaced repetition
+        next_review_date=learning_result["next_review"] if learning_result else None,
+        interval_days=learning_result["interval_days"] if learning_result else None,
+        difficulty_level=learning_result["new_difficulty"] if learning_result else None
+    )
+
+
+def save_user_attempt_to_db(
+    db: Session,
+    user_id: str,
+    exercise_id: int,
+    user_answer: str,
+    is_correct: bool,
+    score: int,
+    session_id: Optional[int] = None,
+    time_taken_seconds: Optional[int] = None
+):
+    """
+    Save user attempt to database.
+
+    If session_id is provided, appends attempt to existing session and updates stats.
+    Otherwise, creates a standalone session (legacy behavior for backwards compatibility).
+    """
+    try:
+        user_id_int = parse_user_id(user_id)
+    except (ValueError, IndexError):
+        logger.error(f"Invalid user_id format: {user_id}")
+        return
+
+    from models.progress import Session as PracticeSession
+
+    if session_id:
+        # Append to existing session
+        practice_session = db.query(PracticeSession).filter(
+            PracticeSession.id == session_id,
+            PracticeSession.user_id == user_id_int
+        ).first()
+
+        if not practice_session:
+            logger.error(f"Session {session_id} not found for user {user_id_int}")
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Session not found or does not belong to user"
+            )
+
+        # Update session stats incrementally
+        practice_session.total_exercises += 1
+        if is_correct:
+            practice_session.correct_answers += 1
+
+        # Recalculate score percentage
+        if practice_session.total_exercises > 0:
+            practice_session.score_percentage = (
+                practice_session.correct_answers / practice_session.total_exercises
+            ) * 100
+
+        logger.info(f"Updated session {session_id}: {practice_session.total_exercises} exercises, "
+                   f"{practice_session.correct_answers} correct")
+    else:
+        # Legacy: create standalone session (backwards compatibility)
+        practice_session = PracticeSession(
+            user_id=user_id_int,
+            started_at=datetime.utcnow(),
+            ended_at=datetime.utcnow(),
+            total_exercises=1,
+            correct_answers=1 if is_correct else 0,
+            score_percentage=score,
+            session_type="practice",
+            is_completed=True
+        )
+        db.add(practice_session)
+        db.flush()
+        logger.info(f"Created standalone session for legacy submission")
+
+    # Create attempt record
+    attempt = Attempt(
+        session_id=practice_session.id,
+        user_id=user_id_int,
+        exercise_id=exercise_id,
+        user_answer=user_answer,
+        is_correct=is_correct,
+        time_taken_seconds=time_taken_seconds
+    )
+    db.add(attempt)
+    db.commit()
+    logger.info(f"Saved attempt for user {user_id} on exercise {exercise_id}")
+
+
+# ============================================================================
+# Session Management Endpoints
+# ============================================================================
+
+@router.post("/session/start", response_model=SessionStartResponse)
+async def start_practice_session(
+    request: SessionStartRequest,
+    current_user: Dict[str, Any] = Depends(get_current_active_user),
+    db: Session = Depends(get_db_session)
+):
+    """
+    Start a new practice session.
+
+    Returns a session_id that should be used when submitting answers
+    to track all attempts within this session.
+    """
+    try:
+        user_id_int = parse_user_id(current_user["sub"])
+    except (ValueError, IndexError):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid user ID"
+        )
+
+    from models.progress import Session as PracticeSession
+
+    # Validate session_type
+    valid_session_types = ["practice", "review", "test"]
+    if request.session_type not in valid_session_types:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Invalid session_type. Must be one of: {', '.join(valid_session_types)}"
+        )
+
+    # Create new session
+    practice_session = PracticeSession(
+        user_id=user_id_int,
+        started_at=datetime.utcnow(),
+        total_exercises=0,
+        correct_answers=0,
+        score_percentage=0.0,
+        session_type=request.session_type,
+        is_completed=False
+    )
+
+    db.add(practice_session)
+    db.commit()
+    db.refresh(practice_session)
+
+    logger.info(f"Started {request.session_type} session {practice_session.id} for user {user_id_int}")
+
+    return SessionStartResponse(
+        session_id=practice_session.id,
+        started_at=practice_session.started_at
+    )
+
+
+@router.post("/session/end", response_model=SessionEndResponse)
+async def end_practice_session(
+    request: SessionEndRequest,
+    current_user: Dict[str, Any] = Depends(get_current_active_user),
+    db: Session = Depends(get_db_session)
+):
+    """
+    End a practice session and mark it as completed.
+
+    Calculates final statistics including duration, total exercises,
+    correct answers, and score percentage.
+    """
+    try:
+        user_id_int = parse_user_id(current_user["sub"])
+    except (ValueError, IndexError):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid user ID"
+        )
+
+    from models.progress import Session as PracticeSession
+
+    # Find session
+    practice_session = db.query(PracticeSession).filter(
+        PracticeSession.id == request.session_id,
+        PracticeSession.user_id == user_id_int
+    ).first()
+
+    if not practice_session:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Session not found or does not belong to user"
+        )
+
+    if practice_session.is_completed:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Session is already completed"
+        )
+
+    # Mark session as completed
+    practice_session.ended_at = datetime.utcnow()
+    practice_session.is_completed = True
+
+    # Calculate duration
+    duration = (practice_session.ended_at - practice_session.started_at).total_seconds()
+    practice_session.duration_seconds = int(duration)
+
+    db.commit()
+    db.refresh(practice_session)
+
+    logger.info(f"Ended session {practice_session.id} for user {user_id_int}: "
+               f"{practice_session.total_exercises} exercises, "
+               f"{practice_session.correct_answers} correct, "
+               f"{practice_session.score_percentage:.1f}% score")
+
+    return SessionEndResponse(
+        session_id=practice_session.id,
+        started_at=practice_session.started_at,
+        ended_at=practice_session.ended_at,
+        duration_seconds=practice_session.duration_seconds,
+        total_exercises=practice_session.total_exercises,
+        correct_answers=practice_session.correct_answers,
+        score_percentage=practice_session.score_percentage,
+        session_type=practice_session.session_type
+    )
+
+
+@router.get("/types/available", response_model=List[str])
+async def get_available_exercise_types(
+    current_user: Dict[str, Any] = Depends(get_current_active_user),
+    db: Session = Depends(get_db_session)
+):
+    """Get list of available exercise types."""
+    types = db.query(Exercise.tense).filter(Exercise.is_active == True).distinct().all()
+    type_values = sorted([t[0].value for t in types if t[0] is not None])
+    return type_values
+
+
+# ============================================================================
+# Custom Exercise Generation
+# ============================================================================
+
+from pydantic import BaseModel, Field
+
+
+class CustomPracticeRequest(BaseModel):
+    """Request model for custom practice session generation."""
+    verbs: List[str] = Field(default=[], description="List of verb infinitives to practice")
+    tense: str = Field(default="present_subjunctive", description="Subjunctive tense to practice")
+    persons: List[str] = Field(default=["yo", "tú", "él/ella/usted"], description="Grammatical persons")
+    difficulty: int = Field(default=2, ge=1, le=4, description="Difficulty level 1-4")
+    custom_context: str = Field(default="", description="Situational theme (e.g., 'at a restaurant', 'travel')")
+    trigger_category: str = Field(default="all", description="WEIRDO trigger category")
+    exercise_count: int = Field(default=10, ge=1, le=50, description="Number of exercises")
+    include_hints: bool = Field(default=True)
+    include_explanations: bool = Field(default=True)
+
+
+class GeneratedExercise(BaseModel):
+    """A dynamically generated exercise."""
+    id: str
+    verb: str
+    verb_translation: str
+    tense: str
+    person: str
+    prompt: str
+    correct_answer: str
+    alternative_answers: List[str] = []
+    hint: Optional[str] = None
+    explanation: Optional[str] = None
+    trigger_phrase: Optional[str] = None
+    difficulty: int
+
+
+class CustomPracticeResponse(BaseModel):
+    """Response with generated exercises."""
+    exercises: List[GeneratedExercise]
+    total: int
+    config_summary: Dict[str, Any]
+
+
+# WEIRDO trigger phrases by category
+WEIRDO_TRIGGERS = {
+    "wishes": [
+        ("Espero que", "I hope that"),
+        ("Ojalá que", "I hope/wish that"),
+        ("Deseo que", "I wish that"),
+        ("Quiero que", "I want (someone) to"),
+    ],
+    "emotions": [
+        ("Me alegra que", "It makes me happy that"),
+        ("Siento que", "I'm sorry that"),
+        ("Temo que", "I'm afraid that"),
+        ("Me sorprende que", "It surprises me that"),
+        ("Es triste que", "It's sad that"),
+    ],
+    "impersonal": [
+        ("Es importante que", "It's important that"),
+        ("Es necesario que", "It's necessary that"),
+        ("Es posible que", "It's possible that"),
+        ("Es mejor que", "It's better that"),
+        ("Es probable que", "It's likely that"),
+    ],
+    "requests": [
+        ("Quiero que", "I want (someone) to"),
+        ("Pido que", "I ask that"),
+        ("Sugiero que", "I suggest that"),
+        ("Recomiendo que", "I recommend that"),
+        ("Insisto en que", "I insist that"),
+    ],
+    "doubt": [
+        ("Dudo que", "I doubt that"),
+        ("No creo que", "I don't believe that"),
+        ("No pienso que", "I don't think that"),
+        ("No es cierto que", "It's not certain that"),
+    ],
+    "ojalá": [
+        ("Ojalá", "I hope/wish"),
+        ("Ojalá que", "I hope/wish that"),
+    ],
+}
+
+# Themed sentence contexts - situations/themes for generating contextual exercises
+THEMED_CONTEXTS = {
+    "at a restaurant": {
+        "scenarios": [
+            "ordering food at a restaurant",
+            "asking the waiter for recommendations",
+            "discussing the menu with friends",
+            "making a reservation",
+        ],
+        "sentence_frames": {
+            "hablar": ["El mesero espera que {subject} ___ con él sobre el menú"],
+            "comer": ["Es importante que {subject} ___ algo antes de la reunión"],
+            "pedir": ["Sugiero que {subject} ___ el plato del día"],
+            "traer": ["Quiero que el mesero me ___ la cuenta"],
+            "beber": ["Es mejor que {subject} ___ agua con la comida"],
+            "default": ["En el restaurante, espero que {subject} ___ ({verb})"],
+        },
+    },
+    "travel": {
+        "scenarios": [
+            "planning a trip",
+            "at the airport",
+            "booking a hotel",
+            "asking for directions",
+        ],
+        "sentence_frames": {
+            "ir": ["Espero que {subject} ___ de vacaciones este verano"],
+            "viajar": ["Es importante que {subject} ___ con pasaporte válido"],
+            "llegar": ["Ojalá que {subject} ___ a tiempo al aeropuerto"],
+            "salir": ["Es necesario que {subject} ___ temprano para el vuelo"],
+            "venir": ["Quiero que {subject} ___ conmigo al viaje"],
+            "default": ["Durante el viaje, espero que {subject} ___ ({verb})"],
+        },
+    },
+    "work/career": {
+        "scenarios": [
+            "in a job interview",
+            "talking to your boss",
+            "working on a project",
+            "asking for a promotion",
+        ],
+        "sentence_frames": {
+            "trabajar": ["Es importante que {subject} ___ duro para el proyecto"],
+            "hacer": ["El jefe quiere que {subject} ___ el informe hoy"],
+            "terminar": ["Es necesario que {subject} ___ antes del viernes"],
+            "hablar": ["Sugiero que {subject} ___ con recursos humanos"],
+            "escribir": ["Es mejor que {subject} ___ un correo formal"],
+            "default": ["En el trabajo, es importante que {subject} ___ ({verb})"],
+        },
+    },
+    "health": {
+        "scenarios": [
+            "at the doctor's office",
+            "discussing symptoms",
+            "giving health advice",
+            "at the pharmacy",
+        ],
+        "sentence_frames": {
+            "dormir": ["El médico recomienda que {subject} ___ ocho horas"],
+            "comer": ["Es importante que {subject} ___ más verduras"],
+            "hacer": ["Sugiero que {subject} ___ ejercicio regularmente"],
+            "tomar": ["Es necesario que {subject} ___ la medicina"],
+            "sentir": ["Espero que {subject} se ___ mejor pronto"],
+            "default": ["Para la salud, es importante que {subject} ___ ({verb})"],
+        },
+    },
+    "relationships": {
+        "scenarios": [
+            "giving relationship advice",
+            "discussing family matters",
+            "talking about friendships",
+            "expressing feelings",
+        ],
+        "sentence_frames": {
+            "hablar": ["Es importante que {subject} ___ con sinceridad"],
+            "decir": ["Quiero que {subject} me ___ la verdad"],
+            "entender": ["Espero que {subject} ___ mis sentimientos"],
+            "perdonar": ["Es mejor que {subject} ___ y siga adelante"],
+            "amar": ["Ojalá que {subject} ___ incondicionalmente"],
+            "default": ["En las relaciones, espero que {subject} ___ ({verb})"],
+        },
+    },
+    "school": {
+        "scenarios": [
+            "studying for exams",
+            "in the classroom",
+            "talking to a teacher",
+            "doing homework",
+        ],
+        "sentence_frames": {
+            "estudiar": ["Es necesario que {subject} ___ para el examen"],
+            "aprender": ["Espero que {subject} ___ mucho este semestre"],
+            "escribir": ["El profesor quiere que {subject} ___ un ensayo"],
+            "leer": ["Es importante que {subject} ___ el capítulo"],
+            "hacer": ["Sugiero que {subject} ___ la tarea temprano"],
+            "default": ["En la escuela, es importante que {subject} ___ ({verb})"],
+        },
+    },
+}
+
+
+def get_conjugation_for_verb(verb: str, tense: str, person: str) -> Optional[str]:
+    """Get the conjugation for a verb from seed data."""
+    from core.seed_data import SEED_VERBS
+
+    # Find verb in seed data
+    verb_data = None
+    for v in SEED_VERBS:
+        if v["infinitive"] == verb:
+            verb_data = v
+            break
+
+    if not verb_data:
+        return None
+
+    # Map tense to conjugation key
+    tense_key = "present_subjunctive" if "present" in tense else "imperfect_subjunctive_ra"
+
+    conjugations = verb_data.get(tense_key, {})
+
+    # Map person to conjugation key
+    person_map = {
+        "yo": "yo",
+        "tú": "tú",
+        "él": "él/ella/usted",
+        "ella": "él/ella/usted",
+        "usted": "él/ella/usted",
+        "él/ella/usted": "él/ella/usted",
+        "nosotros": "nosotros",
+        "nosotras": "nosotros",
+        "vosotros": "vosotros",
+        "vosotras": "vosotros",
+        "ellos": "ellos/ellas/ustedes",
+        "ellas": "ellos/ellas/ustedes",
+        "ustedes": "ellos/ellas/ustedes",
+        "ellos/ellas/ustedes": "ellos/ellas/ustedes",
+    }
+
+    person_key = person_map.get(person, person)
+    return conjugations.get(person_key)
+
+
+def get_verb_translation(verb: str) -> str:
+    """Get English translation for a verb."""
+    from core.seed_data import SEED_VERBS
+
+    for v in SEED_VERBS:
+        if v["infinitive"] == verb:
+            return v.get("english_translation", f"to {verb}")
+    return f"to {verb}"
+
+
+def generate_exercise_prompt(
+    verb: str,
+    person: str,
+    trigger_phrase: str,
+    trigger_translation: str,
+    theme: Optional[str] = None
+) -> str:
+    """Generate an exercise prompt, optionally themed."""
+    # Person to subject mapping
+    person_subjects = {
+        "yo": "yo",
+        "tú": "tú",
+        "él/ella/usted": "él",
+        "nosotros": "nosotros",
+        "vosotros": "vosotros",
+        "ellos/ellas/ustedes": "ellos",
+    }
+    subject = person_subjects.get(person, person)
+
+    # Check if we have a themed context
+    if theme:
+        # Normalize theme for lookup
+        theme_key = theme.lower().strip()
+        theme_data = THEMED_CONTEXTS.get(theme_key)
+
+        if theme_data:
+            frames = theme_data.get("sentence_frames", {})
+
+            # Try to get verb-specific frame, fall back to default
+            verb_frames = frames.get(verb, frames.get("default", []))
+
+            if verb_frames:
+                frame = random.choice(verb_frames)
+                return frame.format(subject=subject, verb=verb)
+
+    # Default: use trigger phrase with standard structure
+    return f"{trigger_phrase} {subject} ___ ({verb})."
+
+
+def generate_hint(verb: str, tense: str, person: str) -> str:
+    """Generate a hint for the exercise."""
+    from core.seed_data import SEED_VERBS
+
+    verb_data = None
+    for v in SEED_VERBS:
+        if v["infinitive"] == verb:
+            verb_data = v
+            break
+
+    hints = []
+
+    if verb_data:
+        verb_type = verb_data.get("verb_type")
+        if verb_type:
+            type_name = verb_type.value if hasattr(verb_type, 'value') else str(verb_type)
+            hints.append(f"This is a {type_name} verb")
+
+        if verb_data.get("irregularity_notes"):
+            hints.append(verb_data["irregularity_notes"])
+
+    # Person-based hints
+    if person in ["nosotros", "vosotros"]:
+        hints.append("Remember: nosotros/vosotros forms often have different stem patterns")
+
+    # Tense-based hints
+    if "imperfect" in tense:
+        hints.append("Imperfect subjunctive uses the 3rd person plural preterite stem")
+
+    return " | ".join(hints) if hints else f"Conjugate '{verb}' in the subjunctive for {person}"
+
+
+def generate_explanation(verb: str, tense: str, person: str, correct_answer: str, trigger: str) -> str:
+    """Generate an explanation for the exercise."""
+    tense_name = "present subjunctive" if "present" in tense else "imperfect subjunctive"
+
+    return (
+        f"The phrase '{trigger}' triggers the subjunctive mood. "
+        f"For the verb '{verb}' in the {tense_name}, "
+        f"the {person} form is '{correct_answer}'."
+    )
+
+
+@router.post("/generate", response_model=CustomPracticeResponse)
+async def generate_custom_exercises(
+    config: CustomPracticeRequest,
+    current_user: Dict[str, Any] = Depends(get_current_active_user),
+    db: Session = Depends(get_db_session)
+):
+    """
+    Generate custom exercises based on user configuration.
+
+    Allows users to:
+    - Select specific verbs to practice
+    - Choose grammatical persons
+    - Set difficulty level
+    - Provide custom context/sentences
+    - Focus on specific WEIRDO trigger categories
+
+    Returns dynamically generated exercises.
+    """
+    from core.seed_data import SEED_VERBS
+
+    logger.info(f"Generating custom exercises: {config.dict()}")
+
+    # Get available verbs
+    available_verbs = [v["infinitive"] for v in SEED_VERBS]
+
+    # Filter to requested verbs (or use all if none specified)
+    verbs_to_use = config.verbs if config.verbs else available_verbs
+    verbs_to_use = [v for v in verbs_to_use if v in available_verbs]
+
+    if not verbs_to_use:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No valid verbs found. Please select from available verbs."
+        )
+
+    # Get trigger phrases
+    if config.trigger_category == "all":
+        all_triggers = []
+        for triggers in WEIRDO_TRIGGERS.values():
+            all_triggers.extend(triggers)
+    else:
+        all_triggers = WEIRDO_TRIGGERS.get(config.trigger_category, [])
+        if not all_triggers:
+            all_triggers = WEIRDO_TRIGGERS["wishes"]  # Default fallback
+
+    # Generate exercises
+    exercises = []
+    exercise_id = 0
+
+    # Create combinations of verb + person + trigger
+    combinations = []
+    for verb in verbs_to_use:
+        for person in config.persons:
+            for trigger_phrase, trigger_translation in all_triggers:
+                combinations.append((verb, person, trigger_phrase, trigger_translation))
+
+    # Shuffle and limit
+    random.shuffle(combinations)
+    selected_combinations = combinations[:config.exercise_count]
+
+    for verb, person, trigger_phrase, trigger_translation in selected_combinations:
+        correct_answer = get_conjugation_for_verb(verb, config.tense, person)
+
+        if not correct_answer:
+            continue  # Skip if conjugation not found
+
+        exercise_id += 1
+
+        exercise = GeneratedExercise(
+            id=f"gen_{exercise_id}_{verb}_{person}",
+            verb=verb,
+            verb_translation=get_verb_translation(verb),
+            tense=config.tense,
+            person=person,
+            prompt=generate_exercise_prompt(
+                verb, person, trigger_phrase, trigger_translation,
+                theme=config.custom_context if config.custom_context else None
+            ),
+            correct_answer=correct_answer,
+            alternative_answers=[],
+            hint=generate_hint(verb, config.tense, person) if config.include_hints else None,
+            explanation=generate_explanation(
+                verb, config.tense, person, correct_answer, trigger_phrase
+            ) if config.include_explanations else None,
+            trigger_phrase=trigger_phrase,
+            difficulty=config.difficulty
+        )
+        exercises.append(exercise)
+
+    # Ensure we have enough exercises
+    while len(exercises) < config.exercise_count and len(combinations) > 0:
+        # Add more by repeating with different triggers
+        random.shuffle(combinations)
+        for verb, person, trigger_phrase, trigger_translation in combinations:
+            if len(exercises) >= config.exercise_count:
+                break
+
+            correct_answer = get_conjugation_for_verb(verb, config.tense, person)
+            if not correct_answer:
+                continue
+
+            exercise_id += 1
+            exercise = GeneratedExercise(
+                id=f"gen_{exercise_id}_{verb}_{person}",
+                verb=verb,
+                verb_translation=get_verb_translation(verb),
+                tense=config.tense,
+                person=person,
+                prompt=generate_exercise_prompt(
+                    verb, person, trigger_phrase, trigger_translation,
+                    theme=config.custom_context if config.custom_context else None
+                ),
+                correct_answer=correct_answer,
+                hint=generate_hint(verb, config.tense, person) if config.include_hints else None,
+                explanation=generate_explanation(
+                    verb, config.tense, person, correct_answer, trigger_phrase
+                ) if config.include_explanations else None,
+                trigger_phrase=trigger_phrase,
+                difficulty=config.difficulty
+            )
+            exercises.append(exercise)
+
+    logger.info(f"Generated {len(exercises)} custom exercises for user {current_user.get('sub')}")
+
+    return CustomPracticeResponse(
+        exercises=exercises,
+        total=len(exercises),
+        config_summary={
+            "verbs": verbs_to_use[:5],  # First 5 for summary
+            "verb_count": len(verbs_to_use),
+            "tense": config.tense,
+            "persons": config.persons,
+            "difficulty": config.difficulty,
+            "trigger_category": config.trigger_category,
+            "has_custom_context": bool(config.custom_context),
+        }
+    )
+
+
+@router.get("/verbs/available")
+async def get_available_verbs(
+    current_user: Dict[str, Any] = Depends(get_current_active_user)
+):
+    """Get list of all available verbs for practice."""
+    from core.seed_data import SEED_VERBS
+
+    verbs = []
+    for v in SEED_VERBS:
+        verb_type = v.get("verb_type")
+        type_value = verb_type.value if hasattr(verb_type, 'value') else str(verb_type)
+
+        verbs.append({
+            "infinitive": v["infinitive"],
+            "translation": v.get("english_translation", ""),
+            "type": type_value,
+            "is_irregular": v.get("is_irregular", False),
+            "frequency_rank": v.get("frequency_rank", 100),
+        })
+
+    # Sort by frequency
+    verbs.sort(key=lambda x: x["frequency_rank"])
+
+    return {"verbs": verbs, "total": len(verbs)}
+
+
+# ============================================================================
+# Spaced Repetition / Review Endpoints
+# ============================================================================
+
+@router.get("/review/due", response_model=DueReviewResponse)
+async def get_due_reviews(
+    limit: int = Query(10, ge=1, le=50, description="Maximum number of due items to return"),
+    tense: Optional[str] = Query(None, description="Filter by tense"),
+    current_user: Dict[str, Any] = Depends(get_current_active_user),
+    db: Session = Depends(get_db_session)
+):
+    """
+    Get exercises that are due for review based on spaced repetition schedule.
+    
+    Returns items ordered by most overdue first, with metadata about difficulty
+    level and review performance.
+    """
+    from models.progress import ReviewSchedule
+    from models.exercise import Verb
+    from datetime import datetime, timedelta
+    
+    # Parse user ID
+    try:
+        user_id_int = parse_user_id(current_user["sub"])
+    except (ValueError, IndexError):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid user ID format"
+        )
+    
+    # Query for due reviews
+    now = datetime.utcnow()
+    query = db.query(ReviewSchedule).filter(
+        ReviewSchedule.user_id == user_id_int,
+        ReviewSchedule.next_review_date <= now
+    ).join(Verb)
+    
+    # Apply tense filter if provided
+    if tense:
+        # Filter is applied in post-processing since tense is exercise-specific
+        pass
+    
+    # Order by most overdue first
+    query = query.order_by(ReviewSchedule.next_review_date.asc())
+    
+    # Get all due items (we'll limit after processing)
+    due_schedules = query.all()
+    
+    # Build response items
+    items = []
+    for schedule in due_schedules:
+        # Calculate days overdue
+        time_diff = now - schedule.next_review_date
+        days_overdue = max(0, time_diff.days)
+        
+        # Calculate success rate
+        success_rate = 0.0
+        if schedule.total_attempts > 0:
+            success_rate = (schedule.total_correct / schedule.total_attempts) * 100
+        
+        # Determine difficulty level based on SM-2 parameters
+        difficulty_level = "new"
+        if schedule.review_count == 0:
+            difficulty_level = "new"
+        elif schedule.easiness_factor < 2.0:
+            difficulty_level = "learning"
+        elif schedule.easiness_factor < 2.5:
+            difficulty_level = "reviewing"
+        else:
+            difficulty_level = "mastered"
+        
+        # Create review item
+        item = DueReviewItem(
+            verb_id=schedule.verb_id,
+            verb_infinitive=schedule.verb.infinitive,
+            verb_translation=schedule.verb.english_translation,
+            tense="present_subjunctive",  # Default, can be customized
+            person=None,  # Will be determined during practice
+            days_overdue=days_overdue,
+            difficulty_level=difficulty_level,
+            easiness_factor=schedule.easiness_factor,
+            next_review_date=schedule.next_review_date,
+            review_count=schedule.review_count,
+            success_rate=success_rate
+        )
+        items.append(item)
+        
+        if len(items) >= limit:
+            break
+    
+    # Get next upcoming review date (for items not yet due)
+    next_review_query = db.query(ReviewSchedule).filter(
+        ReviewSchedule.user_id == user_id_int,
+        ReviewSchedule.next_review_date > now
+    ).order_by(ReviewSchedule.next_review_date.asc()).first()
+    
+    next_review_date = next_review_query.next_review_date if next_review_query else None
+    
+    logger.info(f"User {user_id_int} has {len(items)} items due for review")
+    
+    return DueReviewResponse(
+        items=items,
+        total_due=len(items),
+        next_review_date=next_review_date
+    )
+
+
+@router.get("/review/stats", response_model=ReviewStatsResponse)
+async def get_review_stats(
+    current_user: Dict[str, Any] = Depends(get_current_active_user),
+    db: Session = Depends(get_db_session)
+):
+    """
+    Get review statistics including:
+    - Count of due cards
+    - Distribution by difficulty level
+    - Average retention rate
+    - Review activity metrics
+    """
+    from models.progress import ReviewSchedule, Session as PracticeSession
+    from datetime import datetime, timedelta
+    
+    # Parse user ID
+    try:
+        user_id_int = parse_user_id(current_user["sub"])
+    except (ValueError, IndexError):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid user ID format"
+        )
+    
+    now = datetime.utcnow()
+    today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    
+    # Get all review schedules for user
+    all_schedules = db.query(ReviewSchedule).filter(
+        ReviewSchedule.user_id == user_id_int
+    ).all()
+    
+    # Count due items
+    total_due = 0
+    due_by_difficulty = {
+        "new": 0,
+        "learning": 0,
+        "reviewing": 0,
+        "mastered": 0
+    }
+    
+    total_correct = 0
+    total_attempts = 0
+    total_reviewed = 0
+    
+    for schedule in all_schedules:
+        # Count reviewed items
+        if schedule.review_count > 0:
+            total_reviewed += 1
+        
+        # Accumulate performance metrics
+        total_correct += schedule.total_correct
+        total_attempts += schedule.total_attempts
+        
+        # Check if due
+        if schedule.next_review_date <= now:
+            total_due += 1
+            
+            # Categorize by difficulty
+            if schedule.review_count == 0:
+                due_by_difficulty["new"] += 1
+            elif schedule.easiness_factor < 2.0:
+                due_by_difficulty["learning"] += 1
+            elif schedule.easiness_factor < 2.5:
+                due_by_difficulty["reviewing"] += 1
+            else:
+                due_by_difficulty["mastered"] += 1
+    
+    # Calculate average retention rate
+    average_retention = 0.0
+    if total_attempts > 0:
+        average_retention = (total_correct / total_attempts) * 100
+    
+    # Count reviews done today
+    reviews_today = db.query(PracticeSession).filter(
+        PracticeSession.user_id == user_id_int,
+        PracticeSession.session_type == "review",
+        PracticeSession.started_at >= today_start
+    ).count()
+    
+    # Calculate streak days (simplified - count consecutive days with reviews)
+    # This is a basic implementation; a more sophisticated one would check
+    # for actual consecutive days
+    streak_days = 0
+    check_date = today_start
+    for _ in range(365):  # Check up to a year back
+        day_sessions = db.query(PracticeSession).filter(
+            PracticeSession.user_id == user_id_int,
+            PracticeSession.started_at >= check_date,
+            PracticeSession.started_at < check_date + timedelta(days=1),
+            PracticeSession.is_completed == True
+        ).count()
+        
+        if day_sessions > 0:
+            streak_days += 1
+            check_date -= timedelta(days=1)
+        else:
+            break
+    
+    logger.info(f"Review stats for user {user_id_int}: {total_due} due, {average_retention:.1f}% retention")
+    
+    return ReviewStatsResponse(
+        total_due=total_due,
+        due_by_difficulty=due_by_difficulty,
+        average_retention=round(average_retention, 2),
+        total_reviewed=total_reviewed,
+        reviews_today=reviews_today,
+        streak_days=streak_days
+    )

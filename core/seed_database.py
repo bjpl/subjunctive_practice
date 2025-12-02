@@ -115,6 +115,7 @@ def seed_exercises(db: Session, verb_map: dict) -> list:
             explanation=exercise_data.get("explanation"),
             trigger_phrase=exercise_data.get("trigger_phrase"),
             hint=exercise_data.get("hint"),
+            tags=exercise_data.get("tags", []),
             is_active=True,
             usage_count=0,
             success_rate=0
