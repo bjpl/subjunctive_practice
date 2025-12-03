@@ -4,40 +4,25 @@ __pycache__/
 *$py.class
 *.so
 .Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
 venv/
 env/
 ENV/
+.venv
 
-# Node
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-.next/
-out/
-.vercel
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+coverage.xml
+test-results.xml
+test_metrics.json
+.test-report.json
 
-# Environment
-.env
-.env.local
-.env.*.local
+# Database
+*.db
+*.sqlite
+*.sqlite3
 
 # IDE
 .vscode/
@@ -46,55 +31,24 @@ out/
 *.swo
 *~
 
+# Logs
+*.log
+logs/
+backend.log
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# User data
+user_data/
+
 # OS
 .DS_Store
 Thumbs.db
 
-# Logs
-*.log
-logs/
-
-# Testing
-.coverage
-coverage/
-.pytest_cache/
-
-# Build outputs
-*.pyc
-dist/
-build/
-
-# Claude Flow generated files
-.claude/settings.local.json
-.claude/settings.json
-.claude/agents/
-.claude/commands/
-.claude/helpers/
-.mcp.json
-claude-flow.config.json
-.swarm/
-.hive-mind/
-.claude-flow/
-memory/
-coordination/
-memory/claude-flow-data.json
-memory/sessions/*
-!memory/sessions/README.md
-memory/agents/*
-!memory/agents/README.md
-coordination/memory_bank/*
-coordination/subtasks/*
-coordination/orchestration/*
-*.db
-*.db-journal
-*.db-wal
-*.sqlite
-*.sqlite-journal
-*.sqlite-wal
-claude-flow
-# Removed Windows wrapper files per user request
-hive-mind-prompt-*.txt
-
-# Backup files
-*.backup
-backups/
+# Temporary
+*.tmp
+temp/
+tmp/

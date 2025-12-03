@@ -1,62 +1,67 @@
-# Labeler configuration for automatic PR labeling
+# Auto-labeler configuration for PR labeling
 
+# Backend code changes
 backend:
-  - changed-files:
-    - any-glob-to-any-file: 'backend/**/*'
+  - backend/**/*.py
+  - backend/**
 
-frontend:
-  - changed-files:
-    - any-glob-to-any-file: 'frontend/**/*'
-
-tests:
-  - changed-files:
-    - any-glob-to-any-file: 'tests/**/*'
-    - any-glob-to-any-file: 'backend/tests/**/*'
-    - any-glob-to-any-file: 'frontend/__tests__/**/*'
-
-documentation:
-  - changed-files:
-    - any-glob-to-any-file: 'docs/**/*'
-    - any-glob-to-any-file: '**/*.md'
-    - any-glob-to-any-file: '**/README.*'
-
-ci-cd:
-  - changed-files:
-    - any-glob-to-any-file: '.github/**/*'
-    - any-glob-to-any-file: '**/Dockerfile'
-    - any-glob-to-any-file: '**/.dockerignore'
-
-dependencies:
-  - changed-files:
-    - any-glob-to-any-file: '**/package.json'
-    - any-glob-to-any-file: '**/package-lock.json'
-    - any-glob-to-any-file: '**/requirements*.txt'
-    - any-glob-to-any-file: '**/Pipfile*'
-
-database:
-  - changed-files:
-    - any-glob-to-any-file: 'backend/alembic/**/*'
-    - any-glob-to-any-file: 'backend/models/**/*'
-    - any-glob-to-any-file: '**/migrations/**/*'
-
+# API changes
 api:
-  - changed-files:
-    - any-glob-to-any-file: 'backend/api/**/*'
-    - any-glob-to-any-file: 'backend/routes/**/*'
+  - api/**/*.py
+  - backend/api/**
 
-ui:
-  - changed-files:
-    - any-glob-to-any-file: 'frontend/components/**/*'
-    - any-glob-to-any-file: 'frontend/app/**/*'
-    - any-glob-to-any-file: 'frontend/styles/**/*'
+# Database changes
+database:
+  - database/**
+  - models/**/*.py
+  - alembic/**
+  - '**/*migration*.py'
 
-performance:
-  - changed-files:
-    - any-glob-to-any-file: '**/*performance*'
-    - any-glob-to-any-file: '**/*benchmark*'
+# Service layer changes
+services:
+  - services/**/*.py
+  - backend/services/**
 
+# Core functionality
+core:
+  - core/**/*.py
+  - backend/core/**
+
+# Tests
+tests:
+  - tests/**/*.py
+  - test_*.py
+  - '**/test_*.py'
+
+# Documentation
+documentation:
+  - '**/*.md'
+  - docs/**
+  - README.md
+
+# Dependencies
+dependencies:
+  - requirements.txt
+  - requirements-dev.txt
+  - pyproject.toml
+
+# CI/CD
+ci-cd:
+  - .github/**
+  - Dockerfile
+  - docker-compose.yml
+  - Makefile
+
+# Configuration
+config:
+  - '**/*.yml'
+  - '**/*.yaml'
+  - '**/*.toml'
+  - '**/*.ini'
+  - .env.example
+
+# Security
 security:
-  - changed-files:
-    - any-glob-to-any-file: '**/*auth*'
-    - any-glob-to-any-file: '**/*security*'
-    - any-glob-to-any-file: '**/middleware/**/*'
+  - '**/auth*.py'
+  - '**/security*.py'
+  - '**/middleware*.py'

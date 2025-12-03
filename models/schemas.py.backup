@@ -1,0 +1,180 @@
+"""
+Pydantic schemas for API request/response validation.
+"""
+
+from typing import Optional, List, Dict, Any
+from datetime import datetime
+from pydantic import BaseModel, EmailStr, Field, validator
+
+
+# ==================== Authentication Models ====================
+
+class UserCreate(BaseModel):
+    """Schema for user registration."""
+    username: str = Field(..., min_length=3, max_length=50)
+    email: EmailStr
+    password: str = Field(..., min_length=8, max_length=100)
+    full_name: Optional[str] = Field(None, max_length=100)
+
+    @validator("username")
+    def username_alphanumeric(cls, v):
+        """Ensure username is alphanumeric."""
+        if not v.replace("_", "").replace("-", "").isalnum():
+            raise ValueError("Username must be alphanumeric (underscores and hyphens allowed)")
+        return v
+
+    @validator("password")
+    def password_strength(cls, v):
+        """Validate password strength."""
+        if len(v) < 8:
+            raise ValueError("Password must be at least 8 characters")
+        if not any(char.isdigit() for char in v):
+            raise ValueError("Password must contain at least one digit")
+        if not any(char.isalpha() for char in v):
+            raise ValueError("Password must contain at least one letter")
+        return v
+
+
+class UserLogin(BaseModel):
+    """Schema for user login."""
+    username: str
+    password: str
+
+
+class UserResponse(BaseModel):
+    """Schema for user information in responses."""
+    user_id: str
+    username: str
+    email: str
+    full_name: Optional[str] = None
+    created_at: datetime
+    last_login: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
+
+class Token(BaseModel):
+    """Schema for authentication token response."""
+    access_token: str
+    refresh_token: str
+    token_type: str = "bearer"
+    expires_in: int  # seconds
+
+
+class TokenRefresh(BaseModel):
+    """Schema for token refresh request."""
+    refresh_token: str
+
+
+# ==================== Exercise Models ====================
+
+class ExerciseResponse(BaseModel):
+    """Schema for exercise data."""
+    id: str
+    type: str = Field(..., description="Subjunctive type (present, imperfect, etc.)")
+    prompt: str = Field(..., description="Exercise prompt with blank")
+    difficulty: int = Field(..., ge=1, le=5, description="Difficulty level 1-5")
+    explanation: Optional[str] = Field(None, description="Grammar explanation")
+    hints: Optional[List[str]] = Field(default_factory=list)
+    tags: Optional[List[str]] = Field(default_factory=list)
+
+    class Config:
+        from_attributes = True
+
+
+class AnswerSubmit(BaseModel):
+    """Schema for submitting an exercise answer."""
+    exercise_id: str
+    user_answer: str = Field(..., min_length=1, max_length=200)
+    time_taken: Optional[int] = Field(None, description="Time taken in seconds")
+
+
+class AnswerValidation(BaseModel):
+    """Schema for answer validation response."""
+    is_correct: bool
+    correct_answer: str
+    user_answer: str
+    feedback: str
+    explanation: Optional[str] = None
+    score: int = Field(..., ge=0, le=100)
+    alternative_answers: Optional[List[str]] = Field(default_factory=list)
+
+
+# ==================== Progress & Statistics Models ====================
+
+class ProgressResponse(BaseModel):
+    """Schema for user progress data."""
+    user_id: str
+    total_exercises: int = 0
+    correct_answers: int = 0
+    incorrect_answers: int = 0
+    accuracy_rate: float = Field(..., ge=0.0, le=100.0)
+    current_streak: int = 0
+    best_streak: int = 0
+    last_practice: Optional[datetime] = None
+    level: int = Field(..., ge=1, le=10)
+    experience_points: int = 0
+
+    class Config:
+        from_attributes = True
+
+
+class StatisticsResponse(BaseModel):
+    """Schema for detailed user statistics."""
+    user_id: str
+    overall_stats: Dict[str, Any]
+    by_type: Dict[str, Dict[str, Any]]  # Stats by subjunctive type
+    by_difficulty: Dict[int, Dict[str, Any]]  # Stats by difficulty level
+    recent_performance: List[Dict[str, Any]]  # Last 10 exercises
+    learning_insights: List[str]  # AI-generated insights
+    practice_calendar: List[str]  # Dates of practice
+
+    class Config:
+        from_attributes = True
+
+
+# ==================== System Models ====================
+
+class HealthCheck(BaseModel):
+    """Schema for health check endpoint."""
+    status: str = "healthy"
+    timestamp: datetime
+    version: str
+    environment: str
+    database_connected: bool = False
+    redis_connected: bool = False
+    openai_configured: bool = False
+
+
+class ErrorResponse(BaseModel):
+    """Schema for error responses."""
+    error: str
+    message: str
+    details: Optional[Dict[str, Any]] = None
+    path: Optional[str] = None
+    timestamp: datetime = Field(default_factory=datetime.utcnow)
+
+
+# ==================== Batch Operations ====================
+
+class ExerciseListResponse(BaseModel):
+    """Schema for paginated exercise list."""
+    exercises: List[ExerciseResponse]
+    total: int
+    page: int = 1
+    page_size: int = 10
+    has_more: bool = False
+
+
+class BatchAnswerSubmit(BaseModel):
+    """Schema for submitting multiple answers."""
+    answers: List[AnswerSubmit]
+
+
+class BatchAnswerValidation(BaseModel):
+    """Schema for batch answer validation response."""
+    results: List[AnswerValidation]
+    overall_score: float
+    total_correct: int
+    total_incorrect: int
