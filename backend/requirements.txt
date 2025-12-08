@@ -4,11 +4,11 @@
 # Core Framework
 fastapi==0.118.0
 uvicorn[standard]==0.37.0
-pydantic==2.11.10
+pydantic==2.12.5
 pydantic-settings==2.11.0
 
 # Database
-sqlalchemy==2.0.43
+sqlalchemy==2.0.44
 alembic==1.13.1
 psycopg2-binary==2.9.9
 asyncpg==0.29.0
