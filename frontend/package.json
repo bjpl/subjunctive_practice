@@ -55,7 +55,7 @@
     "zod": "^4.1.12"
   },
   "devDependencies": {
-    "@playwright/test": "^1.55.1",
+    "@playwright/test": "^1.57.0",
     "@swc/jest": "^0.2.39",
     "@tailwindcss/postcss": "^4.1.14",
     "@testing-library/jest-dom": "^6.9.1",
