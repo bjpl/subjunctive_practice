@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Achievement Unlocked!</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .trophy-icon {
+            font-size: 64px;
+            margin-bottom: 10px;
+        }
+        h1 {
+            color: #FFD700;
+            margin: 0;
+            font-size: 28px;
+        }
+        .achievement-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 30px;
+            color: white;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .achievement-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        .achievement-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .achievement-description {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        .achievement-points {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .message {
+            font-size: 16px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #667eea;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .cta-container {
+            text-align: center;
+        }
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            font-size: 12px;
+            color: #888;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="trophy-icon">🏆</div>
+            <h1>Achievement Unlocked!</h1>
+        </div>
+
+        <div class="achievement-card">
+            <div class="achievement-icon">{{ achievement_icon or '🎖️' }}</div>
+            <div class="achievement-name">{{ achievement_name }}</div>
+            <div class="achievement-description">{{ achievement_description }}</div>
+            <div class="achievement-points">+{{ achievement_points }} points</div>
+        </div>
+
+        <div class="message">
+            <p>Congratulations, {{ user_name }}! 🎉</p>
+            <p>You've earned a new achievement! Keep up the great work and continue your Spanish learning journey.</p>
+        </div>
+
+        <div class="cta-container">
+            <a href="#" class="cta-button">View All Achievements</a>
+        </div>
+
+        <div class="footer">
+            <p>{{ app_name }} &copy; {{ year }}</p>
+            <p>You're receiving this email because you have achievement notifications enabled.</p>
+            <p><a href="#" style="color: #888;">Manage notification preferences</a></p>
+        </div>
+    </div>
+</body>
+</html>

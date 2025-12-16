@@ -23,6 +23,76 @@ from utils.spanish_grammar import (
     Person
 )
 
+# Past participles for perfect and pluperfect subjunctive
+PAST_PARTICIPLES = {
+    # Regular participles
+    "hablar": "hablado",
+    "estudiar": "estudiado",
+    "trabajar": "trabajado",
+    "cantar": "cantado",
+    "llegar": "llegado",
+    "terminar": "terminado",
+    "comer": "comido",
+    "beber": "bebido",
+    "vivir": "vivido",
+    "abrir": "abierto",  # irregular
+    "escribir": "escrito",  # irregular
+
+    # Irregular participles
+    "hacer": "hecho",
+    "decir": "dicho",
+    "ver": "visto",
+    "poner": "puesto",
+    "volver": "vuelto",
+    "morir": "muerto",
+    "cubrir": "cubierto",
+    "descubrir": "descubierto",
+    "romper": "roto",
+    "resolver": "resuelto",
+    "devolver": "devuelto",
+    "freír": "frito",
+    "imprimir": "impreso",
+    "satisfacer": "satisfecho",
+    "proveer": "provisto",
+
+    # Additional common verbs
+    "saber": "sabido",
+    "venir": "venido",
+    "traer": "traído",
+    "leer": "leído",
+    "oír": "oído",
+    "caer": "caído",
+    "creer": "creído",
+    "pensar": "pensado",
+    "querer": "querido",
+    "poder": "podido",
+    "ir": "ido",
+    "dar": "dado",
+    "estar": "estado",
+    "tener": "tenido",
+    "ser": "sido",
+    "salir": "salido",
+    "buscar": "buscado",
+    "pagar": "pagado",
+    "jugar": "jugado",
+    "contar": "contado",
+    "recordar": "recordado",
+    "sentir": "sentido",
+    "dormir": "dormido",
+    "pedir": "pedido",
+    "servir": "servido",
+    "repetir": "repetido",
+    "empezar": "empezado",
+    "cerrar": "cerrado",
+    "entender": "entendido",
+    "encontrar": "encontrado",
+    "seguir": "seguido",
+    "morir": "muerto",  # irregular
+    "conocer": "conocido",
+    "parecer": "parecido",
+    "llamar": "llamado",
+}
+
 
 logger = logging.getLogger(__name__)
 
@@ -159,8 +229,21 @@ class ConjugationEngine:
         if not verb_type:
             raise ValueError(f"Invalid verb: {verb}. Must end in -ar, -er, or -ir")
 
-        if tense not in ["present_subjunctive", "imperfect_subjunctive_ra", "imperfect_subjunctive_se"]:
+        valid_tenses = [
+            "present_subjunctive",
+            "imperfect_subjunctive_ra",
+            "imperfect_subjunctive_se",
+            "present_perfect_subjunctive",
+            "pluperfect_subjunctive"
+        ]
+        if tense not in valid_tenses:
             raise ValueError(f"Invalid tense: {tense}")
+
+        # Handle perfect and pluperfect subjunctive (compound tenses)
+        if tense == "present_perfect_subjunctive":
+            return self._conjugate_perfect_subjunctive(verb, person)
+        elif tense == "pluperfect_subjunctive":
+            return self._conjugate_pluperfect_subjunctive(verb, person)
 
         # Check if irregular verb (takes precedence)
         # Irregular verbs are taught as irregular, not stem-changing
@@ -275,6 +358,91 @@ class ConjugationEngine:
             has_spelling_change=has_spelling_change,
             spelling_change_rule=spelling_rule
         )
+
+    def _conjugate_perfect_subjunctive(
+        self,
+        verb: str,
+        person: str
+    ) -> ConjugationResult:
+        """
+        Conjugate present perfect subjunctive (haya + past participle).
+        Example: haya hablado, hayas comido, haya vivido
+        """
+        # Get past participle
+        participle = self._get_past_participle(verb)
+
+        # Conjugate haber in present subjunctive
+        haber_forms = {
+            "yo": "haya",
+            "tú": "hayas",
+            "él/ella/usted": "haya",
+            "nosotros/nosotras": "hayamos",
+            "vosotros/vosotras": "hayáis",
+            "ellos/ellas/ustedes": "hayan"
+        }
+
+        if person not in haber_forms:
+            raise ValueError(f"Invalid person: {person}")
+
+        conjugation = f"{haber_forms[person]} {participle}"
+
+        return ConjugationResult(
+            verb=verb,
+            tense="present_perfect_subjunctive",
+            person=person,
+            conjugation=conjugation,
+            is_irregular=participle != self._get_regular_participle(verb)
+        )
+
+    def _conjugate_pluperfect_subjunctive(
+        self,
+        verb: str,
+        person: str
+    ) -> ConjugationResult:
+        """
+        Conjugate pluperfect subjunctive (hubiera/hubiese + past participle).
+        Example: hubiera hablado, hubieras comido, hubiera vivido
+        """
+        # Get past participle
+        participle = self._get_past_participle(verb)
+
+        # Conjugate haber in imperfect subjunctive (ra form - more common)
+        haber_forms = {
+            "yo": "hubiera",
+            "tú": "hubieras",
+            "él/ella/usted": "hubiera",
+            "nosotros/nosotras": "hubiéramos",
+            "vosotros/vosotras": "hubierais",
+            "ellos/ellas/ustedes": "hubieran"
+        }
+
+        if person not in haber_forms:
+            raise ValueError(f"Invalid person: {person}")
+
+        conjugation = f"{haber_forms[person]} {participle}"
+
+        return ConjugationResult(
+            verb=verb,
+            tense="pluperfect_subjunctive",
+            person=person,
+            conjugation=conjugation,
+            is_irregular=participle != self._get_regular_participle(verb)
+        )
+
+    def _get_past_participle(self, verb: str) -> str:
+        """Get the past participle of a verb (handles irregular forms)."""
+        if verb in PAST_PARTICIPLES:
+            return PAST_PARTICIPLES[verb]
+        return self._get_regular_participle(verb)
+
+    def _get_regular_participle(self, verb: str) -> str:
+        """Generate regular past participle based on verb ending."""
+        if verb.endswith("ar"):
+            return verb[:-2] + "ado"
+        elif verb.endswith("er") or verb.endswith("ir"):
+            return verb[:-2] + "ido"
+        else:
+            raise ValueError(f"Invalid verb ending: {verb}")
 
     def _conjugate_regular(
         self,
@@ -453,7 +621,14 @@ class ConjugationEngine:
                 return error_type, suggestions
 
         # Check if wrong tense
-        for t in ["present_subjunctive", "imperfect_subjunctive_ra", "imperfect_subjunctive_se"]:
+        all_tenses = [
+            "present_subjunctive",
+            "imperfect_subjunctive_ra",
+            "imperfect_subjunctive_se",
+            "present_perfect_subjunctive",
+            "pluperfect_subjunctive"
+        ]
+        for t in all_tenses:
             if t != tense:
                 try:
                     other_result = self.conjugate(verb, t, person)

@@ -32,7 +32,7 @@ class HealthCheck(BaseModel):
     database_connected: bool = False
     redis_connected: bool = False
     anthropic_configured: bool = False
-from api.routes import auth, exercises, progress, achievements
+from api.routes import auth, exercises, progress, achievements, leaderboard
 from api.routes import settings as settings_router
 
 
@@ -92,6 +92,10 @@ app = FastAPI(
             "description": "Track learning progress and view detailed analytics"
         },
         {
+            "name": "leaderboard",
+            "description": "Competitive leaderboards, rankings, and user comparisons"
+        },
+        {
             "name": "System",
             "description": "Health checks and system information"
         }
@@ -113,6 +117,7 @@ app.include_router(exercises.router, prefix=settings.API_V1_PREFIX)
 app.include_router(progress.router, prefix=settings.API_V1_PREFIX)
 app.include_router(achievements.router, prefix=settings.API_V1_PREFIX)
 app.include_router(settings_router.router, prefix=settings.API_V1_PREFIX)
+app.include_router(leaderboard.router)
 
 
 # Health check endpoint

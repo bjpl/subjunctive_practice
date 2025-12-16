@@ -1224,7 +1224,490 @@ SEED_VERBS = [
             "ellos/ellas/ustedes": "recordaran"
         }
     },
+    {
+        "infinitive": "romper",
+        "english_translation": "to break",
+        "verb_type": VerbType.REGULAR,
+        "is_irregular": False,
+        "frequency_rank": 51,
+        "irregularity_notes": "Irregular past participle: roto",
+        "present_subjunctive": {
+            "yo": "rompa",
+            "tú": "rompas",
+            "él/ella/usted": "rompa",
+            "nosotros": "rompamos",
+            "vosotros": "rompáis",
+            "ellos/ellas/ustedes": "rompan"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "rompiera",
+            "tú": "rompieras",
+            "él/ella/usted": "rompiera",
+            "nosotros": "rompiéramos",
+            "vosotros": "rompierais",
+            "ellos/ellas/ustedes": "rompieran"
+        }
+    },
+    {
+        "infinitive": "cubrir",
+        "english_translation": "to cover",
+        "verb_type": VerbType.REGULAR,
+        "is_irregular": False,
+        "frequency_rank": 52,
+        "irregularity_notes": "Irregular past participle: cubierto",
+        "present_subjunctive": {
+            "yo": "cubra",
+            "tú": "cubras",
+            "él/ella/usted": "cubra",
+            "nosotros": "cubramos",
+            "vosotros": "cubráis",
+            "ellos/ellas/ustedes": "cubran"
+        },
+        "imperfect_subjunctive_ra": {
+            "yo": "cubriera",
+            "tú": "cubrieras",
+            "él/ella/usted": "cubriera",
+            "nosotros": "cubriéramos",
+            "vosotros": "cubrierais",
+            "ellos/ellas/ustedes": "cubrieran"
+        }
+    },
 ]
+
+# Sample exercises for new subjunctive types
+SEED_EXERCISES = {
+    # A. PERFECT SUBJUNCTIVE (Present Perfect Subjunctive - haya + past participle)
+    "perfect_subjunctive": [
+        {
+            "verb": "hablar",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PRESENT_PERFECT,
+            "difficulty": DifficultyLevel.MEDIUM,
+            "prompt": "Es posible que él ya _____ con el profesor. (hablar)",
+            "correct_answer": "haya hablado",
+            "person": "él/ella/usted",
+            "trigger_phrase": "Es posible que",
+            "explanation": "Present perfect subjunctive: haya + past participle (hablado)",
+            "tags": ["perfect-subjunctive", "regular-participle"]
+        },
+        {
+            "verb": "comer",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PRESENT_PERFECT,
+            "difficulty": DifficultyLevel.MEDIUM,
+            "prompt": "Dudo que ellos _____ en ese restaurante. (comer)",
+            "correct_answer": "hayan comido",
+            "person": "ellos/ellas/ustedes",
+            "trigger_phrase": "Dudo que",
+            "explanation": "Present perfect subjunctive: hayan + past participle (comido)",
+            "tags": ["perfect-subjunctive", "regular-participle", "doubt"]
+        },
+        {
+            "verb": "vivir",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PRESENT_PERFECT,
+            "difficulty": DifficultyLevel.MEDIUM,
+            "prompt": "No creo que tú _____ en Madrid antes. (vivir)",
+            "correct_answer": "hayas vivido",
+            "person": "tú",
+            "trigger_phrase": "No creo que",
+            "explanation": "Present perfect subjunctive: hayas + past participle (vivido)",
+            "tags": ["perfect-subjunctive", "regular-participle", "negation"]
+        },
+        {
+            "verb": "hacer",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PRESENT_PERFECT,
+            "difficulty": DifficultyLevel.HARD,
+            "prompt": "Es increíble que nosotros _____ todo el trabajo. (hacer)",
+            "correct_answer": "hayamos hecho",
+            "person": "nosotros/nosotras",
+            "trigger_phrase": "Es increíble que",
+            "explanation": "Present perfect subjunctive with irregular participle: hayamos hecho",
+            "tags": ["perfect-subjunctive", "irregular-participle"]
+        },
+        {
+            "verb": "decir",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PRESENT_PERFECT,
+            "difficulty": DifficultyLevel.HARD,
+            "prompt": "No pienso que ella te _____ la verdad. (decir)",
+            "correct_answer": "haya dicho",
+            "person": "él/ella/usted",
+            "trigger_phrase": "No pienso que",
+            "explanation": "Present perfect subjunctive with irregular participle: haya dicho",
+            "tags": ["perfect-subjunctive", "irregular-participle"]
+        },
+        {
+            "verb": "escribir",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PRESENT_PERFECT,
+            "difficulty": DifficultyLevel.HARD,
+            "prompt": "Espero que ustedes _____ las cartas. (escribir)",
+            "correct_answer": "hayan escrito",
+            "person": "ellos/ellas/ustedes",
+            "trigger_phrase": "Espero que",
+            "explanation": "Present perfect subjunctive with irregular participle: hayan escrito",
+            "tags": ["perfect-subjunctive", "irregular-participle", "hope"]
+        },
+        {
+            "verb": "ver",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PRESENT_PERFECT,
+            "difficulty": DifficultyLevel.HARD,
+            "prompt": "Me alegra que vosotros _____ la película. (ver)",
+            "correct_answer": "hayáis visto",
+            "person": "vosotros/vosotras",
+            "trigger_phrase": "Me alegra que",
+            "explanation": "Present perfect subjunctive with irregular participle: hayáis visto",
+            "tags": ["perfect-subjunctive", "irregular-participle", "emotion"]
+        },
+        {
+            "verb": "estudiar",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PRESENT_PERFECT,
+            "difficulty": DifficultyLevel.MEDIUM,
+            "prompt": "Es probable que yo _____ suficiente para el examen. (estudiar)",
+            "correct_answer": "haya estudiado",
+            "person": "yo",
+            "trigger_phrase": "Es probable que",
+            "explanation": "Present perfect subjunctive: haya + past participle (estudiado)",
+            "tags": ["perfect-subjunctive", "regular-participle", "probability"]
+        },
+        {
+            "verb": "trabajar",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PRESENT_PERFECT,
+            "difficulty": DifficultyLevel.MEDIUM,
+            "prompt": "No es posible que ellos _____ tanto tiempo. (trabajar)",
+            "correct_answer": "hayan trabajado",
+            "person": "ellos/ellas/ustedes",
+            "trigger_phrase": "No es posible que",
+            "explanation": "Present perfect subjunctive: hayan + past participle (trabajado)",
+            "tags": ["perfect-subjunctive", "regular-participle", "impossibility"]
+        },
+        {
+            "verb": "cantar",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PRESENT_PERFECT,
+            "difficulty": DifficultyLevel.MEDIUM,
+            "prompt": "Me sorprende que tú _____ en público. (cantar)",
+            "correct_answer": "hayas cantado",
+            "person": "tú",
+            "trigger_phrase": "Me sorprende que",
+            "explanation": "Present perfect subjunctive: hayas + past participle (cantado)",
+            "tags": ["perfect-subjunctive", "regular-participle", "emotion"]
+        },
+        {
+            "verb": "llegar",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PRESENT_PERFECT,
+            "difficulty": DifficultyLevel.MEDIUM,
+            "prompt": "Es dudoso que nosotros _____ a tiempo. (llegar)",
+            "correct_answer": "hayamos llegado",
+            "person": "nosotros/nosotras",
+            "trigger_phrase": "Es dudoso que",
+            "explanation": "Present perfect subjunctive: hayamos + past participle (llegado)",
+            "tags": ["perfect-subjunctive", "regular-participle", "doubt"]
+        },
+        {
+            "verb": "terminar",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PRESENT_PERFECT,
+            "difficulty": DifficultyLevel.MEDIUM,
+            "prompt": "Ojalá que vosotros _____ el proyecto. (terminar)",
+            "correct_answer": "hayáis terminado",
+            "person": "vosotros/vosotras",
+            "trigger_phrase": "Ojalá que",
+            "explanation": "Present perfect subjunctive: hayáis + past participle (terminado)",
+            "tags": ["perfect-subjunctive", "regular-participle", "wish"]
+        },
+        {
+            "verb": "poner",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PRESENT_PERFECT,
+            "difficulty": DifficultyLevel.HARD,
+            "prompt": "No creo que ella _____ las llaves aquí. (poner)",
+            "correct_answer": "haya puesto",
+            "person": "él/ella/usted",
+            "trigger_phrase": "No creo que",
+            "explanation": "Present perfect subjunctive with irregular participle: haya puesto",
+            "tags": ["perfect-subjunctive", "irregular-participle"]
+        },
+        {
+            "verb": "volver",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PRESENT_PERFECT,
+            "difficulty": DifficultyLevel.HARD,
+            "prompt": "Es extraño que ellos no _____ todavía. (volver)",
+            "correct_answer": "hayan vuelto",
+            "person": "ellos/ellas/ustedes",
+            "trigger_phrase": "Es extraño que",
+            "explanation": "Present perfect subjunctive with irregular participle: hayan vuelto",
+            "tags": ["perfect-subjunctive", "irregular-participle"]
+        },
+        {
+            "verb": "abrir",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PRESENT_PERFECT,
+            "difficulty": DifficultyLevel.HARD,
+            "prompt": "Me alegra que tú _____ la ventana. (abrir)",
+            "correct_answer": "hayas abierto",
+            "person": "tú",
+            "trigger_phrase": "Me alegra que",
+            "explanation": "Present perfect subjunctive with irregular participle: hayas abierto",
+            "tags": ["perfect-subjunctive", "irregular-participle", "emotion"]
+        },
+    ],
+
+    # B. RELATIVE CLAUSE SUBJUNCTIVE (subjunctive in relative clauses with indefinite antecedent)
+    "relative_clause_subjunctive": [
+        {
+            "verb": "tener",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PRESENT,
+            "difficulty": DifficultyLevel.HARD,
+            "prompt": "Busco una casa que _____ tres dormitorios. (tener)",
+            "correct_answer": "tenga",
+            "person": "él/ella/usted",
+            "trigger_phrase": "una casa que",
+            "explanation": "Subjunctive in relative clause with indefinite antecedent (any house, not a specific one)",
+            "tags": ["relative-clause", "indefinite-antecedent"]
+        },
+        {
+            "verb": "saber",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PRESENT,
+            "difficulty": DifficultyLevel.HARD,
+            "prompt": "Necesito alguien que _____ hablar francés. (saber)",
+            "correct_answer": "sepa",
+            "person": "él/ella/usted",
+            "trigger_phrase": "alguien que",
+            "explanation": "Subjunctive in relative clause with indefinite antecedent (anyone who knows)",
+            "tags": ["relative-clause", "indefinite-antecedent"]
+        },
+        {
+            "verb": "poder",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PRESENT,
+            "difficulty": DifficultyLevel.HARD,
+            "prompt": "No hay nadie que _____ resolver este problema. (poder)",
+            "correct_answer": "pueda",
+            "person": "él/ella/usted",
+            "trigger_phrase": "nadie que",
+            "explanation": "Subjunctive in relative clause with non-existent antecedent",
+            "tags": ["relative-clause", "nonexistent-antecedent", "negation"]
+        },
+        {
+            "verb": "ser",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PRESENT,
+            "difficulty": DifficultyLevel.HARD,
+            "prompt": "Quiero un coche que _____ rápido y económico. (ser)",
+            "correct_answer": "sea",
+            "person": "él/ella/usted",
+            "trigger_phrase": "un coche que",
+            "explanation": "Subjunctive in relative clause with indefinite antecedent (any car, not a specific one)",
+            "tags": ["relative-clause", "indefinite-antecedent"]
+        },
+        {
+            "verb": "hablar",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PRESENT,
+            "difficulty": DifficultyLevel.MEDIUM,
+            "prompt": "Buscamos una persona que _____ español e inglés. (hablar)",
+            "correct_answer": "hable",
+            "person": "él/ella/usted",
+            "trigger_phrase": "una persona que",
+            "explanation": "Subjunctive in relative clause with indefinite antecedent",
+            "tags": ["relative-clause", "indefinite-antecedent"]
+        },
+        {
+            "verb": "entender",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PRESENT,
+            "difficulty": DifficultyLevel.HARD,
+            "prompt": "No conozco a nadie que _____ esta situación. (entender)",
+            "correct_answer": "entienda",
+            "person": "él/ella/usted",
+            "trigger_phrase": "nadie que",
+            "explanation": "Subjunctive in relative clause with non-existent antecedent",
+            "tags": ["relative-clause", "nonexistent-antecedent", "negation"]
+        },
+        {
+            "verb": "querer",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PRESENT,
+            "difficulty": DifficultyLevel.HARD,
+            "prompt": "Buscamos un empleado que _____ trabajar los fines de semana. (querer)",
+            "correct_answer": "quiera",
+            "person": "él/ella/usted",
+            "trigger_phrase": "un empleado que",
+            "explanation": "Subjunctive in relative clause with indefinite antecedent",
+            "tags": ["relative-clause", "indefinite-antecedent"]
+        },
+        {
+            "verb": "vivir",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PRESENT,
+            "difficulty": DifficultyLevel.MEDIUM,
+            "prompt": "Necesito un compañero de piso que _____ cerca de la universidad. (vivir)",
+            "correct_answer": "viva",
+            "person": "él/ella/usted",
+            "trigger_phrase": "un compañero que",
+            "explanation": "Subjunctive in relative clause with indefinite antecedent",
+            "tags": ["relative-clause", "indefinite-antecedent"]
+        },
+        {
+            "verb": "hacer",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PRESENT,
+            "difficulty": DifficultyLevel.HARD,
+            "prompt": "No hay nada que nosotros _____ ahora. (hacer)",
+            "correct_answer": "hagamos",
+            "person": "nosotros/nosotras",
+            "trigger_phrase": "nada que",
+            "explanation": "Subjunctive in relative clause with non-existent antecedent",
+            "tags": ["relative-clause", "nonexistent-antecedent", "negation"]
+        },
+        {
+            "verb": "conocer",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PRESENT,
+            "difficulty": DifficultyLevel.HARD,
+            "prompt": "Busco un guía que _____ bien la ciudad. (conocer)",
+            "correct_answer": "conozca",
+            "person": "él/ella/usted",
+            "trigger_phrase": "un guía que",
+            "explanation": "Subjunctive in relative clause with indefinite antecedent",
+            "tags": ["relative-clause", "indefinite-antecedent"]
+        },
+    ],
+
+    # C. PLUPERFECT SUBJUNCTIVE (hubiera/hubiese + past participle)
+    "pluperfect_subjunctive": [
+        {
+            "verb": "saber",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PLUPERFECT,
+            "difficulty": DifficultyLevel.EXPERT,
+            "prompt": "Si yo _____ la verdad, habría actuado diferente. (saber)",
+            "correct_answer": "hubiera sabido",
+            "person": "yo",
+            "trigger_phrase": "Si",
+            "explanation": "Pluperfect subjunctive for hypothetical past: hubiera + past participle",
+            "tags": ["pluperfect-subjunctive", "hypothetical-past", "conditional"]
+        },
+        {
+            "verb": "estudiar",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PLUPERFECT,
+            "difficulty": DifficultyLevel.EXPERT,
+            "prompt": "Ojalá _____ más para el examen. (estudiar)",
+            "correct_answer": "hubiera estudiado",
+            "person": "yo",
+            "trigger_phrase": "Ojalá",
+            "explanation": "Pluperfect subjunctive expressing regret about the past",
+            "tags": ["pluperfect-subjunctive", "regret", "wish"]
+        },
+        {
+            "verb": "hacer",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PLUPERFECT,
+            "difficulty": DifficultyLevel.EXPERT,
+            "prompt": "Si ellos _____ la tarea, habrían aprobado. (hacer)",
+            "correct_answer": "hubieran hecho",
+            "person": "ellos/ellas/ustedes",
+            "trigger_phrase": "Si",
+            "explanation": "Pluperfect subjunctive with irregular participle for hypothetical past",
+            "tags": ["pluperfect-subjunctive", "irregular-participle", "conditional"]
+        },
+        {
+            "verb": "decir",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PLUPERFECT,
+            "difficulty": DifficultyLevel.EXPERT,
+            "prompt": "Ojalá tú me _____ antes. (decir)",
+            "correct_answer": "hubieras dicho",
+            "person": "tú",
+            "trigger_phrase": "Ojalá",
+            "explanation": "Pluperfect subjunctive with irregular participle expressing regret",
+            "tags": ["pluperfect-subjunctive", "irregular-participle", "regret"]
+        },
+        {
+            "verb": "venir",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PLUPERFECT,
+            "difficulty": DifficultyLevel.EXPERT,
+            "prompt": "Si nosotros _____ antes, lo habríamos visto. (venir)",
+            "correct_answer": "hubiéramos venido",
+            "person": "nosotros/nosotras",
+            "trigger_phrase": "Si",
+            "explanation": "Pluperfect subjunctive for hypothetical past situation",
+            "tags": ["pluperfect-subjunctive", "hypothetical-past", "conditional"]
+        },
+        {
+            "verb": "trabajar",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PLUPERFECT,
+            "difficulty": DifficultyLevel.EXPERT,
+            "prompt": "Si ella _____ más duro, habría conseguido el ascenso. (trabajar)",
+            "correct_answer": "hubiera trabajado",
+            "person": "él/ella/usted",
+            "trigger_phrase": "Si",
+            "explanation": "Pluperfect subjunctive for hypothetical past situation",
+            "tags": ["pluperfect-subjunctive", "hypothetical-past", "conditional"]
+        },
+        {
+            "verb": "escribir",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PLUPERFECT,
+            "difficulty": DifficultyLevel.EXPERT,
+            "prompt": "Ojalá vosotros _____ la carta a tiempo. (escribir)",
+            "correct_answer": "hubierais escrito",
+            "person": "vosotros/vosotras",
+            "trigger_phrase": "Ojalá",
+            "explanation": "Pluperfect subjunctive with irregular participle expressing regret",
+            "tags": ["pluperfect-subjunctive", "irregular-participle", "regret"]
+        },
+        {
+            "verb": "ver",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PLUPERFECT,
+            "difficulty": DifficultyLevel.EXPERT,
+            "prompt": "Si yo _____ eso, habría llamado a la policía. (ver)",
+            "correct_answer": "hubiera visto",
+            "person": "yo",
+            "trigger_phrase": "Si",
+            "explanation": "Pluperfect subjunctive with irregular participle for hypothetical past",
+            "tags": ["pluperfect-subjunctive", "irregular-participle", "conditional"]
+        },
+        {
+            "verb": "llegar",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PLUPERFECT,
+            "difficulty": DifficultyLevel.EXPERT,
+            "prompt": "Si tú _____ a tiempo, nos habrías encontrado. (llegar)",
+            "correct_answer": "hubieras llegado",
+            "person": "tú",
+            "trigger_phrase": "Si",
+            "explanation": "Pluperfect subjunctive for hypothetical past situation",
+            "tags": ["pluperfect-subjunctive", "hypothetical-past", "conditional"]
+        },
+        {
+            "verb": "poner",
+            "exercise_type": ExerciseType.FILL_BLANK,
+            "tense": SubjunctiveTense.PLUPERFECT,
+            "difficulty": DifficultyLevel.EXPERT,
+            "prompt": "Ojalá ellos _____ más atención. (poner)",
+            "correct_answer": "hubieran puesto",
+            "person": "ellos/ellas/ustedes",
+            "trigger_phrase": "Ojalá",
+            "explanation": "Pluperfect subjunctive with irregular participle expressing regret",
+            "tags": ["pluperfect-subjunctive", "irregular-participle", "regret"]
+        },
+    ]
+}
 
 # Sample achievements
 SEED_ACHIEVEMENTS = [

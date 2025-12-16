@@ -42,6 +42,10 @@ from .progress import (
     UserStatistics,
 )
 
+from .ai_usage import (
+    AIUsageRecord,
+)
+
 # Export all models
 __all__ = [
     # User models
@@ -66,4 +70,6 @@ __all__ = [
     "UserAchievement",
     "ReviewSchedule",
     "UserStatistics",
+    # AI Usage models
+    "AIUsageRecord",
 ]

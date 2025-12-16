@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Weekly Progress</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .chart-icon {
+            font-size: 64px;
+            margin-bottom: 10px;
+        }
+        h1 {
+            color: #4A90E2;
+            margin: 0;
+            font-size: 28px;
+        }
+        .week-period {
+            text-align: center;
+            color: #888;
+            margin-bottom: 30px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .stat-card {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #4A90E2;
+            margin-bottom: 5px;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+        .message {
+            font-size: 16px;
+            margin: 20px 0;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #4A90E2;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .cta-container {
+            text-align: center;
+        }
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            font-size: 12px;
+            color: #888;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="chart-icon">📊</div>
+            <h1>Your Weekly Progress</h1>
+        </div>
+
+        <div class="week-period">
+            {{ week_start }} - {{ week_end }}
+        </div>
+
+        <div class="message">
+            <p>Hi {{ user_name }},</p>
+            <p>Here's a summary of your Spanish learning progress this week:</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">{{ total_exercises }}</div>
+                <div class="stat-label">Exercises Completed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ accuracy }}%</div>
+                <div class="stat-label">Accuracy</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ study_time_minutes }}</div>
+                <div class="stat-label">Minutes Practiced</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ current_streak }} 🔥</div>
+                <div class="stat-label">Day Streak</div>
+            </div>
+        </div>
+
+        <div class="message">
+            <p><strong>Verbs Mastered:</strong> {{ verbs_mastered }}</p>
+            <p><strong>Achievements Earned:</strong> {{ achievements_earned }}</p>
+        </div>
+
+        <div class="cta-container">
+            <a href="#" class="cta-button">Continue Learning</a>
+        </div>
+
+        <div class="footer">
+            <p>{{ app_name }} &copy; {{ year }}</p>
+            <p>You're receiving this weekly summary because you have email notifications enabled.</p>
+            <p><a href="#" style="color: #888;">Manage notification preferences</a></p>
+        </div>
+    </div>
+</body>
+</html>

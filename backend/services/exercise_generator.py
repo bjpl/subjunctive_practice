@@ -271,41 +271,77 @@ class ExerciseGenerator:
         return exercise
 
     def _select_verb_by_difficulty(self, difficulty: str) -> str:
-        """Select an appropriate verb based on difficulty level"""
+        """
+        Select an appropriate verb based on difficulty level.
+
+        Difficulty-based verb selection strategy:
+
+        BEGINNER (regular verbs only):
+        - 100% regular verbs from most common 6 per type
+        - Examples: hablar, comer, vivir, trabajar, aprender, escribir
+        - Focus: Learning basic subjunctive endings without complications
+
+        INTERMEDIATE (mixed complexity):
+        - 40% regular verbs (full common list)
+        - 30% stem-changing verbs (e→ie, o→ue, e→i)
+        - 30% common irregular verbs (ser, estar, ir, haber, etc.)
+        - Focus: Applying stem changes and learning high-frequency irregulars
+
+        ADVANCED (complex patterns):
+        - 20% regular verbs (for variety)
+        - 20% stem-changing verbs
+        - 60% irregular verbs (all irregulars, including less common)
+        - Focus: Mastering all patterns, including rare irregulars
+
+        The weighted random selection ensures appropriate challenge level
+        while maintaining variety within each difficulty tier.
+
+        Args:
+            difficulty: "beginner", "intermediate", or "advanced"
+
+        Returns:
+            Selected verb infinitive form
+
+        Examples:
+            >>> # Beginner always returns regular verb
+            >>> verb = generator._select_verb_by_difficulty("beginner")
+            >>> verb in ["hablar", "comer", "vivir", "trabajar", "aprender", "escribir"]
+            True
+        """
         if difficulty == "beginner":
-            # Regular verbs only
+            # Regular verbs only - first 6 most common of each type
             verb_type = random.choice(["-ar", "-er", "-ir"])
             return random.choice(COMMON_REGULAR_VERBS[verb_type][:6])
 
         elif difficulty == "intermediate":
-            # Mix of regular, stem-changing, and common irregulars
+            # Mix of regular (40%), stem-changing (30%), and common irregulars (30%)
             choice = random.random()
             if choice < 0.4:
-                # Regular verb
+                # Regular verb - full common list
                 verb_type = random.choice(["-ar", "-er", "-ir"])
                 return random.choice(COMMON_REGULAR_VERBS[verb_type])
             elif choice < 0.7:
-                # Stem-changing verb
+                # Stem-changing verb (any pattern: e→ie, o→ue, e→i)
                 pattern = random.choice(list(STEM_CHANGING_VERBS.keys()))
                 return random.choice(list(STEM_CHANGING_VERBS[pattern].keys()))
             else:
-                # Common irregular
+                # Common irregular - high frequency verbs
                 common_irregulars = ["ser", "estar", "ir", "haber", "tener", "hacer", "poder", "querer"]
                 return random.choice(common_irregulars)
 
         else:  # advanced
-            # All verb types, favor complex ones
+            # All verb types, heavily favor complex patterns (80% non-regular)
             choice = random.random()
             if choice < 0.2:
-                # Regular verb
+                # Regular verb (20% for variety)
                 verb_type = random.choice(["-ar", "-er", "-ir"])
                 return random.choice(COMMON_REGULAR_VERBS[verb_type])
             elif choice < 0.4:
-                # Stem-changing verb
+                # Stem-changing verb (20%)
                 pattern = random.choice(list(STEM_CHANGING_VERBS.keys()))
                 return random.choice(list(STEM_CHANGING_VERBS[pattern].keys()))
             else:
-                # Any irregular verb
+                # Any irregular verb (60%) - including rare/difficult ones
                 return random.choice(list(IRREGULAR_VERBS.keys()))
 
     def _map_category_to_context(self, category: str) -> str:
@@ -359,10 +395,47 @@ class ExerciseGenerator:
         person: str,
         correct_answer: str
     ) -> List[str]:
-        """Generate plausible wrong answers for multiple choice"""
+        """
+        Generate plausible incorrect answers for multiple choice exercises.
+
+        Distractor generation strategy creates pedagogically valuable wrong answers:
+
+        1. Wrong person distractors (up to 2):
+           - Uses correct subjunctive mood and tense but different person
+           - Example: If answer is "hable" (yo), add "hables" (tú)
+           - Tests: Ability to identify correct grammatical person
+
+        2. Mood confusion distractor:
+           - Uses indicative mood instead of subjunctive
+           - Example: If answer is "hable" (subjunctive), add "hablo" (indicative)
+           - Tests: Understanding when subjunctive is required
+           - Most common learner error, makes for valuable distractor
+
+        The distractors are:
+        - Plausible (grammatically valid forms of the same verb)
+        - Educational (test specific aspects of subjunctive knowledge)
+        - Unique (no duplicates, none match correct answer)
+        - Limited (3 distractors maximum for standard multiple choice)
+
+        Args:
+            verb: Infinitive form
+            tense: Subjunctive tense
+            person: Grammatical person for correct answer
+            correct_answer: The correct conjugation (to exclude)
+
+        Returns:
+            List of 1-3 plausible distractor options
+
+        Examples:
+            >>> # For "hable" (hablar, present_subjunctive, yo)
+            >>> distractors = generator._generate_distractors("hablar", "present_subjunctive", "yo", "hable")
+            >>> # Might return: ["hables", "hable", "hablo"]
+            >>> # (tú form, él form, indicative yo)
+        """
         distractors = []
 
-        # Get conjugations for other persons
+        # Strategy 1: Add conjugations for other persons (same mood/tense)
+        # This tests whether user knows the correct person
         all_conjugations = self.engine.get_full_conjugation_table(verb, tense)
         for p, result in all_conjugations.items():
             if result and result.conjugation != correct_answer and p != person:
@@ -370,24 +443,32 @@ class ExerciseGenerator:
                 if len(distractors) >= 2:
                     break
 
-        # Add indicative form as a distractor
+        # Strategy 2: Add indicative form as distractor (tests mood confusion)
+        # This is the most common error type for subjunctive learners
         try:
-            # Simplified - would use full indicative conjugation in production
+            # Simplified indicative conjugation (production would use full conjugation engine)
             verb_stem = verb[:-2]
             verb_type = verb[-2:]
+
+            # Present indicative endings for common persons
             if verb_type == "ar":
                 indicative_ending = {"yo": "o", "tú": "as", "él/ella/usted": "a"}.get(person, "a")
-            else:
+            else:  # -er or -ir
                 indicative_ending = {"yo": "o", "tú": "es", "él/ella/usted": "e"}.get(person, "e")
 
             indicative_form = verb_stem + indicative_ending
+
+            # Only add if unique and different from correct answer
             if indicative_form not in distractors and indicative_form != correct_answer:
                 distractors.append(indicative_form)
         except:
+            # If indicative generation fails, continue with existing distractors
             pass
 
-        # Shuffle and return up to 3 distractors
+        # Shuffle to randomize order (prevents pattern recognition)
         random.shuffle(distractors)
+
+        # Return maximum 3 distractors for standard multiple choice format
         return distractors[:3]
 
     def generate_exercise_set(

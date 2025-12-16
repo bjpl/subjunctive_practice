@@ -136,8 +136,43 @@ class ErrorAnalyzer:
         }
 
     def _determine_severity(self, error_type: str) -> str:
-        """Determine error severity"""
+        """
+        Classify error severity based on impact on subjunctive learning.
+
+        Severity classification:
+
+        HIGH severity (conceptual/structural errors):
+        - mood_confusion: Using indicative instead of subjunctive
+          * Indicates fundamental misunderstanding of when subjunctive is required
+          * Most critical error type as it affects sentence meaning
+        - stem_change_error: Failing to apply stem changes
+          * Shows incomplete understanding of verb patterns
+          * Common stumbling block that needs focused attention
+
+        MEDIUM severity (grammatical accuracy):
+        - wrong_person: Correct mood but wrong grammatical person
+          * Understands subjunctive but made conjugation error
+        - wrong_tense: Correct mood but wrong tense (present vs. imperfect)
+          * Shows partial understanding, needs tense sequence practice
+        - spelling_change_error: Missing orthographic changes
+          * Technical error that affects spelling but not core grammar
+
+        LOW severity (minor mistakes):
+        - spelling_error: Typos or minor misspellings
+          * Close to correct, minimal impact on understanding
+        - wrong_ending: Incorrect ending but mood is correct
+          * Technical conjugation error
+
+        Args:
+            error_type: Type of error detected
+
+        Returns:
+            Severity level: "high", "medium", or "low"
+        """
+        # High severity: conceptual misunderstandings
         high_severity = ["mood_confusion", "stem_change_error"]
+
+        # Medium severity: grammatical but not conceptual errors
         medium_severity = ["wrong_person", "wrong_tense", "spelling_change_error"]
 
         if error_type in high_severity:
@@ -246,45 +281,75 @@ class ErrorAnalyzer:
 
     def detect_patterns(self, min_frequency: int = 3) -> List[ErrorPattern]:
         """
-        Detect recurring error patterns.
+        Detect recurring error patterns to identify systematic learning gaps.
+
+        Pattern detection helps identify:
+        1. Systematic misconceptions (e.g., consistently confusing moods)
+        2. Specific weak areas (e.g., struggles with particular verb types)
+        3. Areas needing targeted practice
+
+        Pattern analysis includes:
+        - Error type frequency (how often does this error occur?)
+        - Affected verbs (which verbs cause problems?)
+        - Affected persons (which conjugations are difficult?)
+        - Priority level (how urgent is this to address?)
+
+        Priority classification:
+        - high: ≥5 occurrences (urgent intervention needed)
+        - medium: 3-4 occurrences (needs attention)
+        - low: <3 occurrences (may be random errors)
 
         Args:
-            min_frequency: Minimum occurrences to consider a pattern
+            min_frequency: Minimum occurrences to consider a pattern (default: 3)
 
         Returns:
-            List of ErrorPattern objects
+            List of ErrorPattern objects sorted by frequency (most common first)
+
+        Examples:
+            >>> analyzer.error_history = [
+            ...     {"error_type": "mood_confusion", "verb": "hablar", "person": "yo"},
+            ...     {"error_type": "mood_confusion", "verb": "ser", "person": "yo"},
+            ...     {"error_type": "mood_confusion", "verb": "tener", "person": "él/ella/usted"}
+            ... ]
+            >>> patterns = analyzer.detect_patterns(min_frequency=2)
+            >>> patterns[0].error_type
+            "mood_confusion"
+            >>> patterns[0].frequency
+            3
         """
         if not self.error_history:
             return []
 
         patterns = []
 
-        # Group errors by type
+        # Group errors by type to identify repetition
         errors_by_type = defaultdict(list)
         for error in self.error_history:
             errors_by_type[error["error_type"]].append(error)
 
-        # Analyze each error type
+        # Analyze each error type for patterns
         for error_type, errors in errors_by_type.items():
             if len(errors) >= min_frequency:
-                # Get affected verbs and persons
+                # Extract which verbs and persons are affected
                 verbs = [e["verb"] for e in errors]
                 persons = [e["person"] for e in errors]
 
-                # Determine priority
+                # Determine priority based on frequency
+                # High priority (≥5 errors) requires immediate attention
                 priority = "high" if len(errors) >= 5 else "medium"
 
                 pattern = ErrorPattern(
                     error_type=error_type,
                     frequency=len(errors),
-                    verbs_affected=list(set(verbs)),
-                    persons_affected=list(set(persons)),
+                    verbs_affected=list(set(verbs)),  # Unique verbs
+                    persons_affected=list(set(persons)),  # Unique persons
                     suggestion=self._get_pattern_suggestion(error_type, verbs, persons),
                     priority=priority
                 )
                 patterns.append(pattern)
 
-        # Sort by frequency (descending)
+        # Sort by frequency (most common patterns first)
+        # This helps prioritize intervention on most impactful errors
         patterns.sort(key=lambda p: p.frequency, reverse=True)
 
         return patterns

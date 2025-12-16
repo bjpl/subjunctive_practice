@@ -4,3 +4,4 @@ export { PerformanceChart } from "./PerformanceChart";
 export { WeakAreasAnalysis } from "./WeakAreasAnalysis";
 export { StudyHeatmap } from "./StudyHeatmap";
 export { AchievementGallery } from "./AchievementGallery";
+export { Leaderboard } from "./Leaderboard";

@@ -1,0 +1,26 @@
+Your Weekly Progress 📊
+
+Hi {{ user_name }},
+
+Here's a summary of your Spanish learning progress this week:
+{{ week_start }} - {{ week_end }}
+
+WEEKLY STATS
+============
+Exercises Completed: {{ total_exercises }}
+Accuracy: {{ accuracy }}%
+Minutes Practiced: {{ study_time_minutes }}
+Current Streak: {{ current_streak }} days 🔥
+
+Verbs Mastered: {{ verbs_mastered }}
+Achievements Earned: {{ achievements_earned }}
+
+Keep up the great work!
+
+Continue Learning: [LINK]
+
+---
+{{ app_name }} © {{ year }}
+
+You're receiving this weekly summary because you have email notifications enabled.
+Manage notification preferences: [LINK]

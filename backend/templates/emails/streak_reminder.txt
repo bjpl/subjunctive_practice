@@ -1,0 +1,15 @@
+Don't Break Your Streak! 🔥
+
+Hi {{ user_name }},
+
+You've been doing amazing! You're on a {{ current_streak }}-day streak of practicing Spanish.
+
+Keep the momentum going by completing today's practice session!
+
+Practice Now: [LINK]
+
+---
+{{ app_name }} © {{ year }}
+
+You're receiving this email because you have streak reminders enabled.
+Manage notification preferences: [LINK]

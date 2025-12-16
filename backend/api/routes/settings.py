@@ -417,3 +417,40 @@ async def import_settings(
         last_updated=datetime.fromisoformat(data["last_updated"]),
         version=data["version"]
     )
+
+
+# Additional endpoint for updating notification preferences (alias to /notifications)
+@router.put("/users/me/notifications", response_model=SettingsResponse)
+async def update_user_notification_preferences(
+    notifications: NotificationSettings,
+    current_user: Dict[str, Any] = Depends(get_current_active_user)
+):
+    """
+    Update user notification preferences.
+
+    Alternative endpoint path for notification preferences.
+    This is an alias to PATCH /settings/notifications for convenience.
+
+    Request body:
+    - **email**: Enable/disable email notifications
+    - **push**: Enable/disable push notifications
+    - **streakReminders**: Enable/disable streak reminder notifications
+
+    Requires authentication.
+    """
+    user_id = current_user["sub"]
+    data = load_user_settings(user_id)
+
+    # Update only notification settings
+    current_settings = UserSettings(**data["settings"])
+    current_settings.notifications = notifications
+
+    # Save updated settings
+    data = save_user_settings(user_id, current_settings)
+
+    return SettingsResponse(
+        user_id=data["user_id"],
+        settings=UserSettings(**data["settings"]),
+        last_updated=datetime.fromisoformat(data["last_updated"]),
+        version=data["version"]
+    )

@@ -1,0 +1,20 @@
+Achievement Unlocked! 🏆
+
+Congratulations, {{ user_name }}! 🎉
+
+You've earned a new achievement:
+
+{{ achievement_name }}
+{{ achievement_description }}
+
++{{ achievement_points }} points
+
+Keep up the great work and continue your Spanish learning journey.
+
+View All Achievements: [LINK]
+
+---
+{{ app_name }} © {{ year }}
+
+You're receiving this email because you have achievement notifications enabled.
+Manage notification preferences: [LINK]

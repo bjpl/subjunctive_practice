@@ -24,6 +24,7 @@ from anthropic import AsyncAnthropic, APIError, RateLimitError, APITimeoutError
 from anthropic.types import Message
 
 from core.config import settings
+from services.cache_service import get_cache_service, RedisCache
 
 
 logger = structlog.get_logger(__name__)
@@ -110,7 +111,7 @@ class ClaudeAIService:
     and contextual hints.
     """
 
-    def __init__(self):
+    def __init__(self, cache_service: Optional[RedisCache] = None):
         """Initialize the Claude AI service."""
         if not settings.ANTHROPIC_API_KEY:
             logger.warning("anthropic_api_key_missing", message="AI features will be disabled")
@@ -126,9 +127,13 @@ class ClaudeAIService:
                 temperature=settings.ANTHROPIC_TEMPERATURE
             )
 
-        # Simple in-memory cache for responses (could be Redis in production)
-        self._cache: Dict[str, tuple[str, datetime]] = {}
-        self._cache_ttl = timedelta(hours=1)
+        # Use Redis cache with in-memory fallback
+        self._cache = cache_service or get_cache_service()
+        logger.info(
+            "cache_initialized",
+            backend="redis" if self._cache.is_redis_available else "memory",
+            ttl_seconds=self._cache.default_ttl
+        )
 
     @property
     def is_enabled(self) -> bool:
@@ -137,28 +142,41 @@ class ClaudeAIService:
 
     def _get_cache_key(self, prefix: str, *args, **kwargs) -> str:
         """Generate a cache key from function arguments."""
+        import hashlib
+
+        # Create a deterministic hash of arguments
         key_parts = [prefix]
         key_parts.extend(str(arg) for arg in args)
         key_parts.extend(f"{k}={v}" for k, v in sorted(kwargs.items()))
-        return ":".join(key_parts)
+        key_string = ":".join(key_parts)
 
-    def _get_cached(self, cache_key: str) -> Optional[str]:
+        # Hash long keys to avoid Redis key length limits
+        if len(key_string) > 200:
+            key_hash = hashlib.sha256(key_string.encode()).hexdigest()[:16]
+            return f"ai:{prefix}:{key_hash}"
+
+        return f"ai:{key_string}"
+
+    async def _get_cached(self, cache_key: str) -> Optional[str]:
         """Get cached response if still valid."""
-        if cache_key in self._cache:
-            content, timestamp = self._cache[cache_key]
-            if datetime.now() - timestamp < self._cache_ttl:
-                logger.debug("cache_hit", cache_key=cache_key)
-                return content
-            else:
-                # Expired cache entry
-                del self._cache[cache_key]
-                logger.debug("cache_expired", cache_key=cache_key)
-        return None
+        try:
+            cached_value = await self._cache.get(cache_key)
+            if cached_value:
+                logger.debug("cache_hit", cache_key=cache_key[:50])
+                return cached_value
+            logger.debug("cache_miss", cache_key=cache_key[:50])
+            return None
+        except Exception as e:
+            logger.warning("cache_get_error", error=str(e), cache_key=cache_key[:50])
+            return None
 
-    def _set_cache(self, cache_key: str, content: str) -> None:
+    async def _set_cache(self, cache_key: str, content: str, ttl: Optional[int] = None) -> None:
         """Store response in cache."""
-        self._cache[cache_key] = (content, datetime.now())
-        logger.debug("cache_set", cache_key=cache_key)
+        try:
+            await self._cache.set(cache_key, content, ttl=ttl)
+            logger.debug("cache_set", cache_key=cache_key[:50])
+        except Exception as e:
+            logger.warning("cache_set_error", error=str(e), cache_key=cache_key[:50])
 
     async def _create_message(
         self,
@@ -273,7 +291,7 @@ class ClaudeAIService:
             correct_answer,
             str(exercise_context)
         )
-        cached = self._get_cached(cache_key)
+        cached = await self._get_cached(cache_key)
         if cached:
             return cached
 
@@ -332,8 +350,8 @@ Provide brief, supportive feedback (2-3 sentences) that:
                 temperature=0.7
             )
 
-            # Cache the response
-            self._set_cache(cache_key, feedback)
+            # Cache the response (1 hour TTL for feedback)
+            await self._set_cache(cache_key, feedback, ttl=3600)
 
             return feedback
 
@@ -391,13 +409,16 @@ Provide brief, supportive feedback (2-3 sentences) that:
             str(user_stats),
             str(weak_areas)
         )
-        cached = self._get_cached(cache_key)
+        cached = await self._get_cached(cache_key)
         if cached:
             # Parse cached JSON-like response
             import json
             try:
+                # Cache already stores deserialized objects
+                if isinstance(cached, list):
+                    return cached
                 return json.loads(cached)
-            except json.JSONDecodeError:
+            except (json.JSONDecodeError, TypeError):
                 # If cache is corrupted, regenerate
                 pass
 
@@ -460,8 +481,8 @@ Example format:
                 if isinstance(insights, list) and all(isinstance(i, str) for i in insights):
                     insights = insights[:5]  # Limit to 5 insights
 
-                    # Cache the response
-                    self._set_cache(cache_key, json.dumps(insights))
+                    # Cache the response (2 hours TTL for insights, they change less frequently)
+                    await self._set_cache(cache_key, insights, ttl=7200)
 
                     return insights
 
@@ -540,7 +561,7 @@ Example format:
 
         # Check cache (no user_history in cache key - hints should be fresh)
         cache_key = self._get_cache_key("hint", str(exercise))
-        cached = self._get_cached(cache_key)
+        cached = await self._get_cached(cache_key)
         if cached:
             return cached
 
@@ -588,8 +609,8 @@ Be specific to this exercise, not generic."""
                 temperature=0.7
             )
 
-            # Cache the hint
-            self._set_cache(cache_key, hint)
+            # Cache the hint (30 minutes TTL for hints)
+            await self._set_cache(cache_key, hint, ttl=1800)
 
             return hint
 
@@ -639,17 +660,25 @@ Be specific to this exercise, not generic."""
             for result in results
         ]
 
-    def clear_cache(self) -> int:
+    async def clear_cache(self) -> int:
         """
         Clear the response cache.
 
         Returns:
             Number of cache entries cleared
         """
-        count = len(self._cache)
-        self._cache.clear()
+        count = await self._cache.clear()
         logger.info("cache_cleared", entries_cleared=count)
         return count
+
+    def get_cache_statistics(self) -> Dict[str, Any]:
+        """
+        Get cache performance statistics.
+
+        Returns:
+            Dictionary with cache stats (hits, misses, hit rate, etc.)
+        """
+        return self._cache.get_statistics()
 
     async def health_check(self) -> Dict[str, Any]:
         """
@@ -658,11 +687,15 @@ Be specific to this exercise, not generic."""
         Returns:
             Health status information
         """
+        # Check cache health
+        cache_health = await self._cache.health_check()
+
         if not self.is_enabled:
             return {
                 "status": "disabled",
                 "configured": False,
-                "message": "AI service not configured (missing API key)"
+                "message": "AI service not configured (missing API key)",
+                "cache": cache_health
             }
 
         try:
@@ -677,7 +710,8 @@ Be specific to this exercise, not generic."""
                 "status": "healthy",
                 "configured": True,
                 "model": settings.ANTHROPIC_MODEL,
-                "cache_size": len(self._cache),
+                "cache": cache_health,
+                "cache_statistics": self.get_cache_statistics(),
                 "test_response": test_response[:50]  # First 50 chars
             }
 
@@ -687,7 +721,8 @@ Be specific to this exercise, not generic."""
                 "status": "unhealthy",
                 "configured": True,
                 "error": str(e),
-                "model": settings.ANTHROPIC_MODEL
+                "model": settings.ANTHROPIC_MODEL,
+                "cache": cache_health
             }
 
 
@@ -716,5 +751,6 @@ async def shutdown_ai_service() -> None:
     """
     global _ai_service
     if _ai_service:
-        _ai_service.clear_cache()
+        await _ai_service.clear_cache()
+        await _ai_service._cache.close()
         logger.info("ai_service_shutdown")

@@ -82,54 +82,82 @@ class SM2Algorithm:
         quality: int
     ) -> Tuple[int, float, int, datetime]:
         """
-        Calculate next review interval using SM-2 algorithm.
+        Calculate next review interval using SuperMemo 2 (SM-2) spaced repetition algorithm.
+
+        The SM-2 algorithm optimizes long-term retention by scheduling reviews based on:
+        1. Quality of recall (0-5 scale)
+        2. Easiness Factor (EF): Measures how easy the item is to remember (1.3-2.5)
+        3. Repetition number: How many times successfully recalled
+        4. Previous interval: Days since last review
+
+        Algorithm details (Wozniak, 1990):
+        - EF updated by: EF' = EF + (0.1 - (5-q)*(0.08 + (5-q)*0.02))
+        - EF minimum: 1.3 (prevents items from becoming too difficult)
+        - Quality < 3: Reset to beginning (interval = 1 day)
+        - Quality ≥ 3: Increase interval
+          - First repetition: 1 day
+          - Second repetition: 6 days
+          - Subsequent: previous_interval * EF
+
+        Reference: https://www.supermemo.com/en/archives1990-2015/english/ol/sm2
 
         Args:
-            card: SM2Card object
+            card: SM2Card object with current learning state
             quality: Quality of recall (0-5)
-                5 = perfect response
+                5 = perfect response (instant recall)
                 4 = correct response after hesitation
-                3 = correct response with difficulty
-                2 = incorrect but remembered
-                1 = incorrect, familiar
-                0 = complete blackout
+                3 = correct response with difficulty (barely remembered)
+                2 = incorrect but remembered something
+                1 = incorrect, vaguely familiar
+                0 = complete blackout (no memory)
 
         Returns:
-            Tuple of (new_interval, new_easiness_factor, new_repetitions, next_review_date)
+            Tuple of (new_interval_days, new_easiness_factor, new_repetitions, next_review_datetime)
+
+        Examples:
+            >>> card = SM2Card(item_id="hablar_yo", easiness_factor=2.5, interval=0, repetitions=0)
+            >>> interval, ef, reps, next_date = sm2.calculate_next_interval(card, quality=5)
+            >>> # First repetition with perfect recall: interval=1, ef≈2.6, reps=1
         """
-        # Validate quality
+        # Validate quality score is in valid range
         if quality < 0 or quality > 5:
             raise ValueError("Quality must be between 0 and 5")
 
-        # Copy current values
+        # Copy current values for calculation
         ef = card.easiness_factor
         repetitions = card.repetitions
         interval = card.interval
 
-        # Update easiness factor
+        # Update easiness factor using SM-2 formula
+        # This adjusts how "easy" the item is based on recall quality
         # EF' = EF + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02))
         ef = ef + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02))
 
-        # Ensure EF stays within bounds
+        # Ensure EF stays within bounds (minimum 1.3)
+        # Lower EF = more frequent reviews needed
         if ef < 1.3:
             ef = 1.3
 
-        # If quality < 3, reset repetitions
+        # If quality < 3, reset repetitions and start over
+        # This means the user didn't recall well enough - needs relearning
         if quality < 3:
             repetitions = 0
-            interval = 1
+            interval = 1  # Review again tomorrow
         else:
+            # Successful recall - increase repetition count and interval
             repetitions += 1
 
             # Calculate interval based on repetition number
             if repetitions == 1:
-                interval = 1
+                interval = 1  # First successful recall: review in 1 day
             elif repetitions == 2:
-                interval = 6
+                interval = 6  # Second successful recall: review in 6 days
             else:
+                # Subsequent repetitions: multiply previous interval by easiness factor
+                # This creates exponentially increasing intervals for well-known items
                 interval = round(interval * ef)
 
-        # Calculate next review date
+        # Calculate absolute next review date
         next_review = datetime.now() + timedelta(days=interval)
 
         return interval, ef, repetitions, next_review
@@ -188,48 +216,74 @@ class SM2Algorithm:
         difficulty_felt: Optional[int] = None
     ) -> int:
         """
-        Calculate SM-2 quality score (0-5) from review data.
+        Convert exercise performance into SM-2 quality score (0-5).
+
+        The quality score is crucial for SM-2 algorithm as it determines:
+        1. Whether to reset the card (quality < 3) or advance it (quality ≥ 3)
+        2. How much to adjust the easiness factor
+        3. The next review interval
+
+        Quality score mapping:
+        - 5: Perfect, instant recall (< 3 seconds, felt easy)
+        - 4: Correct after brief thought (3-7 seconds, felt medium)
+        - 3: Correct with effort (> 7 seconds, felt hard)
+        - 2: Incorrect but had partial knowledge
+        - 1: Incorrect but felt familiar
+        - 0: Complete blackout, no recognition
+
+        Scoring prioritizes explicit user feedback (difficulty_felt) over
+        implicit metrics (response_time_ms) for accuracy.
 
         Args:
             correct: Whether answer was correct
-            response_time_ms: Response time in milliseconds
-            difficulty_felt: User's perceived difficulty (1-5)
+            response_time_ms: Time taken to respond in milliseconds
+            difficulty_felt: User's self-reported difficulty (1=easy, 5=very hard)
 
         Returns:
-            Quality score (0-5)
+            Quality score from 0-5 for SM-2 algorithm
+
+        Examples:
+            >>> # Fast correct answer
+            >>> sm2._calculate_quality_score(correct=True, response_time_ms=2000)
+            5
+
+            >>> # Slow incorrect answer
+            >>> sm2._calculate_quality_score(correct=False, response_time_ms=15000)
+            0
         """
         if not correct:
-            # Incorrect answers: 0-2
+            # Incorrect answers map to quality 0-2
+            # These will reset the card's repetition count
             if difficulty_felt and difficulty_felt >= 4:
-                return 0  # Complete blackout
+                return 0  # Complete blackout - user found it very hard
             elif response_time_ms > 15000:
-                return 0  # Took too long, probably guessed
+                return 0  # Took too long (>15s), likely random guessing
             elif response_time_ms > 10000:
-                return 1  # Incorrect but some familiarity
+                return 1  # Incorrect but some familiarity (10-15s)
             else:
-                return 2  # Incorrect but remembered something
+                return 2  # Incorrect but remembered something (<10s)
 
-        # Correct answers: 3-5
-        # Base score on response time and difficulty
+        # Correct answers map to quality 3-5
+        # These will advance the card with varying confidence
+
+        # Prioritize explicit user feedback if available
         if difficulty_felt:
-            # User explicitly indicated difficulty
+            # User explicitly indicated difficulty level
             if difficulty_felt <= 2:
-                return 5  # Easy
+                return 5  # Easy - felt confident
             elif difficulty_felt == 3:
-                return 4  # Medium
+                return 4  # Medium - some thought required
             else:
-                return 3  # Hard
+                return 3  # Hard - struggled but got it
 
-        # Estimate from response time
-        # Fast response (< 3 sec) = 5
-        # Medium response (3-7 sec) = 4
-        # Slow response (> 7 sec) = 3
+        # Otherwise estimate quality from response time
+        # Thresholds based on typical conjugation task timing
         if response_time_ms < 3000:
-            return 5
+            return 5  # Fast response (<3s) = automatic recall
         elif response_time_ms < 7000:
-            return 4
+            return 4  # Medium response (3-7s) = good recall with brief thought
         else:
-            return 3
+            return 3  # Slow response (>7s) = struggled but correct
 
     def get_due_cards(
         self,
@@ -325,27 +379,57 @@ class AdaptiveDifficultyManager:
         return None
 
     def _calculate_difficulty(self) -> str:
-        """Calculate appropriate difficulty level"""
-        # Calculate metrics
+        """
+        Calculate appropriate difficulty level based on recent performance.
+
+        Adaptive difficulty adjustment rules:
+        - Increase difficulty: accuracy ≥ 85% AND average time < 5 seconds
+          (user is consistently fast and accurate - ready for more challenge)
+        - Decrease difficulty: accuracy < 60%
+          (user is struggling - needs more practice at easier level)
+        - Maintain difficulty: all other cases
+          (user is in the learning zone, making appropriate progress)
+
+        The algorithm uses a sliding window of recent results (default: 10 exercises)
+        to adapt quickly to performance changes while avoiding over-sensitivity to
+        individual mistakes.
+
+        Difficulty levels:
+        - beginner: Regular verbs only, common patterns
+        - intermediate: Mix of regular, stem-changing, and common irregulars
+        - advanced: All verb types, complex patterns, less common verbs
+
+        Returns:
+            New difficulty level: "beginner", "intermediate", or "advanced"
+
+        Examples:
+            >>> manager.recent_results = [True]*9 + [False]  # 90% accuracy
+            >>> manager.recent_times = [2000]*10  # Fast responses
+            >>> manager._calculate_difficulty()
+            "advanced"  # Increases from intermediate
+        """
+        # Calculate performance metrics from recent history
         accuracy = sum(self.recent_results) / len(self.recent_results)
         avg_time = sum(self.recent_times) / len(self.recent_times)
 
-        # Get current difficulty index
+        # Get current difficulty index for comparison
         levels = ["beginner", "intermediate", "advanced"]
         current_index = levels.index(self.difficulty)
 
-        # Decision logic
-        # Increase difficulty if: high accuracy + fast times
+        # Decision logic based on performance thresholds
+
+        # Increase difficulty if user shows mastery (high accuracy + fast response)
         if accuracy >= 0.85 and avg_time < 5000:
             if current_index < len(levels) - 1:
                 return levels[current_index + 1]
 
-        # Decrease difficulty if: low accuracy
+        # Decrease difficulty if user is struggling (low accuracy)
         elif accuracy < 0.60:
             if current_index > 0:
                 return levels[current_index - 1]
 
-        # Stay at current level
+        # Stay at current level if performance is in the sweet spot
+        # (60-85% accuracy or slow but accurate)
         return self.difficulty
 
     def get_difficulty(self) -> str:

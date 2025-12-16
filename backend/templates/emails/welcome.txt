@@ -1,0 +1,23 @@
+Welcome to {{ app_name }}! 🎉
+
+Hi {{ user_name }},
+
+We're thrilled to have you join our Spanish learning community! Get ready to master the subjunctive mood and take your Spanish to the next level.
+
+WHAT YOU CAN DO:
+================
+📚 Practice Daily: Complete exercises to build your streak
+🏆 Earn Achievements: Unlock badges as you progress
+📊 Track Progress: Monitor your improvement over time
+🔥 Build Streaks: Stay consistent with daily practice
+
+Ready to get started? Take your first step towards Spanish fluency!
+
+Start Learning: [LINK]
+
+Questions? Contact us at support@example.com
+
+---
+{{ app_name }} © {{ year }}
+
+Manage notification preferences: [LINK]
